@@ -9,18 +9,13 @@ import MovieScoreBadge from "@/polymet/components/movie-score-badge";
 import CategoryBadge from "@/polymet/components/category-badge";
 
 interface MovieCardProps {
-  id: string;
+  id: number;
   title: string;
   posterUrl: string;
   debutDate: string;
-  category:
-    | "Mega Blockbuster"
-    | "Blockbuster"
-    | "Hit"
-    | "Average"
-    | "Below Average";
+  category: string;
   score: number;
-  genre?: string[];
+  genre?: string;
   className?: string;
 }
 
@@ -50,7 +45,7 @@ export default function MovieCard({
       <Card
         className={cn(
           "overflow-hidden transition-all duration-300 hover:shadow-md dark:hover:shadow-primary/5 group h-full",
-          className,
+          className
         )}
         data-pol-id="cgtjmv"
         data-pol-file-name="movie-card"
@@ -144,7 +139,7 @@ export default function MovieCard({
               </span>
             </div>
 
-            {genre && genre.length > 0 && (
+            {/* {genre && genre.length > 0 && (
               <div
                 className="flex flex-wrap gap-1"
                 data-pol-id="uaku9b"
@@ -173,7 +168,7 @@ export default function MovieCard({
                   </span>
                 )}
               </div>
-            )}
+            )} */}
           </div>
         </CardContent>
 

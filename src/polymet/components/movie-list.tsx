@@ -1,10 +1,11 @@
 import React from "react";
 import MovieCard from "@/polymet/components/movie-card";
-import { Movie } from "@/polymet/data/movies-data";
+
 import { cn } from "@/lib/utils";
+import { MovieDetails } from "@/types/MovieDetails";
 
 interface MovieListProps {
-  movies: Movie[];
+  movies: MovieDetails[];
   className?: string;
   isLoading?: boolean;
 }
@@ -81,16 +82,16 @@ export default function MovieList({
       data-pol-file-name="movie-list"
       data-pol-file-type="component"
     >
-      {movies.map((movie, index) => (
+      {Object.values(movies).map((movie, index) => (
         <MovieCard
-          key={movie.id}
-          id={movie.id}
-          title={movie.title}
+          key={movie.FilmId}
+          id={movie.FilmId}
+          title={movie.FilmCommonName}
           posterUrl={movie.posterUrl}
-          debutDate={movie.debutDate}
-          category={movie.category}
-          score={movie.score}
-          genre={movie.genre}
+          debutDate={movie.FilmRelDate}
+          category={movie.classification_s6b3}
+          score={movie.Total_Score_s6b3}
+          genre={movie.FilmGenre}
           data-pol-id={`unbxux_${index}`}
           data-pol-file-name="movie-list"
           data-pol-file-type="component"

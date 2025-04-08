@@ -2,15 +2,15 @@ import React from "react";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
-type CategoryType =
-  | "Mega Blockbuster"
-  | "Blockbuster"
-  | "Hit"
-  | "Average"
-  | "Below Average";
+// type CategoryType =
+//   | "Mega Blockbuster"
+//   | "Blockbuster"
+//   | "Hit"
+//   | "Average"
+//   | "Below Average";
 
 interface CategoryBadgeProps {
-  category: CategoryType;
+  category: string;
   className?: string;
 }
 
@@ -39,7 +39,11 @@ export default function CategoryBadge({
   return (
     <Badge
       variant="outline"
-      className={cn("font-medium border-none", getCategoryColor(), className)}
+      className={cn(
+        "font-medium border-none bg-gray-100 text-gray-800 hover:bg-gray-100 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-800",
+        className
+      )}
+      // className={cn("font-medium border-none", getCategoryColor(), className)}
       data-pol-id="q0pp2l"
       data-pol-file-name="category-badge"
       data-pol-file-type="component"

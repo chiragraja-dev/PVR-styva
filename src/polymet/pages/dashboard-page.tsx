@@ -1,25 +1,31 @@
 import React, { useState, useEffect } from "react";
-import { MOVIES_DATA, Movie } from "@/polymet/data/movies-data";
+
 import MovieList from "@/polymet/components/movie-list";
 import DashboardHeader from "@/polymet/components/dashboard-header";
 import { FilterOptions } from "@/polymet/components/movie-filters";
 import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
+import { fetchMovies } from "@/services/movieService";
+import { MovieDetails } from "@/types/MovieDetails";
 
 export default function DashboardPage() {
-  const [movies, setMovies] = useState<Movie[]>([]);
+  const [movies, setMovies] = useState<MovieDetails[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   // Initial load of movies - only upcoming movies
   useEffect(() => {
-    const loadMovies = () => {
-      // Simply show all movies for now to fix the empty state issue
-      setMovies(MOVIES_DATA);
-      setIsLoading(false);
+    const loadMovies = async () => {
+      try {
+        const data = await fetchMovies("hindi");
+        setMovies(data);
+      } catch (error) {
+        console.error("Failed to load movies", error);
+      } finally {
+        setIsLoading(false);
+      }
     };
 
-    // Short timeout to simulate loading
-    setTimeout(loadMovies, 300);
+    loadMovies();
   }, []);
 
   // Listen for filter changes from the sidebar
@@ -31,13 +37,13 @@ export default function DashboardPage() {
 
     window.addEventListener(
       "filterChange",
-      handleFilterChange as EventListener,
+      handleFilterChange as EventListener
     );
 
     return () => {
       window.removeEventListener(
         "filterChange",
-        handleFilterChange as EventListener,
+        handleFilterChange as EventListener
       );
     };
   }, []);
@@ -47,25 +53,26 @@ export default function DashboardPage() {
 
     // Simulate API call
     setTimeout(() => {
-      let filteredMovies = [...MOVIES_DATA];
+      let filteredMovies = [...movies];
 
       // Apply search filter
       if (filters.search) {
         const searchLower = filters.search.toLowerCase();
         filteredMovies = filteredMovies.filter(
           (movie) =>
-            movie.title.toLowerCase().includes(searchLower) ||
-            movie.director.toLowerCase().includes(searchLower) ||
-            movie.cast.some((actor) =>
-              actor.toLowerCase().includes(searchLower),
-            ),
+            movie.FilmCommonName.toLowerCase().includes(searchLower) ||
+            movie.Director?.toLowerCase().includes(searchLower)
+          //  ||
+          // movie.cast.some((actor) =>
+          //   actor.toLowerCase().includes(searchLower)
+          // )
         );
       }
 
       // Apply category filter
       if (filters.category && filters.category.length > 0) {
         filteredMovies = filteredMovies.filter((movie) =>
-          filters.category.includes(movie.category),
+          filters.category.includes(movie.classification_s6b3)
         );
       }
 
@@ -73,22 +80,22 @@ export default function DashboardPage() {
       if (filters.scoreRange) {
         filteredMovies = filteredMovies.filter(
           (movie) =>
-            movie.score >= filters.scoreRange[0] &&
-            movie.score <= filters.scoreRange[1],
+            movie.Total_Score_s6b3 >= filters.scoreRange[0] &&
+            movie.Total_Score_s6b3 <= filters.scoreRange[1]
         );
       }
 
       // Apply genre filter
       if (filters.genres && filters.genres.length > 0) {
         filteredMovies = filteredMovies.filter((movie) =>
-          movie.genre.some((genre) => filters.genres.includes(genre)),
+          movie.filmGenre.some((genre) => filters.genres.includes(genre))
         );
       }
 
       // Apply language filter
       if (filters.language && filters.language.length > 0) {
         filteredMovies = filteredMovies.filter((movie) =>
-          filters.language.includes(movie.language),
+          filters.language.includes(movie.FilmLang)
         );
       }
 
@@ -96,30 +103,38 @@ export default function DashboardPage() {
       if (filters.sortBy) {
         switch (filters.sortBy) {
           case "score-desc":
-            filteredMovies.sort((a, b) => b.score - a.score);
+            filteredMovies.sort(
+              (a, b) => b.Total_Score_s6b3 - a.Total_Score_s6b3
+            );
             break;
           case "score-asc":
-            filteredMovies.sort((a, b) => a.score - b.score);
+            filteredMovies.sort(
+              (a, b) => a.Total_Score_s6b3 - b.Total_Score_s6b3
+            );
             break;
           case "date-asc":
             filteredMovies.sort(
               (a, b) =>
-                new Date(a.debutDate).getTime() -
-                new Date(b.debutDate).getTime(),
+                new Date(a.FilmRelDate).getTime() -
+                new Date(b.FilmRelDate).getTime()
             );
             break;
           case "date-desc":
             filteredMovies.sort(
               (a, b) =>
-                new Date(b.debutDate).getTime() -
-                new Date(a.debutDate).getTime(),
+                new Date(b.FilmRelDate).getTime() -
+                new Date(a.FilmRelDate).getTime()
             );
             break;
           case "title-asc":
-            filteredMovies.sort((a, b) => a.title.localeCompare(b.title));
+            filteredMovies.sort((a, b) =>
+              a.FilmCommonName.localeCompare(b.FilmCommonName)
+            );
             break;
           case "title-desc":
-            filteredMovies.sort((a, b) => b.title.localeCompare(a.title));
+            filteredMovies.sort((a, b) =>
+              b.FilmCommonName.localeCompare(a.FilmCommonName)
+            );
             break;
         }
       }
