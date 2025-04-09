@@ -1,4 +1,3 @@
-import React from "react";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { CalendarIcon } from "lucide-react";
 import { formatDistanceToNow, format, parseISO } from "date-fns";
@@ -8,12 +7,14 @@ import { Link } from "react-router-dom";
 import MovieScoreBadge from "@/polymet/components/movie-score-badge";
 import CategoryBadge from "@/polymet/components/category-badge";
 
+import { CategoryType } from "@/polymet/components/category-badge";
+
 interface MovieCardProps {
   id: string;
   title: string;
   posterUrl: string;
   debutDate: string;
-  category: string;
+  category: CategoryType;
   score: number;
   genre?: string;
   className?: string;
@@ -22,11 +23,11 @@ interface MovieCardProps {
 export default function MovieCard({
   id,
   title,
-  posterUrl,
+  // posterUrl,
   debutDate,
   category,
   score,
-  genre,
+  // genre,
   className,
 }: MovieCardProps) {
   // Parse the debut date

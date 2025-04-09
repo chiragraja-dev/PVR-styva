@@ -1,4 +1,3 @@
-import React from "react";
 import MovieCard from "@/polymet/components/movie-card";
 
 import { cn } from "@/lib/utils";

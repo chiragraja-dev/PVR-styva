@@ -1,8 +1,6 @@
-import React from "react";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-
-type CategoryType =
+export type CategoryType =
   | "regular"
   | "blockbuster"
   | "mega_blockbuster"
@@ -39,7 +37,11 @@ export default function CategoryBadge({
   return (
     <Badge
       variant="outline"
-      className={cn("font-medium border-none text-md capitalize", getCategoryColor(), className)}
+      className={cn(
+        "font-medium border-none text-md capitalize",
+        getCategoryColor(),
+        className
+      )}
       data-pol-id="q0pp2l"
       data-pol-file-name="category-badge"
       data-pol-file-type="component"

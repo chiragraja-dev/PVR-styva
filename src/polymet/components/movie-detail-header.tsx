@@ -1,10 +1,11 @@
-import React from "react";
-import { CalendarIcon, Globe2Icon } from "lucide-react";
-import { format, parseISO } from "date-fns";
+// import { CalendarIcon, Globe2Icon } from "lucide-react";
+// import { format, parseISO } from "date-fns";
 import { cn } from "@/lib/utils";
 import MovieScoreBadge from "@/polymet/components/movie-score-badge";
 import CategoryBadge from "@/polymet/components/category-badge";
-import { Button } from "@/components/ui/button";
+// import { Button } from "@/components/ui/button";
+
+import {CategoryType} from "@/polymet/components/category-badge";
 
 import {
   AlertTriangle,
@@ -29,7 +30,7 @@ interface MovieDetailHeaderProps {
     FilmCommonName: string;
     posterUrl: string;
     Total_Score_s6b3: number;
-    classification_s6b3: string;
+    classification_s6b3: CategoryType;
     filmGenre: string;
     isControversial: string;
     controversialReason: string;

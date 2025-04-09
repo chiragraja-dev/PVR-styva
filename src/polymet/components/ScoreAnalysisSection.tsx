@@ -6,7 +6,6 @@ import {
   Cell,
   ResponsiveContainer,
   Tooltip,
-  Legend,
   Label,
 } from "recharts";
 
@@ -100,7 +99,7 @@ const ScoreAnalysisSection: React.FC<ScoreAnalysisSectionProps> = ({ scoreAttrib
               labelLine={false}
               cursor="pointer"
             >
-              {scoreAttributes.map((entry, index) => (
+              {scoreAttributes.map((_, index) => (
                 <Cell
                   key={`cell-${index}`}
                   fill={COLORS[index % COLORS.length]}

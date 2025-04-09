@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -16,7 +16,12 @@ import {
 } from "@/components/ui/popover";
 import { Slider } from "@/components/ui/slider";
 import { Badge } from "@/components/ui/badge";
-import { CheckIcon, FilterIcon, SearchIcon, XIcon } from "lucide-react";
+import {
+  // CheckIcon,
+  FilterIcon,
+  SearchIcon,
+  XIcon,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export type FilterOptions = {
@@ -99,7 +104,7 @@ export default function MovieFilters({
   };
 
   const resetFilters = () => {
-    const defaultFilters = {
+    const defaultFilters : FilterOptions  = {
       search: "",
       category: [],
       scoreRange: [0, 100],

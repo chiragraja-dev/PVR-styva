@@ -1,13 +1,10 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CalendarIcon, InfoIcon } from "lucide-react";
 import { format, isWeekend } from "date-fns";
-import { cn } from "@/lib/utils";
 
-import CinemaLocationSelector, {
-  CinemaLocation,
-} from "@/polymet/components/cinema-location-selector";
+import CinemaLocationSelector from "@/polymet/components/cinema-location-selector";
 import CinemaScreenSelector, {
   CinemaScreen,
 } from "@/polymet/components/cinema-screen-selector";
@@ -30,7 +27,7 @@ interface DetailedPricingSectionProps {
 }
 
 export default function DetailedPricingSection({
-  movieId,
+  // movieId,
 }: DetailedPricingSectionProps) {
   const [selectedLocation, setSelectedLocation] = useState<string | null>(null);
   const [selectedCinemaId, setSelectedCinemaId] = useState<string | null>(null);
@@ -62,7 +59,7 @@ export default function DetailedPricingSection({
     if (selectedCinemaId && selectedScreen) {
       const timings = getShowTimingsByCinemaAndScreenId(
         selectedCinemaId,
-        selectedScreen,
+        selectedScreen
       );
       setShowTimings(timings);
       setSelectedTiming(null);
@@ -76,7 +73,7 @@ export default function DetailedPricingSection({
       const pricing = getSeatPricingByCinemaScreenAndTimingId(
         selectedCinemaId,
         selectedScreen,
-        selectedTiming,
+        selectedTiming
       );
       setSeatPricing(pricing);
     }
@@ -483,7 +480,7 @@ export default function DetailedPricingSection({
                     >
                       {
                         CINEMA_LOCATIONS.find(
-                          (loc) => loc.id === selectedLocation,
+                          (loc) => loc.id === selectedLocation
                         )?.name
                       }
                       {" • "}

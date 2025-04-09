@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
   HomeIcon,
   CalendarIcon,
   FilterIcon,
-  UserIcon,
+  // UserIcon,
   LogOutIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -18,7 +18,7 @@ interface DashboardLayoutProps {
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const location = useLocation();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [availableGenres, setAvailableGenres] = useState([
+  const availableGenres = [
     "Action",
     "Adventure",
     "Animation",
@@ -32,12 +32,9 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     "Sci-Fi",
     "Thriller",
     "War",
-  ]);
+  ];
 
-  const [availableLanguages, setAvailableLanguages] = useState([
-    "English",
-    "Hindi",
-  ]);
+  const availableLanguages = ["English", "Hindi"];
 
   const handleFilterChange = (filters: FilterOptions) => {
     // Dispatch a custom event that pages can listen to

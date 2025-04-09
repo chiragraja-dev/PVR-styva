@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CalendarIcon, InfoIcon } from "lucide-react";
 import { format, isWeekend } from "date-fns";
@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
 import CinemaLocationSelector, {
-  CinemaLocation,
+  // CinemaLocation,
 } from "@/polymet/components/cinema-location-selector";
 import CinemaScreenSelector, {
   CinemaScreen,
@@ -33,7 +33,7 @@ interface SimplifiedPricingSectionProps {
 }
 
 export default function SimplifiedPricingSection({
-  movieId,
+  // movieId,
   className,
 }: SimplifiedPricingSectionProps) {
   const [selectedLocation, setSelectedLocation] = useState<string | null>(null);

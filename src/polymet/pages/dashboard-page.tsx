@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 import MovieList from "@/polymet/components/movie-list";
 import DashboardHeader from "@/polymet/components/dashboard-header";
