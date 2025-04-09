@@ -101,7 +101,7 @@ export default function MovieListView({
         return (
           <Link
             to={`/movie/${movie.FilmCommonName}?language=Hindi&region=Mumbai&mode=historic`}
-            key={movie.FilmId}
+            key={`${movie.FilmId}-${index}`}
             className="block"
             ref={isLast ? lastItemRef : undefined}
             data-pol-id={`qdksl9_${index}`}

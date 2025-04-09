@@ -130,8 +130,10 @@ export default function ScoreAttributeCard({
 
         <Progress
           value={score}
-          className="h-2 mb-4"
-          indicatorClassName={getProgressColor()}
+          className={cn(
+            "h-2 mb-4",
+            `[&>div]:${getProgressColor().replace(" ", " [&>div]:")}`
+          )}
           data-pol-id="5cp82i"
           data-pol-file-name="score-attribute-card"
           data-pol-file-type="component"
