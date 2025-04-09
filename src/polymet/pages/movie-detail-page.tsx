@@ -18,7 +18,7 @@ import MovieDetailHeader from "@/polymet/components/movie-detail-header";
 
 import { fetchPrediction } from "@/services/movieService";
 import { Prediction } from "@/types/Prediction";
-import { HistoricPrediction } from "@/types/HistoricPrediction ";
+import { HistoricPrediction } from "@/types/HistoricPrediction";
 import { fetchHistoricPrediction } from "@/services/movieService";
 
 import ScoreAnalysisSection from "../components/ScoreAnalysisSection";
@@ -34,9 +34,7 @@ export default function MovieDetailPage() {
   const language = query.get("language") || "Hindi";
   const region = query.get("region") || "Mumbai";
 
-  const [movie, setMovie] = useState<Prediction | HistoricPrediction | null>(
-    null
-  );
+  const [movie, setMovie] = useState<Prediction | HistoricPrediction>();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -132,6 +130,8 @@ export default function MovieDetailPage() {
       </div>
     );
   }
+
+  if (!movie) return null;
 
   // Generate mock score attributes with descriptions
   const scoreAttributes = movie
@@ -298,7 +298,7 @@ export default function MovieDetailPage() {
                       style: "currency",
                       currency: "INR",
                       minimumFractionDigits: 2,
-                    }).format(movie.total_revenue)}
+                    }).format(movie!.total_revenue)}
                   </div>
                 </div>
 
@@ -310,7 +310,7 @@ export default function MovieDetailPage() {
                     {new Intl.NumberFormat("en-IN", {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 2,
-                    }).format(movie.total_seats_sold)}
+                    }).format(movie!.total_seats_sold)}
                   </div>
                 </div>
 
@@ -323,7 +323,7 @@ export default function MovieDetailPage() {
                       style: "currency",
                       currency: "INR",
                       minimumFractionDigits: 2,
-                    }).format(movie.revenue_per_show)}
+                    }).format(movie!.revenue_per_show)}
                   </div>
                 </div>
               </div>

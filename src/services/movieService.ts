@@ -9,7 +9,7 @@ import {
 import { HistoricMovieDetails } from "@/types/HistoricMovieDetails";
 import { MovieDetails } from "@/types/MovieDetails";
 import { Prediction } from "@/types/Prediction";
-import { HistoricPrediction } from "@/types/HistoricPrediction ";
+import { HistoricPrediction } from "@/types/HistoricPrediction";
 
 export const fetchMovies = async (language: string): Promise<MovieDetails[]> => {
   const response = await client.get(MOVIES, {
