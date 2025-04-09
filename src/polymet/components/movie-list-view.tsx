@@ -1,26 +1,32 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { format, formatDistanceToNow, parseISO } from "date-fns";
-import { Movie } from "@/polymet/data/movies-data";
+
 import { cn } from "@/lib/utils";
 import MovieScoreBadge from "@/polymet/components/movie-score-badge";
 import { CalendarIcon } from "lucide-react";
+import { HistoricMovieDetails } from "@/types/HistoricMovieDetails";
 
 interface MovieListViewProps {
-  movies: Movie[];
+  movies: HistoricMovieDetails[];
   className?: string;
   isLoading?: boolean;
+  lastItemRef?: (node: HTMLAnchorElement | null) => void;
 }
 
 export default function MovieListView({
   movies,
   className,
   isLoading = false,
+  lastItemRef,
 }: MovieListViewProps) {
   if (isLoading) {
     return (
       <div
-        className={cn("space-y-2", className)}
+        className={cn(
+          "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 space-y-2",
+          className
+        )}
         data-pol-id="dsjhzn"
         data-pol-file-name="movie-list-view"
         data-pol-file-type="component"
@@ -45,7 +51,7 @@ export default function MovieListView({
       <div
         className={cn(
           "flex flex-col items-center justify-center py-12 text-center",
-          className,
+          className
         )}
         data-pol-id="x4fpu6"
         data-pol-file-name="movie-list-view"
@@ -73,25 +79,31 @@ export default function MovieListView({
 
   return (
     <div
-      className={cn("space-y-2", className)}
+      className={cn(
+        "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 space-y-2",
+        className
+      )}
       data-pol-id="rr0jtd"
       data-pol-file-name="movie-list-view"
       data-pol-file-type="component"
     >
       {movies.map((movie, index) => {
         // Parse the debut date
-        const parsedDate = parseISO(movie.debutDate);
+        const parsedDate = parseISO(movie.FilmRelDate);
         const formattedDate = format(parsedDate, "MMM d, yyyy");
         const timeUntilRelease = formatDistanceToNow(parsedDate, {
           addSuffix: true,
         });
         const isUpcoming = parsedDate > new Date();
 
+        const isLast = index === movies.length - 1;
+
         return (
           <Link
-            to={`/movie/${movie.id}`}
-            key={movie.id}
+            to={`/movie/${movie.FilmCommonName}?language=Hindi&region=Mumbai&mode=historic`}
+            key={movie.FilmCommonName}
             className="block"
+            ref={isLast ? lastItemRef : undefined}
             data-pol-id={`qdksl9_${index}`}
             data-pol-file-name="movie-list-view"
             data-pol-file-type="component"
@@ -110,8 +122,11 @@ export default function MovieListView({
                 data-pol-file-type="component"
               >
                 <img
-                  src={movie.posterUrl}
-                  alt={`${movie.title} poster`}
+                  src={
+                    "https://posters.movieposterdb.com/25_02/2025/3566834/l_a-minecraft-movie-movie-poster_0be81db1.jpg"
+                  }
+                  // src={movie.posterUrl}
+                  alt={`${movie.FilmCommonName} poster`}
                   className="h-full w-full object-cover rounded"
                   data-pol-id={`mtqsh8_${index}`}
                   data-pol-file-name="movie-list-view"
@@ -138,15 +153,45 @@ export default function MovieListView({
                     data-pol-file-name="movie-list-view"
                     data-pol-file-type="component"
                   >
-                    {movie.title}
+                    {movie.FilmCommonName}
                   </h3>
-                  <MovieScoreBadge
-                    score={movie.score}
-                    size="sm"
-                    data-pol-id={`4qid01_${index}`}
-                    data-pol-file-name="movie-list-view"
-                    data-pol-file-type="component"
-                  />
+                  <div className="flex items-center space-x-3">
+                    <MovieScoreBadge
+                      score={movie.Total_Score_s6b3}
+                      size="md"
+                      data-pol-id={`4qid01_${index}`}
+                      data-pol-file-name="movie-list-view"
+                      data-pol-file-type="component"
+                    />
+                    {/* Category */}
+                    <div
+                      className="hidden md:block"
+                      data-pol-id={`hrem3h_${index}`}
+                      data-pol-file-name="movie-list-view"
+                      data-pol-file-type="component"
+                    >
+                      <span
+                        className={cn(
+                          "px-1.5 py-0.5 rounded text-sm",
+                          movie.classification_s6b3 === "mega_blockbuster" &&
+                            "bg-purple-100 text-purple-800 hover:bg-purple-100 dark:bg-purple-900 dark:text-purple-300 dark:hover:bg-purple-900",
+                          movie.classification_s6b3 === "blockbuster" &&
+                            "bg-blue-100 text-blue-800 hover:bg-blue-100 dark:bg-blue-900 dark:text-blue-300 dark:hover:bg-blue-900",
+                          movie.classification_s6b3 === "popular" &&
+                            "bg-green-100 text-green-800 hover:bg-green-100 dark:bg-green-900 dark:text-green-300 dark:hover:bg-green-900",
+                          movie.classification_s6b3 === "regular" &&
+                            "bg-yellow-100 text-yellow-800 hover:bg-yellow-100 dark:bg-yellow-900 dark:text-yellow-300 dark:hover:bg-yellow-900",
+                          movie.classification_s6b3 === "Below Average" &&
+                            "bg-red-100 text-red-800 hover:bg-red-100 dark:bg-red-900 dark:text-red-300 dark:hover:bg-red-900"
+                        )}
+                        data-pol-id={`lq8pl9_${index}`}
+                        data-pol-file-name="movie-list-view"
+                        data-pol-file-type="component"
+                      >
+                        {movie.classification_s6b3}
+                      </span>
+                    </div>
+                  </div>
                 </div>
 
                 <div
@@ -188,7 +233,7 @@ export default function MovieListView({
                   </div>
 
                   {/* Genres */}
-                  {movie.genre && movie.genre.length > 0 && (
+                  {/* {movie.genres && movie.genres.length > 0 && (
                     <div
                       className="flex items-center gap-1"
                       data-pol-id={`yz792d_${index}`}
@@ -201,11 +246,11 @@ export default function MovieListView({
                         data-pol-file-name="movie-list-view"
                         data-pol-file-type="component"
                       >
-                        {movie.genre.slice(0, 2).join(", ")}
-                        {movie.genre.length > 2 && "..."}
+                        {movie.genres.slice(0, 2).join(", ")}
+                        {movie.genres.length > 2 && "..."}
                       </span>
                     </div>
-                  )}
+                  )} */}
 
                   {/* Language */}
                   <div
@@ -214,36 +259,7 @@ export default function MovieListView({
                     data-pol-file-name="movie-list-view"
                     data-pol-file-type="component"
                   >
-                    {movie.language}
-                  </div>
-
-                  {/* Category */}
-                  <div
-                    className="hidden md:block"
-                    data-pol-id={`hrem3h_${index}`}
-                    data-pol-file-name="movie-list-view"
-                    data-pol-file-type="component"
-                  >
-                    <span
-                      className={cn(
-                        "px-1.5 py-0.5 rounded text-xs",
-                        movie.category === "Mega Blockbuster" &&
-                          "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300",
-                        movie.category === "Blockbuster" &&
-                          "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300",
-                        movie.category === "Hit" &&
-                          "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300",
-                        movie.category === "Average" &&
-                          "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300",
-                        movie.category === "Below Average" &&
-                          "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300",
-                      )}
-                      data-pol-id={`lq8pl9_${index}`}
-                      data-pol-file-name="movie-list-view"
-                      data-pol-file-type="component"
-                    >
-                      {movie.category}
-                    </span>
+                    {movie.FilmLang}
                   </div>
                 </div>
               </div>

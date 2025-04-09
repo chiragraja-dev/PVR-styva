@@ -37,7 +37,7 @@ export default function MovieCard({
 
   return (
     <Link
-      to={`/movie/${id}?language=Hindi&region=Mumbai`}
+      to={`/movie/${id}?language=Hindi&region=Mumbai&mode=default`}
       data-pol-id="l43v0a"
       data-pol-file-name="movie-card"
       data-pol-file-type="component"

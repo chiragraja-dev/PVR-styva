@@ -1,23 +1,26 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useLocation } from "react-router-dom";
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+// import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { ArrowLeftIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 
 import MovieDetailHeader from "@/polymet/components/movie-detail-header";
-import ScoreAttributeCard from "@/polymet/components/score-attribute-card";
-import MovieSynopsis from "@/polymet/components/movie-synopsis";
-import PricingRecommendationCard from "@/polymet/components/pricing-recommendation-card";
-import MovieCastList from "@/polymet/components/movie-cast-list";
-import CompetingReleasesCard from "@/polymet/components/competing-releases-card";
-import RevenuePredictionCard from "@/polymet/components/revenue-prediction-card";
-import SimplifiedPricingSection from "@/polymet/components/simplified-pricing-section";
+// import ScoreAttributeCard from "@/polymet/components/score-attribute-card";
+// import MovieSynopsis from "@/polymet/components/movie-synopsis";
+// import PricingRecommendationCard from "@/polymet/components/pricing-recommendation-card";
+// import MovieCastList from "@/polymet/components/movie-cast-list";
+// import CompetingReleasesCard from "@/polymet/components/competing-releases-card";
+// import RevenuePredictionCard from "@/polymet/components/revenue-prediction-card";
+// import SimplifiedPricingSection from "@/polymet/components/simplified-pricing-section";
 
 import { fetchPrediction } from "@/services/movieService";
 import { Prediction } from "@/types/Prediction";
+import { HistoricPrediction } from "@/types/HistoricPrediction ";
+import { fetchHistoricPrediction } from "@/services/movieService";
+
 import ScoreAnalysisSection from "../components/ScoreAnalysisSection";
 
 function useQuery() {
@@ -27,32 +30,52 @@ function useQuery() {
 export default function MovieDetailPage() {
   const { id: movieName } = useParams(); // This is FilmCommonName
   const query = useQuery();
+  const mode = query.get("mode");
   const language = query.get("language") || "Hindi";
   const region = query.get("region") || "Mumbai";
 
-  const [movie, setMovie] = useState<Prediction>();
+  const [movie, setMovie] = useState<Prediction | HistoricPrediction | null>(
+    null
+  );
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchMoviePrediction = async () => {
+    const fetchMovieData = async () => {
       try {
         setLoading(true);
-        const prediction = await fetchPrediction({
-          movie: movieName!,
-          language,
-          region,
-        });
-        console.log("Prediction - ", prediction);
-        setMovie(prediction);
+
+        if (mode === "historic") {
+          const historicPrediction = await fetchHistoricPrediction({
+            movie: movieName!,
+            language,
+            region,
+          });
+
+          setMovie(historicPrediction as unknown as Prediction); // if type mismatch, cast
+        } else {
+          const prediction = await fetchPrediction({
+            movie: movieName!,
+            language,
+            region,
+          });
+
+          setMovie(prediction);
+        }
       } catch (error) {
-        console.error("Failed to fetch prediction", error);
+        console.error("Failed to fetch movie data", error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchMoviePrediction();
-  }, [movieName, language, region]);
+    fetchMovieData();
+  }, [movieName, language, region, mode]);
+
+  const isHistoricPrediction = (
+    data: Prediction | HistoricPrediction
+  ): data is HistoricPrediction => {
+    return "total_revenue" in data;
+  };
 
   if (loading) {
     return (
@@ -243,6 +266,64 @@ export default function MovieDetailPage() {
           Score Analysis
         </h2>
         {movie && <ScoreAnalysisSection scoreAttributes={scoreAttributes} />}
+      </div>
+      <Separator
+        data-pol-id="s236ib"
+        data-pol-file-name="movie-detail-page"
+        data-pol-file-type="page"
+      />
+      <div>
+        <h2
+          className="text-2xl font-bold"
+          data-pol-id="n2nr7t"
+          data-pol-file-name="movie-detail-page"
+          data-pol-file-type="page"
+        >
+          Historic Revenue Overview
+        </h2>
+
+        {/* Historic-only fields */}
+        {isHistoricPrediction(movie) && (
+          <div className="bg-white shadow-lg rounded-2xl p-6 w-full mx-auto">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
+              <div className="bg-green-50 rounded-xl p-4 shadow-sm">
+                <div className="text-base text-gray-500 mb-1">Total Revenue</div>
+                <div className="text-2xl font-bold text-green-700">
+                  {new Intl.NumberFormat("en-IN", {
+                    style: "currency",
+                    currency: "INR",
+                    minimumFractionDigits: 2,
+                  }).format(movie.total_revenue)}
+                </div>
+              </div>
+
+              <div className="bg-blue-50 rounded-xl p-4 shadow-sm">
+                <div className="text-base text-gray-500 mb-1">
+                  Total Seats Sold
+                </div>
+                <div className="text-2xl font-bold text-blue-700">
+                  {new Intl.NumberFormat("en-IN", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  }).format(movie.total_seats_sold)}
+                </div>
+              </div>
+
+              <div className="bg-purple-50 rounded-xl p-4 shadow-sm">
+                <div className="text-base text-gray-500 mb-1">
+                  Revenue per Show
+                </div>
+                <div className="text-2xl font-bold text-purple-700">
+                  {new Intl.NumberFormat("en-IN", {
+                    style: "currency",
+                    currency: "INR",
+                    minimumFractionDigits: 2,
+                  }).format(movie.revenue_per_show)}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
       {/* <div
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
