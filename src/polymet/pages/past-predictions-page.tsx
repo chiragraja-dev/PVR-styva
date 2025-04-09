@@ -266,6 +266,8 @@ export default function PastPredictionsPage() {
       }
 
       setMovies(filteredMovies);
+      setVisibleMovies(filteredMovies.slice(0, ITEMS_PER_PAGE));
+      setHasMore(filteredMovies.length > ITEMS_PER_PAGE);
       setIsLoading(false);
     }, 300);
   };

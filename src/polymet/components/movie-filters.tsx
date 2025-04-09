@@ -38,10 +38,10 @@ interface MovieFiltersProps {
 }
 
 const CATEGORIES = [
-  "Mega Blockbuster",
-  "Blockbuster",
-  "Hit",
-  "Average",
+  "regular",
+  "blockbuster",
+  "mega_blockbuster",
+  "popular",
   "Below Average",
 ];
 

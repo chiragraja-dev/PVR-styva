@@ -37,13 +37,6 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const [availableLanguages, setAvailableLanguages] = useState([
     "English",
     "Hindi",
-    "Tamil",
-    "Telugu",
-    "Malayalam",
-    "Kannada",
-    "Bengali",
-    "Marathi",
-    "Punjabi",
   ]);
 
   const handleFilterChange = (filters: FilterOptions) => {
@@ -63,7 +56,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       <div
         className={cn(
           "flex flex-col border-r bg-card transition-all duration-300 overflow-hidden",
-          isSidebarOpen ? "w-64" : "w-16",
+          isSidebarOpen ? "w-64" : "w-16"
         )}
         data-pol-id="8cuskg"
         data-pol-file-name="dashboard-layout"
@@ -163,7 +156,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                 "flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors",
                 location.pathname === "/"
                   ? "bg-primary/10 text-primary"
-                  : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
+                  : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
               )}
               data-pol-id="v1ekk3"
               data-pol-file-name="dashboard-layout"
@@ -192,7 +185,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                 "flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors",
                 location.pathname === "/past-predictions"
                   ? "bg-primary/10 text-primary"
-                  : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
+                  : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
               )}
               data-pol-id="qzo0i8"
               data-pol-file-name="dashboard-layout"
