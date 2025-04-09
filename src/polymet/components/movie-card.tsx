@@ -9,7 +9,7 @@ import MovieScoreBadge from "@/polymet/components/movie-score-badge";
 import CategoryBadge from "@/polymet/components/category-badge";
 
 interface MovieCardProps {
-  id: number;
+  id: string;
   title: string;
   posterUrl: string;
   debutDate: string;
@@ -37,7 +37,7 @@ export default function MovieCard({
 
   return (
     <Link
-      to={`/movie/${id}`}
+      to={`/movie/${id}?language=Hindi&region=Mumbai`}
       data-pol-id="l43v0a"
       data-pol-file-name="movie-card"
       data-pol-file-type="component"
@@ -52,13 +52,16 @@ export default function MovieCard({
         data-pol-file-type="component"
       >
         <div
-          className="relative aspect-[2/3] overflow-hidden"
+          className="relative aspect-[3/2] overflow-hidden"
           data-pol-id="39ewzx"
           data-pol-file-name="movie-card"
           data-pol-file-type="component"
         >
           <img
-            src={posterUrl}
+            src={
+              "https://posters.movieposterdb.com/25_02/2025/3566834/l_a-minecraft-movie-movie-poster_0be81db1.jpg"
+            }
+            // src={posterUrl}
             alt={`${title} poster`}
             className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105"
             data-pol-id="38zgo3"
@@ -68,75 +71,48 @@ export default function MovieCard({
         </div>
 
         <CardContent
-          className="pt-4"
+          className="py-4"
           data-pol-id="hi1t25"
           data-pol-file-name="movie-card"
           data-pol-file-type="component"
         >
           <div
-            className="flex flex-col space-y-3"
+            className="flex flex-col"
             data-pol-id="rr28oz"
             data-pol-file-name="movie-card"
             data-pol-file-type="component"
           >
-            <h3
-              className="font-semibold text-lg line-clamp-1"
-              data-pol-id="bg2qq3"
-              data-pol-file-name="movie-card"
-              data-pol-file-type="component"
-            >
-              {title}
-            </h3>
-
             <div
-              className="flex items-center justify-between"
+              className="flex flex-col space-y-2"
               data-pol-id="3bcjk2"
               data-pol-file-name="movie-card"
               data-pol-file-type="component"
             >
-              <MovieScoreBadge
-                score={score}
-                size="sm"
-                className="mr-2"
-                data-pol-id="4tlcfa"
+              <h3
+                className="font-semibold text-lg line-clamp-1"
+                data-pol-id="bg2qq3"
                 data-pol-file-name="movie-card"
                 data-pol-file-type="component"
-              />
-              <CategoryBadge
-                category={category}
-                data-pol-id="8bfli2"
-                data-pol-file-name="movie-card"
-                data-pol-file-type="component"
-              />
-            </div>
+              >
+                {title}
+              </h3>
 
-            <div
-              className="flex items-center text-sm text-muted-foreground"
-              data-pol-id="tws7q5"
-              data-pol-file-name="movie-card"
-              data-pol-file-type="component"
-            >
-              <CalendarIcon
-                className="h-4 w-4 mr-1"
-                data-pol-id="oshc8n"
-                data-pol-file-name="movie-card"
-                data-pol-file-type="component"
-              />
-              <span
-                className="mr-1"
-                data-pol-id="1alzm9"
-                data-pol-file-name="movie-card"
-                data-pol-file-type="component"
-              >
-                Release date:
-              </span>
-              <span
-                data-pol-id="h9nsga"
-                data-pol-file-name="movie-card"
-                data-pol-file-type="component"
-              >
-                {formattedDate}
-              </span>
+              <div className="flex items-center space-x-2">
+                <MovieScoreBadge
+                  score={score}
+                  size="md"
+                  className=""
+                  data-pol-id="4tlcfa"
+                  data-pol-file-name="movie-card"
+                  data-pol-file-type="component"
+                />
+                <CategoryBadge
+                  category={category}
+                  data-pol-id="8bfli2"
+                  data-pol-file-name="movie-card"
+                  data-pol-file-type="component"
+                />
+              </div>
             </div>
 
             {/* {genre && genre.length > 0 && (
@@ -173,11 +149,39 @@ export default function MovieCard({
         </CardContent>
 
         <CardFooter
-          className="pt-0 pb-4"
+          className="pt-0 pb-4 flex justify-between items-center"
           data-pol-id="ev292v"
           data-pol-file-name="movie-card"
           data-pol-file-type="component"
         >
+          <div
+            className="flex items-center text-sm text-muted-foreground"
+            data-pol-id="tws7q5"
+            data-pol-file-name="movie-card"
+            data-pol-file-type="component"
+          >
+            <CalendarIcon
+              className="h-4 w-4 mr-1"
+              data-pol-id="oshc8n"
+              data-pol-file-name="movie-card"
+              data-pol-file-type="component"
+            />
+            <span
+              className="mr-1"
+              data-pol-id="1alzm9"
+              data-pol-file-name="movie-card"
+              data-pol-file-type="component"
+            >
+              Release date:
+            </span>
+            <span
+              data-pol-id="h9nsga"
+              data-pol-file-name="movie-card"
+              data-pol-file-type="component"
+            >
+              {formattedDate}
+            </span>
+          </div>
           {isUpcoming && (
             <span
               className="text-xs text-muted-foreground"

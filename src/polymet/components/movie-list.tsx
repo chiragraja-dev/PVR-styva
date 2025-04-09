@@ -85,7 +85,7 @@ export default function MovieList({
       {Object.values(movies).map((movie, index) => (
         <MovieCard
           key={movie.FilmId}
-          id={movie.FilmId}
+          id={movie.FilmCommonName}
           title={movie.FilmCommonName}
           posterUrl={movie.posterUrl}
           debutDate={movie.FilmRelDate}

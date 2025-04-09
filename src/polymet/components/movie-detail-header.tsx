@@ -6,50 +6,110 @@ import MovieScoreBadge from "@/polymet/components/movie-score-badge";
 import CategoryBadge from "@/polymet/components/category-badge";
 import { Button } from "@/components/ui/button";
 
+import {
+  AlertTriangle,
+  Landmark,
+  UserCheck,
+  Book,
+  Gavel,
+  ShieldAlert,
+  Flag,
+  HelpCircle,
+} from "lucide-react";
+
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+
 interface MovieDetailHeaderProps {
-  title: string;
-  posterUrl: string;
-  language: string;
-  debutDate: string;
-  score: number;
-  category:
-    | "Mega Blockbuster"
-    | "Blockbuster"
-    | "Hit"
-    | "Average"
-    | "Below Average";
-  genre: string[];
-  director: string;
-  runtime: number;
+  movie: {
+    FilmCommonName: string;
+    posterUrl: string;
+    Total_Score_s6b3: number;
+    classification_s6b3: string;
+    filmGenre: string;
+    isControversial: string;
+    controversialReason: string;
+    isHistoric: string;
+    historicTopic: string;
+    hasStereotypes: string;
+    stereotypesReason: string;
+    isReligious: string;
+    religiousTopic: string;
+    isPolitical: string;
+    politicalTopic: string;
+    isSensitive: string;
+    sensitiveReason: string;
+    isPatriotic: string;
+    patrioticTopic: string;
+  };
   className?: string;
 }
 
 export default function MovieDetailHeader({
-  title,
-  posterUrl,
-  language,
-  debutDate,
-  score,
-  category,
-  genre,
-  director,
-  runtime,
+  movie,
   className,
 }: MovieDetailHeaderProps) {
-  // Parse the debut date
-  const parsedDate = parseISO(debutDate);
-  const formattedDate = format(parsedDate, "MMMM d, yyyy");
-
-  // Format runtime to hours and minutes
-  const hours = Math.floor(runtime / 60);
-  const minutes = runtime % 60;
-  const formattedRuntime = `${hours}h ${minutes}m`;
+  const flags = [
+    {
+      label: "Controversial",
+      value: movie.isControversial,
+      reason: movie.controversialReason,
+      icon: AlertTriangle,
+      color: "text-red-500",
+    },
+    {
+      label: "Historic",
+      value: movie.isHistoric,
+      reason: movie.historicTopic,
+      icon: Landmark,
+      color: "text-yellow-500",
+    },
+    {
+      label: "Stereotypes",
+      value: movie.hasStereotypes,
+      reason: movie.stereotypesReason,
+      icon: UserCheck,
+      color: "text-blue-500",
+    },
+    {
+      label: "Religious",
+      value: movie.isReligious,
+      reason: movie.religiousTopic,
+      icon: Book,
+      color: "text-purple-500",
+    },
+    {
+      label: "Political",
+      value: movie.isPolitical,
+      reason: movie.politicalTopic,
+      icon: Gavel,
+      color: "text-green-500",
+    },
+    {
+      label: "Sensitive",
+      value: movie.isSensitive,
+      reason: movie.sensitiveReason,
+      icon: ShieldAlert,
+      color: "text-orange-500",
+    },
+    {
+      label: "Patriotic",
+      value: movie.isPatriotic,
+      reason: movie.patrioticTopic,
+      icon: Flag,
+      color: "text-indigo-500",
+    },
+  ];
 
   return (
     <div
       className={cn(
         "flex flex-col md:flex-row gap-6 md:gap-8 items-start",
-        className,
+        className
       )}
       data-pol-id="r81vzb"
       data-pol-file-name="movie-detail-header"
@@ -63,30 +123,19 @@ export default function MovieDetailHeader({
         data-pol-file-type="component"
       >
         <div
-          className="aspect-[2/3] rounded-lg overflow-hidden shadow-lg"
+          className="aspect-square rounded-lg overflow-hidden shadow-lg"
           data-pol-id="5jrkcf"
           data-pol-file-name="movie-detail-header"
           data-pol-file-type="component"
         >
           <img
-            src={posterUrl}
-            alt={`${title} poster`}
+            src={
+              "https://posters.movieposterdb.com/25_02/2025/3566834/l_a-minecraft-movie-movie-poster_0be81db1.jpg"
+            }
+            // src={posterUrl}
+            alt={`${movie.FilmCommonName} poster`}
             className="w-full h-full object-cover"
             data-pol-id="mvzh0d"
-            data-pol-file-name="movie-detail-header"
-            data-pol-file-type="component"
-          />
-        </div>
-        <div
-          className="absolute top-4 right-4"
-          data-pol-id="10287q"
-          data-pol-file-name="movie-detail-header"
-          data-pol-file-type="component"
-        >
-          <MovieScoreBadge
-            score={score}
-            size="lg"
-            data-pol-id="5p201n"
             data-pol-file-name="movie-detail-header"
             data-pol-file-type="component"
           />
@@ -105,178 +154,84 @@ export default function MovieDetailHeader({
           data-pol-file-name="movie-detail-header"
           data-pol-file-type="component"
         >
-          <h1
-            className="text-3xl md:text-4xl font-bold"
-            data-pol-id="hmkkk5"
-            data-pol-file-name="movie-detail-header"
-            data-pol-file-type="component"
-          >
-            {title}
-          </h1>
+          <div className="flex gap-x-6">
+            <h1
+              className="text-3xl md:text-4xl font-bold"
+              data-pol-id="hmkkk5"
+              data-pol-file-name="movie-detail-header"
+              data-pol-file-type="component"
+            >
+              {movie.FilmCommonName}
+            </h1>
+
+            <div
+              className="flex gap-x-2 items-center"
+              data-pol-id="3oryqx"
+              data-pol-file-name="movie-detail-header"
+              data-pol-file-type="component"
+            >
+              <div
+                className=""
+                data-pol-id="10287q"
+                data-pol-file-name="movie-detail-header"
+                data-pol-file-type="component"
+              >
+                <MovieScoreBadge
+                  score={movie.Total_Score_s6b3}
+                  size="lg"
+                  data-pol-id="5p201n"
+                  data-pol-file-name="movie-detail-header"
+                  data-pol-file-type="component"
+                />
+              </div>
+              <CategoryBadge
+                category={movie.classification_s6b3}
+                className="text-sm"
+                data-pol-id="733bwu"
+                data-pol-file-name="movie-detail-header"
+                data-pol-file-type="component"
+              />
+            </div>
+          </div>
           <div
             className="flex flex-wrap gap-2 mt-2"
             data-pol-id="17tpna"
             data-pol-file-name="movie-detail-header"
             data-pol-file-type="component"
           >
-            {genre.map((g, index) => (
-              <span
-                key={g}
-                className="px-2 py-1 bg-secondary text-secondary-foreground text-xs rounded-full"
-                data-pol-id={`l8qr82_${index}`}
-                data-pol-file-name="movie-detail-header"
-                data-pol-file-type="component"
-              >
-                {g}
-              </span>
-            ))}
+            Genre : {movie.filmGenre}
           </div>
         </div>
 
-        <div
-          className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm"
-          data-pol-id="cylx0a"
-          data-pol-file-name="movie-detail-header"
-          data-pol-file-type="component"
-        >
-          <div
-            className="flex items-center gap-2"
-            data-pol-id="qujjbc"
-            data-pol-file-name="movie-detail-header"
-            data-pol-file-type="component"
-          >
-            <CalendarIcon
-              className="h-4 w-4 text-muted-foreground"
-              data-pol-id="sative"
-              data-pol-file-name="movie-detail-header"
-              data-pol-file-type="component"
-            />
-            <span
-              data-pol-id="2rctb5"
-              data-pol-file-name="movie-detail-header"
-              data-pol-file-type="component"
-            >
-              Release Date: {formattedDate}
-            </span>
-          </div>
-          <div
-            className="flex items-center gap-2"
-            data-pol-id="tp2p3r"
-            data-pol-file-name="movie-detail-header"
-            data-pol-file-type="component"
-          >
-            <Globe2Icon
-              className="h-4 w-4 text-muted-foreground"
-              data-pol-id="ij1j35"
-              data-pol-file-name="movie-detail-header"
-              data-pol-file-type="component"
-            />
-            <span
-              data-pol-id="k4ywvt"
-              data-pol-file-name="movie-detail-header"
-              data-pol-file-type="component"
-            >
-              Language: {language}
-            </span>
-          </div>
-        </div>
-
-        <div
-          className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm"
-          data-pol-id="492zs3"
-          data-pol-file-name="movie-detail-header"
-          data-pol-file-type="component"
-        >
-          <div
-            data-pol-id="mlds6l"
-            data-pol-file-name="movie-detail-header"
-            data-pol-file-type="component"
-          >
-            <span
-              className="text-muted-foreground"
-              data-pol-id="k4v2zq"
-              data-pol-file-name="movie-detail-header"
-              data-pol-file-type="component"
-            >
-              Director:
-            </span>{" "}
-            <span
-              className="font-medium"
-              data-pol-id="rtfv7t"
-              data-pol-file-name="movie-detail-header"
-              data-pol-file-type="component"
-            >
-              {director}
-            </span>
-          </div>
-          <div
-            data-pol-id="n4eyjv"
-            data-pol-file-name="movie-detail-header"
-            data-pol-file-type="component"
-          >
-            <span
-              className="text-muted-foreground"
-              data-pol-id="azmgbx"
-              data-pol-file-name="movie-detail-header"
-              data-pol-file-type="component"
-            >
-              Runtime:
-            </span>{" "}
-            <span
-              className="font-medium"
-              data-pol-id="0yq1qo"
-              data-pol-file-name="movie-detail-header"
-              data-pol-file-type="component"
-            >
-              {formattedRuntime}
-            </span>
-          </div>
-        </div>
-
-        <div
-          className="pt-2"
-          data-pol-id="3oryqx"
-          data-pol-file-name="movie-detail-header"
-          data-pol-file-type="component"
-        >
-          <CategoryBadge
-            category={category}
-            className="text-sm"
-            data-pol-id="733bwu"
-            data-pol-file-name="movie-detail-header"
-            data-pol-file-type="component"
-          />
-        </div>
-
-        <div
-          className="flex flex-wrap gap-3 pt-4"
-          data-pol-id="p7wcf7"
-          data-pol-file-name="movie-detail-header"
-          data-pol-file-type="component"
-        >
-          <Button
-            data-pol-id="rbc17x"
-            data-pol-file-name="movie-detail-header"
-            data-pol-file-type="component"
-          >
-            Edit Movie
-          </Button>
-          <Button
-            variant="outline"
-            data-pol-id="fvtvnt"
-            data-pol-file-name="movie-detail-header"
-            data-pol-file-type="component"
-          >
-            View Analytics
-          </Button>
-          <Button
-            variant="outline"
-            data-pol-id="6beawz"
-            data-pol-file-name="movie-detail-header"
-            data-pol-file-type="component"
-          >
-            Adjust Pricing
-          </Button>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+          {flags.map((flag, index) => {
+            const Icon = flag.icon;
+            return (
+              <div key={index} className="flex items-center gap-2">
+                <Icon
+                  className={`h-8 w-8 ${flag.color || "text-muted-foreground"}`}
+                />
+                <span className="font-medium text-muted-foreground text-lg">
+                  {flag.label}:
+                </span>
+                <span className="text-foreground font-semibold text-lg">
+                  {flag.value}
+                </span>
+                {flag.reason && (
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <HelpCircle className="h-5 w-5 text-muted-foreground cursor-help" />
+                      </TooltipTrigger>
+                      <TooltipContent className="bg-muted text-gray-600 rounded px-3 py-2 max-w-xs text-base shadow-md">
+                        {flag.reason}
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                )}
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>

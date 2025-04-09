@@ -34,5 +34,11 @@ export interface Prediction {
   movie_name: string;
   budget_score: number;
   Total_Score_s6b3: number;
-  classification_s6b3: string;
+  classification_s6b3:
+    | "regular"
+    | "blockbuster"
+    | "mega_blockbuster"
+    | "popular"
+    | "Below Average";
+  posterUrl: "https://posters.movieposterdb.com/25_02/2025/3566834/l_a-minecraft-movie-movie-poster_0be81db1.jpg";
 }

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { MOVIES_DATA } from "@/polymet/data/movies-data";
+import { useParams, useLocation } from "react-router-dom";
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { ArrowLeftIcon } from "lucide-react";
@@ -16,20 +16,43 @@ import CompetingReleasesCard from "@/polymet/components/competing-releases-card"
 import RevenuePredictionCard from "@/polymet/components/revenue-prediction-card";
 import SimplifiedPricingSection from "@/polymet/components/simplified-pricing-section";
 
+import { fetchPrediction } from "@/services/movieService";
+import { Prediction } from "@/types/Prediction";
+import ScoreAnalysisSection from "../components/ScoreAnalysisSection";
+
+function useQuery() {
+  return new URLSearchParams(useLocation().search);
+}
+
 export default function MovieDetailPage() {
-  const { id = "m001" } = useParams();
-  const [movie, setMovie] = useState(MOVIES_DATA[0]);
+  const { id: movieName } = useParams(); // This is FilmCommonName
+  const query = useQuery();
+  const language = query.get("language") || "Hindi";
+  const region = query.get("region") || "Mumbai";
+
+  const [movie, setMovie] = useState<Prediction>();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setLoading(true);
-    // Simulate API call
-    setTimeout(() => {
-      const foundMovie = MOVIES_DATA.find((m) => m.id === id) || MOVIES_DATA[0];
-      setMovie(foundMovie);
-      setLoading(false);
-    }, 500);
-  }, [id]);
+    const fetchMoviePrediction = async () => {
+      try {
+        setLoading(true);
+        const prediction = await fetchPrediction({
+          movie: movieName!,
+          language,
+          region,
+        });
+        console.log("Prediction - ", prediction);
+        setMovie(prediction);
+      } catch (error) {
+        console.error("Failed to fetch prediction", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMoviePrediction();
+  }, [movieName, language, region]);
 
   if (loading) {
     return (
@@ -88,59 +111,78 @@ export default function MovieDetailPage() {
   }
 
   // Generate mock score attributes with descriptions
-  const scoreAttributes = [
-    {
-      title: "Actor Rating",
-      score: Math.floor(Math.random() * 30) + 70, // 70-100 range
-      description: `Strong performances from the lead cast with notable chemistry. ${movie.cast[0]} delivers a standout performance that elevates key scenes.`,
-      tooltipText:
-        "Measures the quality and audience reception of the cast's performance",
-    },
-    {
-      title: "Director Rating",
-      score: Math.floor(Math.random() * 40) + 60, // 60-100 range
-      description: `${movie.director} brings a unique vision to the film with signature stylistic elements. Direction shows strong command of the ${movie.genre[0]} genre conventions.`,
-      tooltipText:
-        "Evaluates the director's reputation and previous work success",
-    },
-    {
-      title: "Plot Rating",
-      score: Math.floor(Math.random() * 50) + 50, // 50-100 range
-      description: `The narrative structure is well-crafted with engaging story arcs. The ${movie.genre.join("/")} elements blend effectively to create a cohesive storyline.`,
-      tooltipText:
-        "Assesses the quality, originality and audience appeal of the storyline",
-    },
-    {
-      title: "Budget",
-      score: Math.floor(movie.productionBudget / 3) + 40, // Scaled score
-      description: `Production budget of $${movie.productionBudget}M with marketing spend of $${movie.marketingBudget}M positions this release competitively within its category.`,
-      tooltipText:
-        "Evaluation of production and marketing budget relative to genre expectations",
-    },
-    {
-      title: "Overall Sentiment",
-      score: movie.socialMediaBuzz,
-      description:
-        movie.socialMediaBuzz > 50
-          ? `Positive social media buzz with strong anticipation building across platforms. Pre-release engagement metrics show promising audience interest.`
-          : `Mixed to negative sentiment in social media conversations. Concerns about various aspects of the film are prevalent in online discussions.`,
-      tooltipText: "Analysis of social media sentiment and audience reactions",
-    },
-    {
-      title: "Audience Popularity",
-      score: movie.preReleaseBookings,
-      description:
-        movie.preReleaseBookings > 60
-          ? `Strong pre-release booking trends indicate high audience interest. Early ticket sales are tracking above average for the ${movie.category} category.`
-          : `Pre-release bookings are below expectations for a film in the ${movie.category} category. Additional marketing push may be required.`,
-      tooltipText:
-        "Measures pre-release bookings and audience interest metrics",
-    },
-  ];
+  const scoreAttributes = movie
+    ? [
+        {
+          title: "Actor Rating",
+          score: movie.actorRating,
+          description: movie.actorReason,
+          tooltipText:
+            "Measures the quality and audience reception of the cast's performance",
+        },
+        {
+          title: "Director Rating",
+          score: movie.directorRating,
+          description: movie.directorReason,
+          tooltipText:
+            "Evaluates the director's reputation and previous work success",
+        },
+        {
+          title: "Plot Rating",
+          score: movie.plotRating,
+          description: movie.plotRatingReason,
+          tooltipText:
+            "Assesses the quality, originality and audience appeal of the storyline",
+        },
+        {
+          title: "Budget Score",
+          score: movie.budget_score,
+          description:
+            "Based on estimated production and marketing investment.",
+          tooltipText:
+            "Evaluation of production and marketing budget relative to genre expectations",
+        },
+        {
+          title: "Overall Sentiment",
+          score: movie.sentimentScore,
+          description: movie.sentimentReason,
+          tooltipText:
+            "Analysis of social media sentiment and audience reactions",
+        },
+        {
+          title: "Audience Popularity",
+          score: movie.audiencePopularityScore,
+          description: movie.audiencePopularityReason,
+          tooltipText:
+            "Measures pre-release audience interest and popularity score",
+        },
+        {
+          title: "Producer Rating",
+          score: movie.producerRating,
+          description: movie.producerReason,
+          tooltipText:
+            "Measures pre-release audience interest and popularity score",
+        },
+        {
+          title: "Music Director Rating",
+          score: movie.musicDirectorRating,
+          description: movie.musicDirectorReason,
+          tooltipText:
+            "Measures pre-release audience interest and popularity score",
+        },
+        {
+          title: "Songs Rating",
+          score: movie.songsRating,
+          description: movie.songReason,
+          tooltipText:
+            "Measures pre-release audience interest and popularity score",
+        },
+      ]
+    : [];
 
   return (
     <div
-      className="space-y-8"
+      className="space-y-4"
       data-pol-id="at924k"
       data-pol-file-name="movie-detail-page"
       data-pol-file-type="page"
@@ -176,20 +218,14 @@ export default function MovieDetailPage() {
       </div>
 
       {/* Movie header */}
-      <MovieDetailHeader
-        title={movie.title}
-        posterUrl={movie.posterUrl}
-        language={movie.language}
-        debutDate={movie.debutDate}
-        score={movie.score}
-        category={movie.category}
-        genre={movie.genre}
-        director={movie.director}
-        runtime={movie.runtime}
-        data-pol-id="udj1ct"
-        data-pol-file-name="movie-detail-page"
-        data-pol-file-type="page"
-      />
+      {movie && (
+        <MovieDetailHeader
+          movie={movie}
+          data-pol-id="udj1ct"
+          data-pol-file-name="movie-detail-page"
+          data-pol-file-type="page"
+        />
+      )}
 
       <Separator
         data-pol-id="s236ib"
@@ -197,8 +233,39 @@ export default function MovieDetailPage() {
         data-pol-file-type="page"
       />
 
+      <div>
+        <h2
+          className="text-2xl font-bold"
+          data-pol-id="n2nr7t"
+          data-pol-file-name="movie-detail-page"
+          data-pol-file-type="page"
+        >
+          Score Analysis
+        </h2>
+        {movie && <ScoreAnalysisSection scoreAttributes={scoreAttributes} />}
+      </div>
+      {/* <div
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+        data-pol-id="40v827"
+        data-pol-file-name="movie-detail-page"
+        data-pol-file-type="page"
+      >
+        {scoreAttributes.map((attr, index) => (
+          <ScoreAttributeCard
+            key={index}
+            title={attr.title}
+            score={attr.score}
+            description={attr.description}
+            tooltipText={attr.tooltipText}
+            data-pol-id={`0nrcod_${index}`}
+            data-pol-file-name="movie-detail-page"
+            data-pol-file-type="page"
+          />
+        ))}
+      </div> */}
+
       {/* Tabs for different sections */}
-      <Tabs
+      {/* <Tabs
         defaultValue="overview"
         className="space-y-6"
         data-pol-id="zc2rly"
@@ -243,33 +310,6 @@ export default function MovieDetailPage() {
           data-pol-file-name="movie-detail-page"
           data-pol-file-type="page"
         >
-          <h2
-            className="text-2xl font-bold"
-            data-pol-id="n2nr7t"
-            data-pol-file-name="movie-detail-page"
-            data-pol-file-type="page"
-          >
-            Score Analysis
-          </h2>
-          <div
-            className="grid grid-cols-1 md:grid-cols-2 gap-6"
-            data-pol-id="40v827"
-            data-pol-file-name="movie-detail-page"
-            data-pol-file-type="page"
-          >
-            {scoreAttributes.map((attr, index) => (
-              <ScoreAttributeCard
-                key={index}
-                title={attr.title}
-                score={attr.score}
-                description={attr.description}
-                tooltipText={attr.tooltipText}
-                data-pol-id={`0nrcod_${index}`}
-                data-pol-file-name="movie-detail-page"
-                data-pol-file-type="page"
-              />
-            ))}
-          </div>
 
           <div
             className="grid grid-cols-1 lg:grid-cols-3 gap-6"
@@ -344,7 +384,11 @@ export default function MovieDetailPage() {
             <ScoreAttributeCard
               title="Social Media Buzz"
               score={movie.socialMediaBuzz}
-              description={`The film has generated ${movie.socialMediaBuzz > 75 ? "significant" : "moderate"} buzz across social media platforms. Sentiment analysis shows ${movie.socialMediaBuzz > 60 ? "positive" : "mixed"} reception to trailers and promotional content.`}
+              description={`The film has generated ${
+                movie.socialMediaBuzz > 75 ? "significant" : "moderate"
+              } buzz across social media platforms. Sentiment analysis shows ${
+                movie.socialMediaBuzz > 60 ? "positive" : "mixed"
+              } reception to trailers and promotional content.`}
               data-pol-id="b75jyi"
               data-pol-file-name="movie-detail-page"
               data-pol-file-type="page"
@@ -353,7 +397,13 @@ export default function MovieDetailPage() {
             <ScoreAttributeCard
               title="Pre-Release Bookings"
               score={movie.preReleaseBookings}
-              description={`Current pre-release booking rate is at ${movie.preReleaseBookings}% of projected capacity. ${movie.preReleaseBookings > 70 ? "Strong early interest suggests potential for sold-out opening weekend." : "Additional promotional efforts may boost opening weekend numbers."}`}
+              description={`Current pre-release booking rate is at ${
+                movie.preReleaseBookings
+              }% of projected capacity. ${
+                movie.preReleaseBookings > 70
+                  ? "Strong early interest suggests potential for sold-out opening weekend."
+                  : "Additional promotional efforts may boost opening weekend numbers."
+              }`}
               data-pol-id="qnwb4y"
               data-pol-file-name="movie-detail-page"
               data-pol-file-type="page"
@@ -407,7 +457,7 @@ export default function MovieDetailPage() {
             data-pol-file-type="page"
           />
         </TabsContent>
-      </Tabs>
+      </Tabs> */}
     </div>
   );
 }

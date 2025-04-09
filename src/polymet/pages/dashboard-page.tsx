@@ -16,7 +16,7 @@ export default function DashboardPage() {
   useEffect(() => {
     const loadMovies = async () => {
       try {
-        const data = await fetchMovies("hindi");
+        const data = await fetchMovies("Hindi");
         setMovies(data);
       } catch (error) {
         console.error("Failed to load movies", error);

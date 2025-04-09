@@ -14,37 +14,38 @@ export default function MovieScoreBadge({
 }: MovieScoreBadgeProps) {
   // Determine color based on score
   const getScoreColor = () => {
-    if (score >= 90)
-      return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300";
-    if (score >= 75)
-      return "bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-300";
-    if (score >= 60)
-      return "bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-300";
-    if (score >= 40)
-      return "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300";
-    return "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300";
+    if (score > 90)
+      return "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300 backdrop-filter backdrop-blur-md bg-opacity-20";
+    if (score > 75)
+      return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 backdrop-filter backdrop-blur-md bg-opacity-20";
+    if (score > 60)
+      return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 backdrop-filter backdrop-blur-md bg-opacity-20";
+    if (score > 40)
+      return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300 backdrop-filter backdrop-blur-md bg-opacity-20";
+    return "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300 backdrop-filter backdrop-blur-md bg-opacity-20";
   };
 
   // Determine size classes
   const getSizeClasses = () => {
     switch (size) {
       case "sm":
-        return "w-8 h-8 text-xs";
+        return "text-xs";
       case "lg":
-        return "w-16 h-16 text-xl font-bold";
+        return "text-xl font-bold";
       case "md":
+        return "text-lg font-bold";
       default:
-        return "w-12 h-12 text-sm font-medium";
+        return "text-sm font-medium";
     }
   };
 
   return (
     <div
       className={cn(
-        "rounded-full flex items-center justify-center font-semibold",
+        "flex items-center justify-center font-semibold rounded-bl-xl rounded-tr-xl",
         getScoreColor(),
         getSizeClasses(),
-        className,
+        className
       )}
       data-pol-id="9cydfx"
       data-pol-file-name="movie-score-badge"
