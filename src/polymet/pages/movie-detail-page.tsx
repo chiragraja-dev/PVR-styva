@@ -267,64 +267,70 @@ export default function MovieDetailPage() {
         </h2>
         {movie && <ScoreAnalysisSection scoreAttributes={scoreAttributes} />}
       </div>
-      <Separator
-        data-pol-id="s236ib"
-        data-pol-file-name="movie-detail-page"
-        data-pol-file-type="page"
-      />
-      <div>
-        <h2
-          className="text-2xl font-bold"
-          data-pol-id="n2nr7t"
-          data-pol-file-name="movie-detail-page"
-          data-pol-file-type="page"
-        >
-          Historic Revenue Overview
-        </h2>
 
-        {/* Historic-only fields */}
-        {isHistoricPrediction(movie) && (
-          <div className="bg-white shadow-lg rounded-2xl p-6 w-full mx-auto">
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
-              <div className="bg-green-50 rounded-xl p-4 shadow-sm">
-                <div className="text-base text-gray-500 mb-1">Total Revenue</div>
-                <div className="text-2xl font-bold text-green-700">
-                  {new Intl.NumberFormat("en-IN", {
-                    style: "currency",
-                    currency: "INR",
-                    minimumFractionDigits: 2,
-                  }).format(movie.total_revenue)}
-                </div>
-              </div>
+      {isHistoricPrediction(movie) && (
+        <>
+          <Separator
+            data-pol-id="s236ib"
+            data-pol-file-name="movie-detail-page"
+            data-pol-file-type="page"
+          />
 
-              <div className="bg-blue-50 rounded-xl p-4 shadow-sm">
-                <div className="text-base text-gray-500 mb-1">
-                  Total Seats Sold
-                </div>
-                <div className="text-2xl font-bold text-blue-700">
-                  {new Intl.NumberFormat("en-IN", {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  }).format(movie.total_seats_sold)}
-                </div>
-              </div>
+          <div>
+            <h2
+              className="text-2xl font-bold"
+              data-pol-id="n2nr7t"
+              data-pol-file-name="movie-detail-page"
+              data-pol-file-type="page"
+            >
+              Historic Revenue Overview
+            </h2>
 
-              <div className="bg-purple-50 rounded-xl p-4 shadow-sm">
-                <div className="text-base text-gray-500 mb-1">
-                  Revenue per Show
+            {/* Historic-only fields */}
+            <div className="bg-white shadow-lg rounded-2xl p-6 w-full mx-auto">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
+                <div className="bg-green-50 rounded-xl p-4 shadow-sm">
+                  <div className="text-base text-gray-500 mb-1">
+                    Total Revenue
+                  </div>
+                  <div className="text-2xl font-bold text-green-700">
+                    {new Intl.NumberFormat("en-IN", {
+                      style: "currency",
+                      currency: "INR",
+                      minimumFractionDigits: 2,
+                    }).format(movie.total_revenue)}
+                  </div>
                 </div>
-                <div className="text-2xl font-bold text-purple-700">
-                  {new Intl.NumberFormat("en-IN", {
-                    style: "currency",
-                    currency: "INR",
-                    minimumFractionDigits: 2,
-                  }).format(movie.revenue_per_show)}
+
+                <div className="bg-blue-50 rounded-xl p-4 shadow-sm">
+                  <div className="text-base text-gray-500 mb-1">
+                    Total Seats Sold
+                  </div>
+                  <div className="text-2xl font-bold text-blue-700">
+                    {new Intl.NumberFormat("en-IN", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    }).format(movie.total_seats_sold)}
+                  </div>
+                </div>
+
+                <div className="bg-purple-50 rounded-xl p-4 shadow-sm">
+                  <div className="text-base text-gray-500 mb-1">
+                    Revenue per Show
+                  </div>
+                  <div className="text-2xl font-bold text-purple-700">
+                    {new Intl.NumberFormat("en-IN", {
+                      style: "currency",
+                      currency: "INR",
+                      minimumFractionDigits: 2,
+                    }).format(movie.revenue_per_show)}
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        )}
-      </div>
+        </>
+      )}
       {/* <div
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
         data-pol-id="40v827"
