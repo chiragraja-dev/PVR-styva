@@ -53,7 +53,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       <div
         className={cn(
           "flex flex-col border-r bg-card transition-all duration-300 overflow-hidden",
-          isSidebarOpen ? "w-64" : "w-16"
+          isSidebarOpen ? "w-1/6" : "w-16"
         )}
         data-pol-id="8cuskg"
         data-pol-file-name="dashboard-layout"

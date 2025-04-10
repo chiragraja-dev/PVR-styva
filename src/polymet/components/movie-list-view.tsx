@@ -200,7 +200,7 @@ export default function MovieListView({
                   data-pol-file-type="component"
                 >
                   {/* Release date */}
-                  <div
+                  {/* <div
                     className="flex items-center"
                     data-pol-id={`5n69il_${index}`}
                     data-pol-file-name="movie-list-view"
@@ -229,7 +229,7 @@ export default function MovieListView({
                         ({timeUntilRelease})
                       </span>
                     )}
-                  </div>
+                  </div> */}
 
                   {/* Genres */}
                   {/* {movie.genres && movie.genres.length > 0 && (
