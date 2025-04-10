@@ -203,11 +203,14 @@ export default function PastPredictionsPage() {
       // Apply tab filter
       if (activeTab !== "all") {
         switch (activeTab) {
+          case "mega_blockbuster":
+            filteredMovies = filteredMovies.filter(
+              (movie) => movie.classification_s6b3 === "mega_blockbuster"
+            );
+            break;
           case "blockbuster":
             filteredMovies = filteredMovies.filter(
-              (movie) =>
-                movie.classification_s6b3 === "mega_blockbuster" ||
-                movie.classification_s6b3 === "blockbuster"
+              (movie) => movie.classification_s6b3 === "blockbuster"
             );
             break;
           case "popular":
@@ -243,11 +246,14 @@ export default function PastPredictionsPage() {
 
       if (value !== "all") {
         switch (value) {
+          case "mega_blockbuster":
+            filteredMovies = filteredMovies.filter(
+              (movie) => movie.classification_s6b3 === "mega_blockbuster"
+            );
+            break;
           case "blockbuster":
             filteredMovies = filteredMovies.filter(
-              (movie) =>
-                movie.classification_s6b3 === "mega_blockbuster" ||
-                movie.classification_s6b3 === "blockbuster"
+              (movie) => movie.classification_s6b3 === "blockbuster"
             );
             break;
           case "popular":
@@ -297,7 +303,7 @@ export default function PastPredictionsPage() {
         data-pol-file-type="page"
       >
         <TabsList
-          className="grid grid-cols-4 w-full max-w-md"
+          className="grid grid-cols-5 w-full"
           data-pol-id="jcgluo"
           data-pol-file-name="past-predictions-page"
           data-pol-file-type="page"
@@ -309,6 +315,14 @@ export default function PastPredictionsPage() {
             data-pol-file-type="page"
           >
             All Past Movies
+          </TabsTrigger>
+          <TabsTrigger
+            value="mega_blockbuster"
+            data-pol-id="sada2z"
+            data-pol-file-name="past-predictions-page"
+            data-pol-file-type="page"
+          >
+            Mega Blockbuster
           </TabsTrigger>
           <TabsTrigger
             value="blockbuster"

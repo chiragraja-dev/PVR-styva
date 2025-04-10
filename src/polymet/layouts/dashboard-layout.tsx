@@ -249,7 +249,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         </div>
 
         {/* User Profile */}
-        <div
+        {/* <div
           className="p-4 border-t flex items-center"
           data-pol-id="hmnn2x"
           data-pol-file-name="dashboard-layout"
@@ -310,7 +310,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
               />
             </button>
           )}
-        </div>
+        </div> */}
 
         {/* Toggle Button */}
         <button

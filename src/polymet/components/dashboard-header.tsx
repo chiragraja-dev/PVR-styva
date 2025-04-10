@@ -50,7 +50,7 @@ export default function DashboardHeader({
           </p>
         )}
       </div>
-      <div
+      {/* <div
         className="flex items-center gap-3 mt-4 sm:mt-0"
         data-pol-id="u073zp"
         data-pol-file-name="dashboard-header"
@@ -77,7 +77,7 @@ export default function DashboardHeader({
             Add Movie
           </span>
         </Button>
-      </div>
+      </div> */}
     </div>
   );
 }
