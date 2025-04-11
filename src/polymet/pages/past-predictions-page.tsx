@@ -148,12 +148,12 @@ export default function PastPredictionsPage() {
           movie.Total_Score_s6b3 <= filters.scoreRange[1]
       );
 
-      // Apply genre filter
-      if (filters.genres.length > 0) {
-        filteredMovies = filteredMovies.filter((movie) =>
-          movie.filmGenre.some((genre) => filters.genres.includes(genre))
-        );
-      }
+      // // Apply genre filter
+      // if (filters.genres.length > 0) {
+      //   filteredMovies = filteredMovies.filter((movie) =>
+      //     movie.filmGenre.some((genre) => filters.genres.includes(genre))
+      //   );
+      // }
 
       // Apply language filter
       if (filters.language && filters.language.length > 0) {

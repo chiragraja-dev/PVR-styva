@@ -5,7 +5,7 @@ import {
   CalendarIcon,
   FilterIcon,
   // UserIcon,
-  LogOutIcon,
+  // LogOutIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import MovieFilters from "@/polymet/components/movie-filters";
@@ -18,21 +18,21 @@ interface DashboardLayoutProps {
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const location = useLocation();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const availableGenres = [
-    "Action",
-    "Adventure",
-    "Animation",
-    "Comedy",
-    "Crime",
-    "Drama",
-    "Fantasy",
-    "Horror",
-    "Mystery",
-    "Romance",
-    "Sci-Fi",
-    "Thriller",
-    "War",
-  ];
+  // const availableGenres = [
+  //   "Action",
+  //   "Adventure",
+  //   "Animation",
+  //   "Comedy",
+  //   "Crime",
+  //   "Drama",
+  //   "Fantasy",
+  //   "Horror",
+  //   "Mystery",
+  //   "Romance",
+  //   "Sci-Fi",
+  //   "Thriller",
+  //   "War",
+  // ];
 
   const availableLanguages = ["English", "Hindi"];
 
@@ -237,7 +237,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
               </div>
               <MovieFilters
                 onFilterChange={handleFilterChange}
-                availableGenres={availableGenres}
+                // availableGenres={availableGenres}
                 availableLanguages={availableLanguages}
                 compact={true}
                 data-pol-id="jua4xd"

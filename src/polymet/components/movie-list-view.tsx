@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
-import { format, formatDistanceToNow, parseISO } from "date-fns";
+// import { format, formatDistanceToNow, parseISO } from "date-fns";
 
 import { cn } from "@/lib/utils";
 import MovieScoreBadge from "@/polymet/components/movie-score-badge";
-import { CalendarIcon } from "lucide-react";
+// import { CalendarIcon } from "lucide-react";
 import { HistoricMovieDetails } from "@/types/HistoricMovieDetails";
 
 interface MovieListViewProps {
@@ -88,12 +88,12 @@ export default function MovieListView({
     >
       {movies.map((movie, index) => {
         // Parse the debut date
-        const parsedDate = parseISO(movie.FilmRelDate);
-        const formattedDate = format(parsedDate, "MMM d, yyyy");
-        const timeUntilRelease = formatDistanceToNow(parsedDate, {
-          addSuffix: true,
-        });
-        const isUpcoming = parsedDate > new Date();
+        // const parsedDate = parseISO(movie.FilmRelDate);
+        // const formattedDate = format(parsedDate, "MMM d, yyyy");
+        // const timeUntilRelease = formatDistanceToNow(parsedDate, {
+        //   addSuffix: true,
+        // });
+        // const isUpcoming = parsedDate > new Date();
 
         const isLast = index === movies.length - 1;
 

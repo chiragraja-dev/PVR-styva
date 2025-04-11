@@ -1,7 +1,7 @@
 import React from "react";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { PlusIcon } from "lucide-react";
+// import { Button } from "@/components/ui/button";
+// import { PlusIcon } from "lucide-react";
 
 interface DashboardHeaderProps {
   title: string;
@@ -14,7 +14,7 @@ export default function DashboardHeader({
   title,
   subtitle,
   className,
-  children,
+  // children,
 }: DashboardHeaderProps) {
   return (
     <div
