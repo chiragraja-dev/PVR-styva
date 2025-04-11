@@ -28,7 +28,7 @@ export type FilterOptions = {
   search: string;
   category: string[];
   scoreRange: [number, number];
-  genres: string[];
+  // genres: string[];
   releaseTimeframe: string;
   sortBy: string;
   language: string[];
@@ -36,7 +36,7 @@ export type FilterOptions = {
 
 interface MovieFiltersProps {
   onFilterChange: (filters: FilterOptions) => void;
-  availableGenres: string[];
+  // availableGenres: string[];
   availableLanguages?: string[];
   className?: string;
   compact?: boolean;
@@ -69,7 +69,7 @@ const SORT_OPTIONS = [
 
 export default function MovieFilters({
   onFilterChange,
-  availableGenres,
+  // availableGenres,
   availableLanguages = [],
   className,
   compact = false,
@@ -78,7 +78,7 @@ export default function MovieFilters({
     search: "",
     category: [],
     scoreRange: [0, 100],
-    genres: [],
+    // genres: [],
     releaseTimeframe: "all",
     sortBy: "date-desc",
     language: [],
@@ -97,7 +97,7 @@ export default function MovieFilters({
     if (updatedFilters.category.length > 0) count++;
     if (updatedFilters.scoreRange[0] > 0 || updatedFilters.scoreRange[1] < 100)
       count++;
-    if (updatedFilters.genres.length > 0) count++;
+    // if (updatedFilters.genres.length > 0) count++;
     if (updatedFilters.releaseTimeframe !== "all") count++;
     if (updatedFilters.language.length > 0) count++;
     setActiveFilterCount(count);
@@ -108,7 +108,7 @@ export default function MovieFilters({
       search: "",
       category: [],
       scoreRange: [0, 100],
-      genres: [],
+      // genres: [],
       releaseTimeframe: "all",
       sortBy: "date-desc",
       language: [],
@@ -126,13 +126,13 @@ export default function MovieFilters({
     handleFilterChange({ category: newCategories });
   };
 
-  const toggleGenre = (genre: string) => {
-    const newGenres = filters.genres.includes(genre)
-      ? filters.genres.filter((g) => g !== genre)
-      : [...filters.genres, genre];
+  // const toggleGenre = (genre: string) => {
+  //   const newGenres = filters.genres.includes(genre)
+  //     ? filters.genres.filter((g) => g !== genre)
+  //     : [...filters.genres, genre];
 
-    handleFilterChange({ genres: newGenres });
-  };
+  //   handleFilterChange({ genres: newGenres });
+  // };
 
   const toggleLanguage = (language: string) => {
     const newLanguages = filters.language.includes(language)
@@ -315,7 +315,7 @@ export default function MovieFilters({
         </div>
 
         {/* Genres */}
-        <div
+        {/* <div
           className="space-y-2"
           data-pol-id="7xhhfu"
           data-pol-file-name="movie-filters"
@@ -350,7 +350,7 @@ export default function MovieFilters({
               </Button>
             ))}
           </div>
-        </div>
+        </div> */}
 
         {/* Languages */}
         {availableLanguages.length > 0 && (
@@ -711,7 +711,7 @@ export default function MovieFilters({
             </div>
 
             {/* Genres */}
-            <div
+            {/* <div
               className="mb-4"
               data-pol-id="v1nihj"
               data-pol-file-name="movie-filters"
@@ -748,7 +748,7 @@ export default function MovieFilters({
                   </Button>
                 ))}
               </div>
-            </div>
+            </div> */}
 
             {/* Languages */}
             {availableLanguages.length > 0 && (
@@ -889,7 +889,7 @@ export default function MovieFilters({
             </Badge>
           ))}
 
-          {filters.genres.map((genre, index) => (
+          {/* {filters.genres.map((genre, index) => (
             <Badge
               key={genre}
               variant="secondary"
@@ -907,7 +907,7 @@ export default function MovieFilters({
                 data-pol-file-type="component"
               />
             </Badge>
-          ))}
+          ))} */}
 
           {filters.language.map((language, index) => (
             <Badge

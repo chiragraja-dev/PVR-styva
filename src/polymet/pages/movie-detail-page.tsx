@@ -1,20 +1,12 @@
 import { useState, useEffect } from "react";
 import { useParams, useLocation } from "react-router-dom";
 
-// import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { ArrowLeftIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 
 import MovieDetailHeader from "@/polymet/components/movie-detail-header";
-// import ScoreAttributeCard from "@/polymet/components/score-attribute-card";
-// import MovieSynopsis from "@/polymet/components/movie-synopsis";
-// import PricingRecommendationCard from "@/polymet/components/pricing-recommendation-card";
-// import MovieCastList from "@/polymet/components/movie-cast-list";
-// import CompetingReleasesCard from "@/polymet/components/competing-releases-card";
-// import RevenuePredictionCard from "@/polymet/components/revenue-prediction-card";
-// import SimplifiedPricingSection from "@/polymet/components/simplified-pricing-section";
 
 import { fetchPrediction } from "@/services/movieService";
 import { Prediction } from "@/types/Prediction";
@@ -34,30 +26,35 @@ export default function MovieDetailPage() {
   const language = query.get("language") || "Hindi";
   const region = query.get("region") || "Mumbai";
 
-  const [movie, setMovie] = useState<Prediction | HistoricPrediction>();
+  const [movie, setMovie] = useState<
+    Prediction & Partial<HistoricPrediction>
+  >();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchMovieData = async () => {
       try {
         setLoading(true);
+        let result;
 
         if (mode === "historic") {
-          const historicPrediction = await fetchHistoricPrediction({
+          result = await fetchHistoricPrediction({
             movie: movieName!,
             language,
             region,
           });
-
-          setMovie(historicPrediction as unknown as Prediction); // if type mismatch, cast
         } else {
-          const prediction = await fetchPrediction({
+          result = await fetchPrediction({
             movie: movieName!,
             language,
             region,
           });
+        }
 
-          setMovie(prediction);
+        if (isHistoricPrediction(result)) {
+          setMovie(result as HistoricPrediction);
+        } else {
+          setMovie(result as Prediction & Partial<HistoricPrediction>);
         }
       } catch (error) {
         console.error("Failed to fetch movie data", error);
@@ -138,28 +135,28 @@ export default function MovieDetailPage() {
     ? [
         {
           title: "Actor Rating",
-          score: movie.actorRating,
-          description: movie.actorReason,
+          score: movie.features.actorRating,
+          description: movie.features.actorReason,
           tooltipText:
             "Measures the quality and audience reception of the cast's performance",
         },
         {
           title: "Director Rating",
-          score: movie.directorRating,
-          description: movie.directorReason,
+          score: movie.features.directorRating,
+          description: movie.features.directorReason,
           tooltipText:
             "Evaluates the director's reputation and previous work success",
         },
         {
           title: "Plot Rating",
-          score: movie.plotRating,
-          description: movie.plotRatingReason,
+          score: movie.features.plotRating,
+          description: movie.features.plotRatingReason,
           tooltipText:
             "Assesses the quality, originality and audience appeal of the storyline",
         },
         {
           title: "Budget Score",
-          score: movie.budget_score,
+          score: movie.features.budget_score,
           description:
             "Based on estimated production and marketing investment.",
           tooltipText:
@@ -167,36 +164,36 @@ export default function MovieDetailPage() {
         },
         {
           title: "Overall Sentiment",
-          score: movie.sentimentScore,
-          description: movie.sentimentReason,
+          score: movie.features.sentimentScore,
+          description: movie.features.sentimentReason,
           tooltipText:
             "Analysis of social media sentiment and audience reactions",
         },
         {
           title: "Audience Popularity",
-          score: movie.audiencePopularityScore,
-          description: movie.audiencePopularityReason,
+          score: movie.features.audiencePopularityScore,
+          description: movie.features.audiencePopularityReason,
           tooltipText:
             "Measures pre-release audience interest and popularity score",
         },
         {
           title: "Producer Rating",
-          score: movie.producerRating,
-          description: movie.producerReason,
+          score: movie.features.producerRating,
+          description: movie.features.producerReason,
           tooltipText:
             "Measures pre-release audience interest and popularity score",
         },
         {
           title: "Music Director Rating",
-          score: movie.musicDirectorRating,
-          description: movie.musicDirectorReason,
+          score: movie.features.musicDirectorRating,
+          description: movie.features.musicDirectorReason,
           tooltipText:
             "Measures pre-release audience interest and popularity score",
         },
         {
           title: "Songs Rating",
-          score: movie.songsRating,
-          description: movie.songReason,
+          score: movie.features.songsRating,
+          description: movie.features.songReason,
           tooltipText:
             "Measures pre-release audience interest and popularity score",
         },
@@ -243,7 +240,8 @@ export default function MovieDetailPage() {
       {/* Movie header */}
       {movie && (
         <MovieDetailHeader
-          movie={movie}
+          movie={movie.features}
+          movieMeta={movie.meta}
           data-pol-id="udj1ct"
           data-pol-file-name="movie-detail-page"
           data-pol-file-type="page"
@@ -298,7 +296,7 @@ export default function MovieDetailPage() {
                       style: "currency",
                       currency: "INR",
                       minimumFractionDigits: 2,
-                    }).format(movie!.total_revenue)}
+                    }).format(movie!.features.total_revenue)}
                   </div>
                 </div>
 
@@ -310,7 +308,7 @@ export default function MovieDetailPage() {
                     {new Intl.NumberFormat("en-IN", {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 2,
-                    }).format(movie!.total_seats_sold)}
+                    }).format(movie!.features.total_seats_sold)}
                   </div>
                 </div>
 
@@ -323,7 +321,7 @@ export default function MovieDetailPage() {
                       style: "currency",
                       currency: "INR",
                       minimumFractionDigits: 2,
-                    }).format(movie!.revenue_per_show)}
+                    }).format(movie!.features.revenue_per_show)}
                   </div>
                 </div>
               </div>
@@ -331,220 +329,6 @@ export default function MovieDetailPage() {
           </div>
         </>
       )}
-      {/* <div
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-        data-pol-id="40v827"
-        data-pol-file-name="movie-detail-page"
-        data-pol-file-type="page"
-      >
-        {scoreAttributes.map((attr, index) => (
-          <ScoreAttributeCard
-            key={index}
-            title={attr.title}
-            score={attr.score}
-            description={attr.description}
-            tooltipText={attr.tooltipText}
-            data-pol-id={`0nrcod_${index}`}
-            data-pol-file-name="movie-detail-page"
-            data-pol-file-type="page"
-          />
-        ))}
-      </div> */}
-
-      {/* Tabs for different sections */}
-      {/* <Tabs
-        defaultValue="overview"
-        className="space-y-6"
-        data-pol-id="zc2rly"
-        data-pol-file-name="movie-detail-page"
-        data-pol-file-type="page"
-      >
-        <TabsList
-          data-pol-id="izcw12"
-          data-pol-file-name="movie-detail-page"
-          data-pol-file-type="page"
-        >
-          <TabsTrigger
-            value="overview"
-            data-pol-id="9zyelp"
-            data-pol-file-name="movie-detail-page"
-            data-pol-file-type="page"
-          >
-            Overview
-          </TabsTrigger>
-          <TabsTrigger
-            value="performance"
-            data-pol-id="73u25g"
-            data-pol-file-name="movie-detail-page"
-            data-pol-file-type="page"
-          >
-            Performance
-          </TabsTrigger>
-          <TabsTrigger
-            value="pricing"
-            data-pol-id="k7utbm"
-            data-pol-file-name="movie-detail-page"
-            data-pol-file-type="page"
-          >
-            Pricing
-          </TabsTrigger>
-        </TabsList>
-
-        <TabsContent
-          value="overview"
-          className="space-y-6"
-          data-pol-id="8l772e"
-          data-pol-file-name="movie-detail-page"
-          data-pol-file-type="page"
-        >
-
-          <div
-            className="grid grid-cols-1 lg:grid-cols-3 gap-6"
-            data-pol-id="bz1540"
-            data-pol-file-name="movie-detail-page"
-            data-pol-file-type="page"
-          >
-            <MovieSynopsis
-              synopsis={movie.synopsis}
-              className="lg:col-span-2"
-              data-pol-id="vv4cio"
-              data-pol-file-name="movie-detail-page"
-              data-pol-file-type="page"
-            />
-
-            <MovieCastList
-              cast={movie.cast}
-              data-pol-id="ly0wmw"
-              data-pol-file-name="movie-detail-page"
-              data-pol-file-type="page"
-            />
-          </div>
-        </TabsContent>
-
-        <TabsContent
-          value="performance"
-          className="space-y-6"
-          data-pol-id="lu2hzz"
-          data-pol-file-name="movie-detail-page"
-          data-pol-file-type="page"
-        >
-          <h2
-            className="text-2xl font-bold"
-            data-pol-id="8c9td3"
-            data-pol-file-name="movie-detail-page"
-            data-pol-file-type="page"
-          >
-            Performance Metrics
-          </h2>
-
-          <div
-            className="grid grid-cols-1 lg:grid-cols-3 gap-6"
-            data-pol-id="yk8mt2"
-            data-pol-file-name="movie-detail-page"
-            data-pol-file-type="page"
-          >
-            <RevenuePredictionCard
-              opening={movie.predictedRevenue.opening}
-              lifetime={movie.predictedRevenue.lifetime}
-              similarMovies={movie.historicalPerformance.similarMovies}
-              className="lg:col-span-2"
-              data-pol-id="lpnv1m"
-              data-pol-file-name="movie-detail-page"
-              data-pol-file-type="page"
-            />
-
-            <CompetingReleasesCard
-              competingReleases={movie.competingReleases}
-              weekendType={movie.weekendType}
-              data-pol-id="u6ohrx"
-              data-pol-file-name="movie-detail-page"
-              data-pol-file-type="page"
-            />
-          </div>
-
-          <div
-            className="grid grid-cols-1 md:grid-cols-2 gap-6"
-            data-pol-id="tiiufy"
-            data-pol-file-name="movie-detail-page"
-            data-pol-file-type="page"
-          >
-            <ScoreAttributeCard
-              title="Social Media Buzz"
-              score={movie.socialMediaBuzz}
-              description={`The film has generated ${
-                movie.socialMediaBuzz > 75 ? "significant" : "moderate"
-              } buzz across social media platforms. Sentiment analysis shows ${
-                movie.socialMediaBuzz > 60 ? "positive" : "mixed"
-              } reception to trailers and promotional content.`}
-              data-pol-id="b75jyi"
-              data-pol-file-name="movie-detail-page"
-              data-pol-file-type="page"
-            />
-
-            <ScoreAttributeCard
-              title="Pre-Release Bookings"
-              score={movie.preReleaseBookings}
-              description={`Current pre-release booking rate is at ${
-                movie.preReleaseBookings
-              }% of projected capacity. ${
-                movie.preReleaseBookings > 70
-                  ? "Strong early interest suggests potential for sold-out opening weekend."
-                  : "Additional promotional efforts may boost opening weekend numbers."
-              }`}
-              data-pol-id="qnwb4y"
-              data-pol-file-name="movie-detail-page"
-              data-pol-file-type="page"
-            />
-          </div>
-        </TabsContent>
-
-        <TabsContent
-          value="pricing"
-          className="space-y-6"
-          data-pol-id="0aomek"
-          data-pol-file-name="movie-detail-page"
-          data-pol-file-type="page"
-        >
-          <h2
-            className="text-2xl font-bold"
-            data-pol-id="6sj4cm"
-            data-pol-file-name="movie-detail-page"
-            data-pol-file-type="page"
-          >
-            Pricing Strategy
-          </h2>
-
-          <div
-            className="grid grid-cols-1 md:grid-cols-3 gap-6"
-            data-pol-id="uvcwab"
-            data-pol-file-name="movie-detail-page"
-            data-pol-file-type="page"
-          >
-            <div
-              className="md:col-span-3"
-              data-pol-id="z91n0h"
-              data-pol-file-name="movie-detail-page"
-              data-pol-file-type="page"
-            >
-              <PricingRecommendationCard
-                premium={movie.pricingRecommendation.premium}
-                standard={movie.pricingRecommendation.standard}
-                budget={movie.pricingRecommendation.budget}
-                data-pol-id="y78foa"
-                data-pol-file-name="movie-detail-page"
-                data-pol-file-type="page"
-              />
-            </div>
-          </div>
-
-          <SimplifiedPricingSection
-            movieId={movie.id}
-            data-pol-id="m4256l"
-            data-pol-file-name="movie-detail-page"
-            data-pol-file-type="page"
-          />
-        </TabsContent>
-      </Tabs> */}
     </div>
   );
 }

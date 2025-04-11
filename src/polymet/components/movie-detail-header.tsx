@@ -5,7 +5,7 @@ import MovieScoreBadge from "@/polymet/components/movie-score-badge";
 import CategoryBadge from "@/polymet/components/category-badge";
 // import { Button } from "@/components/ui/button";
 
-import {CategoryType} from "@/polymet/components/category-badge";
+import { CategoryType } from "@/polymet/components/category-badge";
 
 import {
   AlertTriangle,
@@ -47,11 +47,17 @@ interface MovieDetailHeaderProps {
     isPatriotic: string;
     patrioticTopic: string;
   };
+  movieMeta: {
+    FilmStars: string;
+    ProductionHouse: string | null;
+    FilmRunTime: number;
+  };
   className?: string;
 }
 
 export default function MovieDetailHeader({
   movie,
+  movieMeta,
   className,
 }: MovieDetailHeaderProps) {
   const flags = [
@@ -233,6 +239,12 @@ export default function MovieDetailHeader({
               </div>
             );
           })}
+        </div>
+
+        <div className="flex justify-between pt-6 flex-col">
+          <h1>FilmStars : {movieMeta.FilmStars || "N/A"}</h1>
+          <h1>ProductionHouse : {movieMeta.ProductionHouse || "N/A"}</h1>
+          <h1>FilmRunTime : {movieMeta.FilmRunTime || "N/A"}</h1>
         </div>
       </div>
     </div>
