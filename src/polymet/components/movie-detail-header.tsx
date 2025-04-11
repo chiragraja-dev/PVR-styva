@@ -241,10 +241,27 @@ export default function MovieDetailHeader({
           })}
         </div>
 
-        <div className="flex justify-between pt-6 flex-col">
-          <h1>FilmStars : {movieMeta.FilmStars || "N/A"}</h1>
-          <h1>ProductionHouse : {movieMeta.ProductionHouse || "N/A"}</h1>
-          <h1>FilmRunTime : {movieMeta.FilmRunTime || "N/A"}</h1>
+        <div className="bg-white rounded-2xl pt-6 space-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="flex flex-col">
+              <span className="text-sm text-gray-500">Film Stars</span>
+              <span className="text-base font-medium text-gray-800">
+                {movieMeta.FilmStars || "N/A"}
+              </span>
+            </div>
+            <div className="flex flex-col">
+              <span className="text-sm text-gray-500">Production House</span>
+              <span className="text-base font-medium text-gray-800">
+                {movieMeta.ProductionHouse || "N/A"}
+              </span>
+            </div>
+            <div className="flex flex-col">
+              <span className="text-sm text-gray-500">Film Runtime</span>
+              <span className="text-base font-medium text-gray-800">
+                {movieMeta.FilmRunTime || "N/A"}
+              </span>
+            </div>
+          </div>
         </div>
       </div>
     </div>

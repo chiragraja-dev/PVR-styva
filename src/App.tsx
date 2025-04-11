@@ -24,11 +24,17 @@ export default function AppPrototype() {
               data-pol-file-name="app-prototype"
               data-pol-file-type="prototype"
             >
-              <DashboardPage
-                data-pol-id="s0lpq6"
-                data-pol-file-name="app-prototype"
-                data-pol-file-type="prototype"
-              />
+              {(
+                {
+                  // setIsSidebarOpen
+                }
+              ) => (
+                <DashboardPage
+                  data-pol-id="s0lpq6"
+                  data-pol-file-name="app-prototype"
+                  data-pol-file-type="prototype"
+                />
+              )}
             </DashboardLayout>
           }
           data-pol-id="k8j8k7"
@@ -44,11 +50,15 @@ export default function AppPrototype() {
               data-pol-file-name="app-prototype"
               data-pol-file-type="prototype"
             >
-              <PastPredictionsPage
-                data-pol-id="wpukvl"
-                data-pol-file-name="app-prototype"
-                data-pol-file-type="prototype"
-              />
+              {({ 
+                // setIsSidebarOpen
+               }) => (
+                <PastPredictionsPage
+                  data-pol-id="wpukvl"
+                  data-pol-file-name="app-prototype"
+                  data-pol-file-type="prototype"
+                />
+              )}
             </DashboardLayout>
           }
           data-pol-id="o5ll5w"
@@ -64,11 +74,14 @@ export default function AppPrototype() {
               data-pol-file-name="app-prototype"
               data-pol-file-type="prototype"
             >
-              <MovieDetailPage
-                data-pol-id="zr8mr5"
-                data-pol-file-name="app-prototype"
-                data-pol-file-type="prototype"
-              />
+              {({ setIsSidebarOpen }) => (
+                <MovieDetailPage
+                  data-pol-id="zr8mr5"
+                  data-pol-file-name="app-prototype"
+                  data-pol-file-type="prototype"
+                  setIsSidebarOpen={setIsSidebarOpen}
+                />
+              )}
             </DashboardLayout>
           }
           data-pol-id="ea3vik"
@@ -84,29 +97,35 @@ export default function AppPrototype() {
               data-pol-file-name="app-prototype"
               data-pol-file-type="prototype"
             >
-              <div
-                className="flex flex-col items-center justify-center h-[70vh]"
-                data-pol-id="lyc8bz"
-                data-pol-file-name="app-prototype"
-                data-pol-file-type="prototype"
-              >
-                <h1
-                  className="text-3xl font-bold"
-                  data-pol-id="zyygrj"
+              {(
+                {
+                  //  setIsSidebarOpen
+                }
+              ) => (
+                <div
+                  className="flex flex-col items-center justify-center h-[70vh]"
+                  data-pol-id="lyc8bz"
                   data-pol-file-name="app-prototype"
                   data-pol-file-type="prototype"
                 >
-                  404
-                </h1>
-                <p
-                  className="text-muted-foreground mt-2"
-                  data-pol-id="zxnwph"
-                  data-pol-file-name="app-prototype"
-                  data-pol-file-type="prototype"
-                >
-                  Page not found
-                </p>
-              </div>
+                  <h1
+                    className="text-3xl font-bold"
+                    data-pol-id="zyygrj"
+                    data-pol-file-name="app-prototype"
+                    data-pol-file-type="prototype"
+                  >
+                    404
+                  </h1>
+                  <p
+                    className="text-muted-foreground mt-2"
+                    data-pol-id="zxnwph"
+                    data-pol-file-name="app-prototype"
+                    data-pol-file-type="prototype"
+                  >
+                    Page not found
+                  </p>
+                </div>
+              )}
             </DashboardLayout>
           }
           data-pol-id="uca625"

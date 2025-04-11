@@ -14,12 +14,13 @@ import { HistoricPrediction } from "@/types/HistoricPrediction";
 import { fetchHistoricPrediction } from "@/services/movieService";
 
 import ScoreAnalysisSection from "../components/ScoreAnalysisSection";
+import { PageProps } from "@/types/LayoutProps";
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
 }
 
-export default function MovieDetailPage() {
+export default function MovieDetailPage({ setIsSidebarOpen }: PageProps) {
   const { id: movieName } = useParams(); // This is FilmCommonName
   const query = useQuery();
   const mode = query.get("mode");
@@ -33,6 +34,7 @@ export default function MovieDetailPage() {
 
   useEffect(() => {
     const fetchMovieData = async () => {
+      setIsSidebarOpen();
       try {
         setLoading(true);
         let result;
@@ -215,6 +217,7 @@ export default function MovieDetailPage() {
       >
         <Link
           to="/"
+          onClick={setIsSidebarOpen}
           data-pol-id="12paj9"
           data-pol-file-name="movie-detail-page"
           data-pol-file-type="page"

@@ -10,10 +10,7 @@ import {
 import { cn } from "@/lib/utils";
 import MovieFilters from "@/polymet/components/movie-filters";
 import { FilterOptions } from "@/polymet/components/movie-filters";
-
-interface DashboardLayoutProps {
-  children: React.ReactNode;
-}
+import { DashboardLayoutProps } from "@/types/LayoutProps";
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const location = useLocation();
@@ -41,6 +38,8 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     const event = new CustomEvent("filterChange", { detail: filters });
     window.dispatchEvent(event);
   };
+
+  const handleSidebarToggle = () => setIsSidebarOpen(!isSidebarOpen);
 
   return (
     <div
@@ -369,7 +368,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           data-pol-file-name="dashboard-layout"
           data-pol-file-type="layout"
         >
-          {children}
+          {children({ setIsSidebarOpen: handleSidebarToggle })}
         </main>
       </div>
     </div>
