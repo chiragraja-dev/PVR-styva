@@ -218,10 +218,10 @@ export default function MovieDetailHeader({
                 <Icon
                   className={`h-8 w-8 ${flag.color || "text-muted-foreground"}`}
                 />
-                <span className="font-medium text-muted-foreground text-lg">
+                <span className="font-medium text-muted-foreground text-base">
                   {flag.label}:
                 </span>
-                <span className="text-foreground font-semibold text-lg">
+                <span className="text-foreground font-semibold text-base">
                   {flag.value}
                 </span>
                 {flag.reason && (
