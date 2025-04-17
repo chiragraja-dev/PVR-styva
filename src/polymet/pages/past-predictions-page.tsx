@@ -10,21 +10,16 @@ import { fetchHistoricMovies } from "@/services/movieService";
 
 export default function PastPredictionsPage() {
   const [allMovies, setAllMovies] = useState<HistoricMovieDetails[]>([]);
-
   const [movies, setMovies] = useState<HistoricMovieDetails[]>([]);
-  const [visibleMovies, setVisibleMovies] = useState<HistoricMovieDetails[]>(
-    []
-  );
+  const [visibleMovies, setVisibleMovies] = useState<HistoricMovieDetails[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-
   const [isFetchingMore, setIsFetchingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
-
   const [activeTab, setActiveTab] = useState("all");
+  const [filters, setFilters] = useState<FilterOptions | null>(null);
 
   const ITEMS_PER_PAGE = 12;
 
-  // Initial load of movies - only past movies
   useEffect(() => {
     const loadPastMovies = async () => {
       try {
@@ -36,7 +31,6 @@ export default function PastPredictionsPage() {
         setAllMovies(fullMovies);
         setMovies(fullMovies);
         setVisibleMovies(fullMovies.slice(0, ITEMS_PER_PAGE));
-
         setHasMore(fullMovies.length > ITEMS_PER_PAGE);
       } catch (error) {
         console.error("Failed to load movies", error);
@@ -51,10 +45,7 @@ export default function PastPredictionsPage() {
   const loadMoreMovies = () => {
     setIsFetchingMore(true);
     setTimeout(() => {
-      const next = movies.slice(
-        visibleMovies.length,
-        visibleMovies.length + ITEMS_PER_PAGE
-      );
+      const next = movies.slice(visibleMovies.length, visibleMovies.length + ITEMS_PER_PAGE);
       setVisibleMovies((prev) => [...prev, ...next]);
 
       if (visibleMovies.length + next.length >= movies.length) {
@@ -81,24 +72,14 @@ export default function PastPredictionsPage() {
     [isFetchingMore, isLoading, hasMore, visibleMovies]
   );
 
-  // Listen for filter changes from the sidebar
   useEffect(() => {
     const handleFilterChange = (event: Event) => {
       const customEvent = event as CustomEvent<FilterOptions>;
       applyFilters(customEvent.detail);
     };
 
-    window.addEventListener(
-      "filterChange",
-      handleFilterChange as EventListener
-    );
-
-    return () => {
-      window.removeEventListener(
-        "filterChange",
-        handleFilterChange as EventListener
-      );
-    };
+    window.addEventListener("filterChange", handleFilterChange as EventListener);
+    return () => window.removeEventListener("filterChange", handleFilterChange as EventListener);
   }, []);
 
   useEffect(() => {
@@ -106,170 +87,75 @@ export default function PastPredictionsPage() {
     setHasMore(movies.length > ITEMS_PER_PAGE);
   }, [movies]);
 
-  const applyFilters = (filters: FilterOptions) => {
+  const applyFilters = (newFilters: FilterOptions, tabValue: string = activeTab) => {
     setIsLoading(true);
+    setFilters(newFilters);
 
-    // Simulate API call
     setTimeout(() => {
       let filteredMovies = [...allMovies];
 
-      // Always filter for past movies on this page
-      const today = new Date();
-      filteredMovies = filteredMovies.filter((movie) => {
-        const movieDate = new Date(movie.FilmRelDate);
-        return movieDate <= today;
-      });
-
-      // Apply search filter
-      if (filters.search) {
-        const searchLower = filters.search.toLowerCase();
+      if (newFilters.search) {
+        const searchLower = newFilters.search.toLowerCase();
         filteredMovies = filteredMovies.filter(
           (movie) =>
             movie.FilmCommonName.toLowerCase().includes(searchLower) ||
             movie.Director?.toLowerCase().includes(searchLower)
-          // ||
-          // movie.cast.some((actor) =>
-          //   actor.toLowerCase().includes(searchLower)
-          // )
         );
       }
 
-      // Apply category filter
-      if (filters.category.length > 0) {
+      if (newFilters.category?.length > 0) {
         filteredMovies = filteredMovies.filter((movie) =>
-          filters.category.includes(movie.classification_s6b3)
+          newFilters.category.includes(movie.classification_s6b3)
         );
       }
 
-      // Apply score range filter
-      filteredMovies = filteredMovies.filter(
-        (movie) =>
-          movie.Total_Score_s6b3 >= filters.scoreRange[0] &&
-          movie.Total_Score_s6b3 <= filters.scoreRange[1]
-      );
+      if (
+        newFilters.scoreRange?.length === 2 &&
+        newFilters.scoreRange[0] != null &&
+        newFilters.scoreRange[1] != null
+      ) {
+        filteredMovies = filteredMovies.filter(
+          (movie) =>
+            movie.Total_Score_s6b3 >= newFilters.scoreRange[0] &&
+            movie.Total_Score_s6b3 <= newFilters.scoreRange[1]
+        );
+      }
 
-      // // Apply genre filter
-      // if (filters.genres.length > 0) {
-      //   filteredMovies = filteredMovies.filter((movie) =>
-      //     movie.filmGenre.some((genre) => filters.genres.includes(genre))
-      //   );
-      // }
-
-      // Apply language filter
-      if (filters.language && filters.language.length > 0) {
+      if (newFilters.language?.length > 0) {
         filteredMovies = filteredMovies.filter((movie) =>
-          filters.language.includes(movie.FilmLang)
+          newFilters.language.some(
+            (lang) => lang.toLowerCase() === movie.FilmLang?.toLowerCase()
+          )
         );
       }
 
-      // Apply sorting
-      switch (filters.sortBy) {
+      switch (newFilters.sortBy) {
         case "score-desc":
-          filteredMovies.sort(
-            (a, b) => b.Total_Score_s6b3 - a.Total_Score_s6b3
-          );
+          filteredMovies.sort((a, b) => b.Total_Score_s6b3 - a.Total_Score_s6b3);
           break;
         case "score-asc":
-          filteredMovies.sort(
-            (a, b) => a.Total_Score_s6b3 - b.Total_Score_s6b3
-          );
+          filteredMovies.sort((a, b) => a.Total_Score_s6b3 - b.Total_Score_s6b3);
           break;
         case "date-asc":
           filteredMovies.sort(
-            (a, b) =>
-              new Date(a.FilmRelDate).getTime() -
-              new Date(b.FilmRelDate).getTime()
+            (a, b) => new Date(a.FilmRelDate).getTime() - new Date(b.FilmRelDate).getTime()
           );
           break;
         case "date-desc":
           filteredMovies.sort(
-            (a, b) =>
-              new Date(b.FilmRelDate).getTime() -
-              new Date(a.FilmRelDate).getTime()
+            (a, b) => new Date(b.FilmRelDate).getTime() - new Date(a.FilmRelDate).getTime()
           );
           break;
         case "title-asc":
-          filteredMovies.sort((a, b) =>
-            a.FilmCommonName.localeCompare(b.FilmCommonName)
-          );
+          filteredMovies.sort((a, b) => a.FilmCommonName.localeCompare(b.FilmCommonName));
           break;
         case "title-desc":
-          filteredMovies.sort((a, b) =>
-            b.FilmCommonName.localeCompare(a.FilmCommonName)
-          );
+          filteredMovies.sort((a, b) => b.FilmCommonName.localeCompare(a.FilmCommonName));
           break;
       }
 
-      // Apply tab filter
-      if (activeTab !== "all") {
-        switch (activeTab) {
-          case "mega_blockbuster":
-            filteredMovies = filteredMovies.filter(
-              (movie) => movie.classification_s6b3 === "mega_blockbuster"
-            );
-            break;
-          case "blockbuster":
-            filteredMovies = filteredMovies.filter(
-              (movie) => movie.classification_s6b3 === "blockbuster"
-            );
-            break;
-          case "popular":
-            filteredMovies = filteredMovies.filter(
-              (movie) => movie.classification_s6b3 === "popular"
-            );
-            break;
-          case "regular":
-            filteredMovies = filteredMovies.filter(
-              (movie) =>
-                movie.classification_s6b3 === "regular" ||
-                movie.classification_s6b3 === "Below Average"
-            );
-            break;
-        }
-      }
-
-      setMovies(filteredMovies);
-      setIsLoading(false);
-    }, 300);
-  };
-
-  const handleTabChange = (value: string) => {
-    setActiveTab(value);
-    setIsLoading(true);
-
-    setTimeout(() => {
-      const today = new Date();
-      let filteredMovies = allMovies.filter((movie) => {
-        const movieDate = new Date(movie.FilmRelDate);
-        return movieDate <= today;
-      });
-
-      if (value !== "all") {
-        switch (value) {
-          case "mega_blockbuster":
-            filteredMovies = filteredMovies.filter(
-              (movie) => movie.classification_s6b3 === "mega_blockbuster"
-            );
-            break;
-          case "blockbuster":
-            filteredMovies = filteredMovies.filter(
-              (movie) => movie.classification_s6b3 === "blockbuster"
-            );
-            break;
-          case "popular":
-            filteredMovies = filteredMovies.filter(
-              (movie) => movie.classification_s6b3 === "popular"
-            );
-            break;
-          case "regular":
-            filteredMovies = filteredMovies.filter(
-              (movie) =>
-                movie.classification_s6b3 === "regular" ||
-                movie.classification_s6b3 === "Below Average"
-            );
-            break;
-        }
-      }
+      // ✅ Apply tab filter
+      filteredMovies = applyTabFilter(filteredMovies, tabValue);
 
       setMovies(filteredMovies);
       setVisibleMovies(filteredMovies.slice(0, ITEMS_PER_PAGE));
@@ -278,76 +164,54 @@ export default function PastPredictionsPage() {
     }, 300);
   };
 
+  const applyTabFilter = (movies: HistoricMovieDetails[], tab: string) => {
+    if (tab === "all") return movies;
+
+    switch (tab) {
+      case "mega_blockbuster":
+        return movies.filter((m) => m.classification_s6b3 === "mega_blockbuster");
+      case "blockbuster":
+        return movies.filter((m) => m.classification_s6b3 === "blockbuster");
+      case "popular":
+        return movies.filter((m) => m.classification_s6b3 === "popular");
+      case "regular":
+        return movies.filter(
+          (m) => m.classification_s6b3 === "regular" || m.classification_s6b3 === "Below Average"
+        );
+      default:
+        return movies;
+    }
+  };
+
+  const handleTabChange = (value: string) => {
+    setActiveTab(value);
+    setIsLoading(true);
+
+    if (filters) {
+      applyFilters(filters, value);
+    } else {
+      const filtered = applyTabFilter(allMovies, value);
+      setMovies(filtered);
+      setVisibleMovies(filtered.slice(0, ITEMS_PER_PAGE));
+      setHasMore(filtered.length > ITEMS_PER_PAGE);
+      setIsLoading(false);
+    }
+  };
+
   return (
-    <div
-      className="space-y-6"
-      data-pol-id="puddyz"
-      data-pol-file-name="past-predictions-page"
-      data-pol-file-type="page"
-    >
+    <div className="space-y-6">
       <DashboardHeader
         title="Past Movies"
         subtitle="Review and analyze previously predicted movie performances"
-        data-pol-id="oy0het"
-        data-pol-file-name="past-predictions-page"
-        data-pol-file-type="page"
       />
 
-      <Tabs
-        defaultValue="all"
-        value={activeTab}
-        onValueChange={handleTabChange}
-        className="w-full"
-        data-pol-id="5xcnp3"
-        data-pol-file-name="past-predictions-page"
-        data-pol-file-type="page"
-      >
-        <TabsList
-          className="grid grid-cols-5 w-full"
-          data-pol-id="jcgluo"
-          data-pol-file-name="past-predictions-page"
-          data-pol-file-type="page"
-        >
-          <TabsTrigger
-            value="all"
-            data-pol-id="v9icac"
-            data-pol-file-name="past-predictions-page"
-            data-pol-file-type="page"
-          >
-            All Past Movies
-          </TabsTrigger>
-          <TabsTrigger
-            value="mega_blockbuster"
-            data-pol-id="sada2z"
-            data-pol-file-name="past-predictions-page"
-            data-pol-file-type="page"
-          >
-            Mega Blockbuster
-          </TabsTrigger>
-          <TabsTrigger
-            value="blockbuster"
-            data-pol-id="3slexa"
-            data-pol-file-name="past-predictions-page"
-            data-pol-file-type="page"
-          >
-            Blockbuster
-          </TabsTrigger>
-          <TabsTrigger
-            value="popular"
-            data-pol-id="uu7bfu"
-            data-pol-file-name="past-predictions-page"
-            data-pol-file-type="page"
-          >
-            Popular
-          </TabsTrigger>
-          <TabsTrigger
-            value="regular"
-            data-pol-id="d43ztj"
-            data-pol-file-name="past-predictions-page"
-            data-pol-file-type="page"
-          >
-            Regular
-          </TabsTrigger>
+      <Tabs defaultValue="all" value={activeTab} onValueChange={handleTabChange} className="w-full">
+        <TabsList className="grid grid-cols-5 w-full">
+          <TabsTrigger value="all">All Past Movies</TabsTrigger>
+          <TabsTrigger value="mega_blockbuster">Mega Blockbuster</TabsTrigger>
+          <TabsTrigger value="blockbuster">Blockbuster</TabsTrigger>
+          <TabsTrigger value="popular">Popular</TabsTrigger>
+          <TabsTrigger value="regular">Regular</TabsTrigger>
         </TabsList>
       </Tabs>
 
@@ -355,9 +219,6 @@ export default function PastPredictionsPage() {
         movies={visibleMovies}
         isLoading={isLoading}
         lastItemRef={lastMovieElementRef}
-        data-pol-id="crqw74"
-        data-pol-file-name="past-predictions-page"
-        data-pol-file-type="page"
       />
     </div>
   );
