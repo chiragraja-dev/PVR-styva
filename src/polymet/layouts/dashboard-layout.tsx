@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import MovieFilters from "@/polymet/components/movie-filters";
-import { FilterOptions } from "@/polymet/components/movie-filters";
+// import { FilterOptions } from "@/polymet/components/movie-filters";
 import { DashboardLayoutProps } from "@/types/LayoutProps";
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
@@ -33,11 +33,11 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
   const availableLanguages = ["English", "Hindi"];
 
-  const handleFilterChange = (filters: FilterOptions) => {
-    // Dispatch a custom event that pages can listen to
-    const event = new CustomEvent("filterChange", { detail: filters });
-    window.dispatchEvent(event);
-  };
+  // const handleFilterChange = (filters: FilterOptions) => {
+  //   // Dispatch a custom event that pages can listen to
+  //   const event = new CustomEvent("filterChange", { detail: filters });
+  //   window.dispatchEvent(event);
+  // };
 
   const handleSidebarToggle = () => setIsSidebarOpen(!isSidebarOpen);
 
