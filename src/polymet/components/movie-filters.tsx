@@ -23,6 +23,7 @@ import {
   XIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useFilterStore } from "@/store/useFilterStore";
 
 export type FilterOptions = {
   search: string;
@@ -35,7 +36,7 @@ export type FilterOptions = {
 };
 
 interface MovieFiltersProps {
-  onFilterChange: (filters: FilterOptions) => void;
+  // onFilterChange: (filters: FilterOptions) => void;
   // availableGenres: string[];
   availableLanguages?: string[];
   className?: string;
@@ -68,28 +69,21 @@ const SORT_OPTIONS = [
 ];
 
 export default function MovieFilters({
-  onFilterChange,
+  // onFilterChange,
   // availableGenres,
   availableLanguages = [],
   className,
   compact = false,
 }: MovieFiltersProps) {
-  const [filters, setFilters] = useState<FilterOptions>({
-    search: "",
-    category: [],
-    scoreRange: [0, 100],
-    // genres: [],
-    releaseTimeframe: "all",
-    sortBy: "date-desc",
-    language: [],
-  });
+  const { filters, setFilters, resetFilters } = useFilterStore();
+
 
   const [activeFilterCount, setActiveFilterCount] = useState(0);
 
   const handleFilterChange = (newFilters: Partial<FilterOptions>) => {
     const updatedFilters = { ...filters, ...newFilters };
     setFilters(updatedFilters);
-    onFilterChange(updatedFilters);
+    // onFilterChange(updatedFilters);
 
     // Count active filters
     let count = 0;
@@ -103,20 +97,20 @@ export default function MovieFilters({
     setActiveFilterCount(count);
   };
 
-  const resetFilters = () => {
-    const defaultFilters : FilterOptions  = {
-      search: "",
-      category: [],
-      scoreRange: [0, 100],
-      // genres: [],
-      releaseTimeframe: "all",
-      sortBy: "date-desc",
-      language: [],
-    };
-    setFilters(defaultFilters);
-    onFilterChange(defaultFilters);
-    setActiveFilterCount(0);
-  };
+  // const resetFilters = () => {
+  //   const defaultFilters : FilterOptions  = {
+  //     search: "",
+  //     category: [],
+  //     scoreRange: [0, 100],
+  //     // genres: [],
+  //     releaseTimeframe: "all",
+  //     sortBy: "date-desc",
+  //     language: [],
+  //   };
+  //   setFilters(defaultFilters);
+  //   onFilterChange(defaultFilters);
+  //   setActiveFilterCount(0);
+  // };
 
   const toggleCategory = (category: string) => {
     const newCategories = filters.category.includes(category)

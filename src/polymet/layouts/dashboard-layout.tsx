@@ -235,7 +235,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                 />
               </div>
               <MovieFilters
-                onFilterChange={handleFilterChange}
+                // onFilterChange={handleFilterChange}
                 // availableGenres={availableGenres}
                 availableLanguages={availableLanguages}
                 compact={true}

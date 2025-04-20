@@ -10,6 +10,7 @@ interface MovieListViewProps {
   movies: HistoricMovieDetails[];
   className?: string;
   isLoading?: boolean;
+  source: string;
   lastItemRef?: (node: HTMLAnchorElement | null) => void;
 }
 
@@ -17,6 +18,7 @@ export default function MovieListView({
   movies,
   className,
   isLoading = false,
+  source,
   lastItemRef,
 }: MovieListViewProps) {
   if (isLoading) {
@@ -258,7 +260,9 @@ export default function MovieListView({
                     data-pol-file-name="movie-list-view"
                     data-pol-file-type="component"
                   >
-                    {movie.FilmLang}
+                    {source === "dashboard"
+                      ? movie.FilmLang
+                      : movie.original_language_name}
                   </div>
                 </div>
               </div>

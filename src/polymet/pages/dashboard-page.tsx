@@ -2,17 +2,18 @@ import { useState, useEffect, useMemo } from "react";
 
 import MovieList from "@/polymet/components/movie-list";
 import DashboardHeader from "@/polymet/components/dashboard-header";
-import { FilterOptions } from "@/polymet/components/movie-filters";
+// import { FilterOptions } from "@/polymet/components/movie-filters";  
 import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
 import { fetchMovies } from "@/services/movieService";
 import { MovieDetails } from "@/types/MovieDetails";
+import { useFilterStore } from "@/store/useFilterStore";
 
 export default function DashboardPage() {
   const [movies, setMovies] = useState<MovieDetails[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const [filters, setFilters] = useState<FilterOptions | null>(null);
+  const { filters } = useFilterStore();
 
   // Initial load of movies - only upcoming movies
   useEffect(() => {
@@ -31,24 +32,24 @@ export default function DashboardPage() {
   }, []);
 
   // Listen for filter changes from the sidebar
-  useEffect(() => {
-    const handleFilterChange = (event: Event) => {
-      const customEvent = event as CustomEvent<FilterOptions>;
-      applyFilters(customEvent.detail);
-    };
+  // useEffect(() => {
+  //   const handleFilterChange = (event: Event) => {
+  //     const customEvent = event as CustomEvent<FilterOptions>;
+  //     applyFilters(customEvent.detail);
+  //   };
 
-    window.addEventListener(
-      "filterChange",
-      handleFilterChange as EventListener
-    );
+  //   window.addEventListener(
+  //     "filterChange",
+  //     handleFilterChange as EventListener
+  //   );
 
-    return () => {
-      window.removeEventListener(
-        "filterChange",
-        handleFilterChange as EventListener
-      );
-    };
-  }, []);
+  //   return () => {
+  //     window.removeEventListener(
+  //       "filterChange",
+  //       handleFilterChange as EventListener
+  //     );
+  //   };
+  // }, []);
 
   const filteredMovies = useMemo(() => {
     if (!filters) return movies;
@@ -135,12 +136,12 @@ export default function DashboardPage() {
     return result;
   }, [filters, movies]);
 
-  const applyFilters = (filters: FilterOptions) => {
-    setIsLoading(true);
+  // const applyFilters = (filters: FilterOptions) => {
+  //   setIsLoading(true);
 
-    setFilters(filters);
-    setIsLoading(false);
-  };
+  //   setFilters(filters);
+  //   setIsLoading(false);
+  // };
 
   return (
     <div

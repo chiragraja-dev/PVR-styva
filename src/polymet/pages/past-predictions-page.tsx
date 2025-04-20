@@ -2,14 +2,15 @@ import { useState, useEffect, useRef, useCallback } from "react";
 
 import MovieListView from "@/polymet/components/movie-list-view";
 import DashboardHeader from "@/polymet/components/dashboard-header";
-import { FilterOptions } from "@/polymet/components/movie-filters";
+// import { FilterOptions } from "@/polymet/components/movie-filters";
 
 import { HistoricMovieDetails } from "@/types/HistoricMovieDetails";
 import { fetchHistoricMovies } from "@/services/movieService";
+import { useFilterStore } from "@/store/useFilterStore";
 
 export default function PastPredictionsPage() {
   const [allMovies, setAllMovies] = useState<HistoricMovieDetails[]>([]);
-  const [filters, setFilters] = useState<FilterOptions | null>(null);
+  const { filters } = useFilterStore();
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
   const ITEMS_PER_PAGE = 12;
@@ -54,7 +55,8 @@ export default function PastPredictionsPage() {
     if (filters?.language?.length) {
       filtered = filtered.filter((movie) =>
         filters.language.some(
-          (lang) => movie.FilmLang?.toLowerCase() === lang.toLowerCase()
+          (lang) =>
+            movie.original_language_name?.toLowerCase() === lang.toLowerCase()
         )
       );
     }
@@ -132,29 +134,33 @@ export default function PastPredictionsPage() {
     [hasMore, isLoading, displayedMovies]
   );
 
-  const applyFilters = (newFilters: FilterOptions) => {
-    setFilters(newFilters);
-    setCurrentPage(1); // Reset to first page when filters change
-  };
-
   useEffect(() => {
-    const handleFilterChange = (event: Event) => {
-      const customEvent = event as CustomEvent<FilterOptions>;
-      applyFilters(customEvent.detail);
-    };
+    setCurrentPage(1); // Reset pagination when filters change
+  }, [filters]);
 
-    window.addEventListener(
-      "filterChange",
-      handleFilterChange as EventListener
-    );
-    return () =>
-      window.removeEventListener(
-        "filterChange",
-        handleFilterChange as EventListener
-      );
-  }, []);
+  // const applyFilters = (newFilters: FilterOptions) => {
+  //   setFilters(newFilters);
+  //   setCurrentPage(1); // Reset to first page when filters change
+  // };
 
-  console.log("movies filter --- ", displayedMovies);
+  // useEffect(() => {
+  //   const handleFilterChange = (event: Event) => {
+  //     const customEvent = event as CustomEvent<FilterOptions>;
+  //     applyFilters(customEvent.detail);
+  //   };
+
+  //   window.addEventListener(
+  //     "filterChange",
+  //     handleFilterChange as EventListener
+  //   );
+  //   return () =>
+  //     window.removeEventListener(
+  //       "filterChange",
+  //       handleFilterChange as EventListener
+  //     );
+  // }, []);
+
+  // console.log("movies filter --- ", displayedMovies);
 
   return (
     <div className="space-y-6">
@@ -167,6 +173,7 @@ export default function PastPredictionsPage() {
         movies={displayedMovies}
         isLoading={isLoading}
         lastItemRef={lastMovieElementRef}
+        source={"past"}
       />
     </div>
   );
