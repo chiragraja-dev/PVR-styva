@@ -41,11 +41,17 @@ export interface Prediction {
       | "mega_blockbuster"
       | "popular"
       | "Below Average";
-    posterUrl: "https://posters.movieposterdb.com/25_02/2025/3566834/l_a-minecraft-movie-movie-poster_0be81db1.jpg";
+    revenue_label:
+      | "regular"
+      | "blockbuster"
+      | "mega_blockbuster"
+      | "popular"
+      | "Below Average";
   };
   meta: {
     FilmStars: string;
     ProductionHouse: string | null;
     FilmRunTime: number;
+    FilmPosterUrl: string | null;
   };
 }

@@ -11,7 +11,9 @@ import { MovieDetails } from "@/types/MovieDetails";
 import { Prediction } from "@/types/Prediction";
 import { HistoricPrediction } from "@/types/HistoricPrediction";
 
-export const fetchMovies = async (language: string): Promise<MovieDetails[]> => {
+export const fetchMovies = async (
+  language: string
+): Promise<MovieDetails[]> => {
   const response = await client.get(MOVIES, {
     params: { language },
   });
@@ -36,14 +38,12 @@ export const fetchHistoricMovies = async (
 export const fetchPrediction = async ({
   movie,
   language,
-  region,
 }: {
   movie: string;
   language: string;
-  region: string;
 }): Promise<Prediction> => {
   const response = await client.get(PREDICTION, {
-    params: { movie, language, region },
+    params: { movie, language },
   });
   return response.data;
 };
@@ -54,14 +54,12 @@ export const fetchPrediction = async ({
 export const fetchHistoricPrediction = async ({
   movie,
   language,
-  region,
 }: {
   movie: string;
   language: string;
-  region: string;
 }): Promise<HistoricPrediction> => {
   const response = await client.get(HISTORIC_PREDICTION, {
-    params: { movie, language, region },
+    params: { movie, language },
   });
   return response.data;
 };

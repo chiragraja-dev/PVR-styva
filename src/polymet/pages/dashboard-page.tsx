@@ -2,7 +2,10 @@ import { useState, useEffect, useMemo } from "react";
 
 import MovieList from "@/polymet/components/movie-list";
 import DashboardHeader from "@/polymet/components/dashboard-header";
-// import { FilterOptions } from "@/polymet/components/movie-filters";  
+
+import { normalizeMovieData } from "@/lib/normalizeMovieData";
+
+// import { FilterOptions } from "@/polymet/components/movie-filters";
 import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
 import { fetchMovies } from "@/services/movieService";
@@ -19,8 +22,10 @@ export default function DashboardPage() {
   useEffect(() => {
     const loadMovies = async () => {
       try {
-        const data = await fetchMovies("Hindi");
-        setMovies(Object.values(data));
+        const language = filters.language[0] || "Hindi";
+        const data = await fetchMovies(language);
+        const normalizedMovies = normalizeMovieData(Object.values(data));
+        setMovies(normalizedMovies);
       } catch (error) {
         console.error("Failed to load movies", error);
       } finally {
@@ -29,30 +34,10 @@ export default function DashboardPage() {
     };
 
     loadMovies();
-  }, []);
-
-  // Listen for filter changes from the sidebar
-  // useEffect(() => {
-  //   const handleFilterChange = (event: Event) => {
-  //     const customEvent = event as CustomEvent<FilterOptions>;
-  //     applyFilters(customEvent.detail);
-  //   };
-
-  //   window.addEventListener(
-  //     "filterChange",
-  //     handleFilterChange as EventListener
-  //   );
-
-  //   return () => {
-  //     window.removeEventListener(
-  //       "filterChange",
-  //       handleFilterChange as EventListener
-  //     );
-  //   };
-  // }, []);
+  }, [filters.language]);
 
   const filteredMovies = useMemo(() => {
-    if (!filters) return movies;
+    if (!filters || Object.keys(filters).length === 0) return movies;
 
     let result = [...movies];
 
@@ -80,20 +65,6 @@ export default function DashboardPage() {
         (movie) =>
           movie.Total_Score_s6b3 >= filters.scoreRange[0] &&
           movie.Total_Score_s6b3 <= filters.scoreRange[1]
-      );
-    }
-
-    // // Genre
-    // if (filters.genres?.length) {
-    //   result = result.filter((movie) =>
-    //     movie.filmGenre?.some((genre) => filters.genres.includes(genre))
-    //   );
-    // }
-
-    // Language
-    if (filters.language?.length) {
-      result = result.filter((movie) =>
-        filters.language.includes(movie.FilmLang)
       );
     }
 
@@ -135,13 +106,6 @@ export default function DashboardPage() {
 
     return result;
   }, [filters, movies]);
-
-  // const applyFilters = (filters: FilterOptions) => {
-  //   setIsLoading(true);
-
-  //   setFilters(filters);
-  //   setIsLoading(false);
-  // };
 
   return (
     <div

@@ -3,6 +3,8 @@ import MovieCard from "@/polymet/components/movie-card";
 import { cn } from "@/lib/utils";
 import { MovieDetails } from "@/types/MovieDetails";
 
+import Default from "@/assets/default.jpg";
+
 interface MovieListProps {
   movies: MovieDetails[];
   className?: string;
@@ -84,9 +86,10 @@ export default function MovieList({
       {Object.values(movies).map((movie, index) => (
         <MovieCard
           key={movie.FilmId}
+          language={movie.FilmLang}
           id={movie.FilmCommonName}
           title={movie.FilmCommonName}
-          posterUrl={movie.posterUrl}
+          FilmPosterUrl={movie.FilmPosterUrl || Default}
           debutDate={movie.FilmRelDate}
           category={movie.classification_s6b3}
           score={movie.Total_Score_s6b3}

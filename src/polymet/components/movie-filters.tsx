@@ -43,13 +43,7 @@ interface MovieFiltersProps {
   compact?: boolean;
 }
 
-const CATEGORIES = [
-  "regular",
-  "blockbuster",
-  "mega_blockbuster",
-  "popular",
-  "Below Average",
-];
+const CATEGORIES = ["regular", "blockbuster", "mega_blockbuster", "popular"];
 
 const TIMEFRAMES = [
   { value: "all", label: "All Time" },
@@ -77,7 +71,6 @@ export default function MovieFilters({
 }: MovieFiltersProps) {
   const { filters, setFilters, resetFilters } = useFilterStore();
 
-
   const [activeFilterCount, setActiveFilterCount] = useState(0);
 
   const handleFilterChange = (newFilters: Partial<FilterOptions>) => {
@@ -97,21 +90,6 @@ export default function MovieFilters({
     setActiveFilterCount(count);
   };
 
-  // const resetFilters = () => {
-  //   const defaultFilters : FilterOptions  = {
-  //     search: "",
-  //     category: [],
-  //     scoreRange: [0, 100],
-  //     // genres: [],
-  //     releaseTimeframe: "all",
-  //     sortBy: "date-desc",
-  //     language: [],
-  //   };
-  //   setFilters(defaultFilters);
-  //   onFilterChange(defaultFilters);
-  //   setActiveFilterCount(0);
-  // };
-
   const toggleCategory = (category: string) => {
     const newCategories = filters.category.includes(category)
       ? filters.category.filter((c) => c !== category)
@@ -120,20 +98,17 @@ export default function MovieFilters({
     handleFilterChange({ category: newCategories });
   };
 
-  // const toggleGenre = (genre: string) => {
-  //   const newGenres = filters.genres.includes(genre)
-  //     ? filters.genres.filter((g) => g !== genre)
-  //     : [...filters.genres, genre];
-
-  //   handleFilterChange({ genres: newGenres });
-  // };
-
   const toggleLanguage = (language: string) => {
-    const newLanguages = filters.language.includes(language)
-      ? filters.language.filter((l) => l !== language)
-      : [...filters.language, language];
+    const isAlreadySelected = filters.language.includes(language);
+    const newLanguages = isAlreadySelected ? [] : [language]; // ✅ only one
 
     handleFilterChange({ language: newLanguages });
+
+    // const newLanguages = filters.language.includes(language)
+    //   ? filters.language.filter((l) => l !== language)
+    //   : [...filters.language, language];
+
+    // handleFilterChange({ language: newLanguages });
   };
 
   if (compact) {
@@ -307,44 +282,6 @@ export default function MovieFilters({
             data-pol-file-type="component"
           />
         </div>
-
-        {/* Genres */}
-        {/* <div
-          className="space-y-2"
-          data-pol-id="7xhhfu"
-          data-pol-file-name="movie-filters"
-          data-pol-file-type="component"
-        >
-          <Label
-            className="text-xs"
-            data-pol-id="1axa2x"
-            data-pol-file-name="movie-filters"
-            data-pol-file-type="component"
-          >
-            Genres
-          </Label>
-          <div
-            className="flex flex-wrap gap-2 max-h-[120px] overflow-y-auto"
-            data-pol-id="9lcppc"
-            data-pol-file-name="movie-filters"
-            data-pol-file-type="component"
-          >
-            {availableGenres.map((genre, index) => (
-              <Button
-                key={genre}
-                variant={filters.genres.includes(genre) ? "default" : "outline"}
-                size="sm"
-                onClick={() => toggleGenre(genre)}
-                className="h-7 text-xs"
-                data-pol-id={`weihnr_${index}`}
-                data-pol-file-name="movie-filters"
-                data-pol-file-type="component"
-              >
-                {genre}
-              </Button>
-            ))}
-          </div>
-        </div> */}
 
         {/* Languages */}
         {availableLanguages.length > 0 && (
@@ -704,46 +641,6 @@ export default function MovieFilters({
               />
             </div>
 
-            {/* Genres */}
-            {/* <div
-              className="mb-4"
-              data-pol-id="v1nihj"
-              data-pol-file-name="movie-filters"
-              data-pol-file-type="component"
-            >
-              <Label
-                className="text-sm font-medium mb-2 block"
-                data-pol-id="a0vk2w"
-                data-pol-file-name="movie-filters"
-                data-pol-file-type="component"
-              >
-                Genres
-              </Label>
-              <div
-                className="flex flex-wrap gap-2 max-h-[120px] overflow-y-auto"
-                data-pol-id="kxatj6"
-                data-pol-file-name="movie-filters"
-                data-pol-file-type="component"
-              >
-                {availableGenres.map((genre, index) => (
-                  <Button
-                    key={genre}
-                    variant={
-                      filters.genres.includes(genre) ? "default" : "outline"
-                    }
-                    size="sm"
-                    onClick={() => toggleGenre(genre)}
-                    className="h-8"
-                    data-pol-id={`px67bu_${index}`}
-                    data-pol-file-name="movie-filters"
-                    data-pol-file-type="component"
-                  >
-                    {genre}
-                  </Button>
-                ))}
-              </div>
-            </div> */}
-
             {/* Languages */}
             {availableLanguages.length > 0 && (
               <div
@@ -882,26 +779,6 @@ export default function MovieFilters({
               />
             </Badge>
           ))}
-
-          {/* {filters.genres.map((genre, index) => (
-            <Badge
-              key={genre}
-              variant="secondary"
-              className="flex items-center gap-1"
-              data-pol-id={`1rsjna_${index}`}
-              data-pol-file-name="movie-filters"
-              data-pol-file-type="component"
-            >
-              {genre}
-              <XIcon
-                className="h-3 w-3 cursor-pointer"
-                onClick={() => toggleGenre(genre)}
-                data-pol-id={`r9xzug_${index}`}
-                data-pol-file-name="movie-filters"
-                data-pol-file-type="component"
-              />
-            </Badge>
-          ))} */}
 
           {filters.language.map((language, index) => (
             <Badge

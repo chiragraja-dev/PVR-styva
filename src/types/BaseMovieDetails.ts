@@ -40,6 +40,12 @@ export interface BaseMovieDetails {
     | "mega_blockbuster"
     | "popular"
     | "Below Average";
+  revenue_label:
+    | "regular"
+    | "blockbuster"
+    | "mega_blockbuster"
+    | "popular"
+    | "Below Average";
 
   FilmName: string;
   FilmId: number;
@@ -63,5 +69,5 @@ export interface BaseMovieDetails {
   IsMetadataFetched: boolean | null;
   ImdbId: string | null;
   InsertedAt: string | null;
-  posterUrl: "https://posters.movieposterdb.com/25_02/2025/3566834/l_a-minecraft-movie-movie-poster_0be81db1.jpg";
+  FilmPosterUrl: string | null;
 }

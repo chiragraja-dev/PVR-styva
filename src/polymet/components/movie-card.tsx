@@ -8,11 +8,13 @@ import MovieScoreBadge from "@/polymet/components/movie-score-badge";
 import CategoryBadge from "@/polymet/components/category-badge";
 
 import { CategoryType } from "@/polymet/components/category-badge";
+import Default from "@/assets/default.jpg";
 
 interface MovieCardProps {
   id: string;
   title: string;
-  posterUrl: string;
+  FilmPosterUrl: string;
+  language: string;
   debutDate: string;
   category: CategoryType;
   score: number;
@@ -23,7 +25,8 @@ interface MovieCardProps {
 export default function MovieCard({
   id,
   title,
-  // posterUrl,
+  FilmPosterUrl,
+  language,
   debutDate,
   category,
   score,
@@ -38,7 +41,7 @@ export default function MovieCard({
 
   return (
     <Link
-      to={`/movie/${id}?language=Hindi&region=Mumbai&mode=default`}
+      to={`/movie/${id}?language=${language}&mode=default`}
       data-pol-id="l43v0a"
       data-pol-file-name="movie-card"
       data-pol-file-type="component"
@@ -59,10 +62,7 @@ export default function MovieCard({
           data-pol-file-type="component"
         >
           <img
-            src={
-              "https://posters.movieposterdb.com/25_02/2025/3566834/l_a-minecraft-movie-movie-poster_0be81db1.jpg"
-            }
-            // src={posterUrl}
+            src={FilmPosterUrl || Default}
             alt={`${title} poster`}
             className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105"
             data-pol-id="38zgo3"

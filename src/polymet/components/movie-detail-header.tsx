@@ -6,6 +6,7 @@ import CategoryBadge from "@/polymet/components/category-badge";
 // import { Button } from "@/components/ui/button";
 
 import { CategoryType } from "@/polymet/components/category-badge";
+import Default from "@/assets/default.jpg";
 
 import {
   AlertTriangle,
@@ -16,6 +17,7 @@ import {
   ShieldAlert,
   Flag,
   HelpCircle,
+  ActivitySquare,
 } from "lucide-react";
 
 import {
@@ -28,7 +30,6 @@ import {
 interface MovieDetailHeaderProps {
   movie: {
     FilmCommonName: string;
-    posterUrl: string;
     Total_Score_s6b3: number;
     classification_s6b3: CategoryType;
     filmGenre: string;
@@ -46,11 +47,13 @@ interface MovieDetailHeaderProps {
     sensitiveReason: string;
     isPatriotic: string;
     patrioticTopic: string;
+    revenue_label: CategoryType;
   };
   movieMeta: {
     FilmStars: string;
     ProductionHouse: string | null;
     FilmRunTime: number;
+    FilmPosterUrl: string | null;
   };
   className?: string;
 }
@@ -90,6 +93,21 @@ export default function MovieDetailHeader({
       color: "text-purple-500",
     },
     {
+      label: "Actual",
+      value: (
+        <CategoryBadge
+          category={movie.revenue_label}
+          className="text-sm"
+          data-pol-id="733bwu"
+          data-pol-file-name="movie-detail-header"
+          data-pol-file-type="component"
+        />
+      ),
+      reason: "The actual classification of the movie",
+      icon: ActivitySquare,
+      color: "text-amber-500",
+    },
+    {
       label: "Political",
       value: movie.isPolitical,
       reason: movie.politicalTopic,
@@ -111,6 +129,8 @@ export default function MovieDetailHeader({
       color: "text-indigo-500",
     },
   ];
+
+  console.log("MOVIES - ", movie.revenue_label)
 
   return (
     <div
@@ -136,10 +156,7 @@ export default function MovieDetailHeader({
           data-pol-file-type="component"
         >
           <img
-            src={
-              "https://posters.movieposterdb.com/25_02/2025/3566834/l_a-minecraft-movie-movie-poster_0be81db1.jpg"
-            }
-            // src={posterUrl}
+            src={movieMeta.FilmPosterUrl || Default}
             alt={`${movie.FilmCommonName} poster`}
             className="w-full h-full object-cover"
             data-pol-id="mvzh0d"
@@ -200,6 +217,7 @@ export default function MovieDetailHeader({
               />
             </div>
           </div>
+
           <div
             className="flex flex-wrap gap-2 mt-2"
             data-pol-id="17tpna"

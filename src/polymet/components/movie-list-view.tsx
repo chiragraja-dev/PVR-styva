@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import MovieScoreBadge from "@/polymet/components/movie-score-badge";
 // import { CalendarIcon } from "lucide-react";
 import { HistoricMovieDetails } from "@/types/HistoricMovieDetails";
+import Default from "@/assets/default.jpg";
 
 interface MovieListViewProps {
   movies: HistoricMovieDetails[];
@@ -101,7 +102,7 @@ export default function MovieListView({
 
         return (
           <Link
-            to={`/movie/${movie.FilmCommonName}?language=Hindi&region=Mumbai&mode=historic`}
+            to={`/movie/${movie.FilmCommonName}?language=${movie.FilmLang}&mode=historic`}
             key={`${movie.FilmId}-${index}`}
             className="block"
             ref={isLast ? lastItemRef : undefined}
@@ -123,10 +124,7 @@ export default function MovieListView({
                 data-pol-file-type="component"
               >
                 <img
-                  src={
-                    "https://posters.movieposterdb.com/25_02/2025/3566834/l_a-minecraft-movie-movie-poster_0be81db1.jpg"
-                  }
-                  // src={movie.posterUrl}
+                  src={movie.FilmPosterUrl || Default}
                   alt={`${movie.FilmCommonName} poster`}
                   className="h-full w-full object-cover rounded"
                   data-pol-id={`mtqsh8_${index}`}
@@ -232,26 +230,6 @@ export default function MovieListView({
                       </span>
                     )}
                   </div> */}
-
-                  {/* Genres */}
-                  {/* {movie.genres && movie.genres.length > 0 && (
-                    <div
-                      className="flex items-center gap-1"
-                      data-pol-id={`yz792d_${index}`}
-                      data-pol-file-name="movie-list-view"
-                      data-pol-file-type="component"
-                    >
-                      <span
-                        className="hidden sm:inline"
-                        data-pol-id={`0atcm7_${index}`}
-                        data-pol-file-name="movie-list-view"
-                        data-pol-file-type="component"
-                      >
-                        {movie.genres.slice(0, 2).join(", ")}
-                        {movie.genres.length > 2 && "..."}
-                      </span>
-                    </div>
-                  )} */}
 
                   {/* Language */}
                   <div

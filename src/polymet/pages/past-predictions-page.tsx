@@ -7,6 +7,7 @@ import DashboardHeader from "@/polymet/components/dashboard-header";
 import { HistoricMovieDetails } from "@/types/HistoricMovieDetails";
 import { fetchHistoricMovies } from "@/services/movieService";
 import { useFilterStore } from "@/store/useFilterStore";
+import { normalizeMovieData } from "@/lib/normalizeMovieData";
 
 export default function PastPredictionsPage() {
   const [allMovies, setAllMovies] = useState<HistoricMovieDetails[]>([]);
@@ -18,8 +19,12 @@ export default function PastPredictionsPage() {
   useEffect(() => {
     const loadPastMovies = async () => {
       try {
-        const data = await fetchHistoricMovies("Hindi");
-        const pastMovies = Object.values(data).filter((movie) => {
+        const language = filters.language[0] || "Hindi";
+        const data = await fetchHistoricMovies(language);
+        const normalizedMovies = normalizeMovieData(
+          Object.values(data)
+        ) as HistoricMovieDetails[];
+        const pastMovies = normalizedMovies.filter((movie) => {
           const movieDate = new Date(movie.FilmRelDate);
           return movieDate <= new Date();
         });
@@ -32,7 +37,7 @@ export default function PastPredictionsPage() {
     };
 
     loadPastMovies();
-  }, []);
+  }, [filters.language]);
 
   const getFilteredMovies = (): HistoricMovieDetails[] => {
     let filtered = [...allMovies];
@@ -49,15 +54,6 @@ export default function PastPredictionsPage() {
     if (filters?.category?.length) {
       filtered = filtered.filter((movie) =>
         filters.category.includes(movie.classification_s6b3)
-      );
-    }
-
-    if (filters?.language?.length) {
-      filtered = filtered.filter((movie) =>
-        filters.language.some(
-          (lang) =>
-            movie.original_language_name?.toLowerCase() === lang.toLowerCase()
-        )
       );
     }
 
@@ -137,30 +133,6 @@ export default function PastPredictionsPage() {
   useEffect(() => {
     setCurrentPage(1); // Reset pagination when filters change
   }, [filters]);
-
-  // const applyFilters = (newFilters: FilterOptions) => {
-  //   setFilters(newFilters);
-  //   setCurrentPage(1); // Reset to first page when filters change
-  // };
-
-  // useEffect(() => {
-  //   const handleFilterChange = (event: Event) => {
-  //     const customEvent = event as CustomEvent<FilterOptions>;
-  //     applyFilters(customEvent.detail);
-  //   };
-
-  //   window.addEventListener(
-  //     "filterChange",
-  //     handleFilterChange as EventListener
-  //   );
-  //   return () =>
-  //     window.removeEventListener(
-  //       "filterChange",
-  //       handleFilterChange as EventListener
-  //     );
-  // }, []);
-
-  // console.log("movies filter --- ", displayedMovies);
 
   return (
     <div className="space-y-6">

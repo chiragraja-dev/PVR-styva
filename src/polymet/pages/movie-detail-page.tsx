@@ -13,8 +13,10 @@ import { Prediction } from "@/types/Prediction";
 import { HistoricPrediction } from "@/types/HistoricPrediction";
 import { fetchHistoricPrediction } from "@/services/movieService";
 
+
 import ScoreAnalysisSection from "../components/ScoreAnalysisSection";
 import { PageProps } from "@/types/LayoutProps";
+import { normalizePrediction } from "@/lib/normalizePrediction";
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
@@ -25,7 +27,6 @@ export default function MovieDetailPage({ setIsSidebarOpen }: PageProps) {
   const query = useQuery();
   const mode = query.get("mode");
   const language = query.get("language") || "Hindi";
-  const region = query.get("region") || "Mumbai";
 
   const [movie, setMovie] = useState<
     Prediction & Partial<HistoricPrediction>
@@ -37,26 +38,26 @@ export default function MovieDetailPage({ setIsSidebarOpen }: PageProps) {
       setIsSidebarOpen();
       try {
         setLoading(true);
-        let result;
+        let rawData;
 
         if (mode === "historic") {
-          result = await fetchHistoricPrediction({
+          rawData = await fetchHistoricPrediction({
             movie: movieName!,
             language,
-            region,
           });
         } else {
-          result = await fetchPrediction({
+          rawData = await fetchPrediction({
             movie: movieName!,
             language,
-            region,
           });
         }
 
-        if (isHistoricPrediction(result)) {
-          setMovie(result as HistoricPrediction);
+        const normalized = normalizePrediction(rawData);
+
+        if (isHistoricPrediction(normalized)) {
+          setMovie(normalized as HistoricPrediction);
         } else {
-          setMovie(result as Prediction & Partial<HistoricPrediction>);
+          setMovie(normalized as Prediction & Partial<HistoricPrediction>);
         }
       } catch (error) {
         console.error("Failed to fetch movie data", error);
@@ -66,7 +67,7 @@ export default function MovieDetailPage({ setIsSidebarOpen }: PageProps) {
     };
 
     fetchMovieData();
-  }, [movieName, language, region, mode]);
+  }, [movieName, language, mode]);
 
   const isHistoricPrediction = (
     data: Prediction | HistoricPrediction

@@ -127,7 +127,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                 data-pol-file-name="dashboard-layout"
                 data-pol-file-type="layout"
               >
-                PVR Dynamic Pricing
+                PVR movie analytics
               </span>
             )}
           </div>

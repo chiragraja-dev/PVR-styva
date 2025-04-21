@@ -10,7 +10,12 @@ export interface HistoricMovieDetails extends BaseMovieDetails {
   genres: string;
   movie_cast: string;
   revenue_per_show: number;
-  revenue_label: string;
+  revenue_label:
+    | "regular"
+    | "blockbuster"
+    | "mega_blockbuster"
+    | "popular"
+    | "Below Average";
   seatsold_label: string;
   ratio_label: string;
 }

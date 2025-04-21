@@ -14,7 +14,7 @@ const defaultFilters: FilterOptions = {
   scoreRange: [0, 100],
   releaseTimeframe: "all",
   sortBy: "date-desc",
-  language: [],
+  language: ["Hindi"],
 };
 
 export const useFilterStore = create<FilterState>((set) => ({
