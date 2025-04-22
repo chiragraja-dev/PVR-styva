@@ -47,8 +47,8 @@ const CATEGORIES = ["regular", "blockbuster", "mega_blockbuster", "popular"];
 
 const TIMEFRAMES = [
   { value: "all", label: "All Time" },
-  { value: "past", label: "Released" },
-  { value: "upcoming", label: "Upcoming" },
+  // { value: "past", label: "Released" },
+  // { value: "upcoming", label: "Upcoming" },
   { value: "next30", label: "Next 30 Days" },
   { value: "next90", label: "Next 90 Days" },
 ];
