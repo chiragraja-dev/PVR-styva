@@ -13,10 +13,12 @@ import { Prediction } from "@/types/Prediction";
 import { HistoricPrediction } from "@/types/HistoricPrediction";
 import { fetchHistoricPrediction } from "@/services/movieService";
 
-
 import ScoreAnalysisSection from "../components/ScoreAnalysisSection";
 import { PageProps } from "@/types/LayoutProps";
 import { normalizePrediction } from "@/lib/normalizePrediction";
+
+import { downloadFilmData } from "@/services/movieService";
+import { convertToCSV } from "@/lib/csvUtils";
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
@@ -203,6 +205,33 @@ export default function MovieDetailPage({ setIsSidebarOpen }: PageProps) {
       ]
     : [];
 
+  const handleDownloadCSV = async () => {
+    try {
+      if (!movieName) return;
+
+      const data = await downloadFilmData({
+        movie: movieName,
+        language,
+        isHistoric: mode === "historic",
+      });
+
+      const csv = convertToCSV(data);
+
+      // Create download
+      const blob = new Blob([csv], { type: "text/csv" });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${data.FilmCommonName}_data.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Download failed:", error);
+      alert("Failed to download CSV file");
+    }
+  };
   return (
     <div
       className="space-y-4"
@@ -249,7 +278,11 @@ export default function MovieDetailPage({ setIsSidebarOpen }: PageProps) {
           data-pol-id="udj1ct"
           data-pol-file-name="movie-detail-page"
           data-pol-file-type="page"
-        />
+        >
+          <Button onClick={handleDownloadCSV} variant="outline">
+            Download CSV
+          </Button>
+        </MovieDetailHeader>
       )}
 
       <Separator

@@ -4,12 +4,15 @@ import {
   HISTORIC_MOVIES,
   PREDICTION,
   HISTORIC_PREDICTION,
+  DOWNLOAD,
+  HISTORIC_DOWNLOAD,
 } from "../api/endpoints";
 
 import { HistoricMovieDetails } from "@/types/HistoricMovieDetails";
 import { MovieDetails } from "@/types/MovieDetails";
 import { Prediction } from "@/types/Prediction";
 import { HistoricPrediction } from "@/types/HistoricPrediction";
+import { ApiResponse } from "@/types/DownloadMovie";
 
 export const fetchMovies = async (
   language: string
@@ -59,6 +62,22 @@ export const fetchHistoricPrediction = async ({
   language: string;
 }): Promise<HistoricPrediction> => {
   const response = await client.get(HISTORIC_PREDICTION, {
+    params: { movie, language },
+  });
+  return response.data;
+};
+
+export const downloadFilmData = async ({
+  movie,
+  language,
+  isHistoric,
+}: {
+  movie: string;
+  language: string;
+  isHistoric: boolean;
+}): Promise<ApiResponse> => {
+  const endpoint = isHistoric ? HISTORIC_DOWNLOAD : DOWNLOAD;
+  const response = await client.get(endpoint, {
     params: { movie, language },
   });
   return response.data;

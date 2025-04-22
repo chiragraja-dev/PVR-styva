@@ -56,12 +56,14 @@ interface MovieDetailHeaderProps {
     FilmPosterUrl: string | null;
   };
   className?: string;
+  children?: React.ReactNode;
 }
 
 export default function MovieDetailHeader({
   movie,
   movieMeta,
   className,
+  children,
 }: MovieDetailHeaderProps) {
   const flags = [
     {
@@ -129,8 +131,6 @@ export default function MovieDetailHeader({
       color: "text-indigo-500",
     },
   ];
-
-  console.log("MOVIES - ", movie.revenue_label)
 
   return (
     <div
@@ -216,6 +216,7 @@ export default function MovieDetailHeader({
                 data-pol-file-type="component"
               />
             </div>
+            <div className="flex gap-2">{children}</div>
           </div>
 
           <div

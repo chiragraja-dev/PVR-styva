@@ -30,7 +30,7 @@ export type FilterOptions = {
   category: string[];
   scoreRange: [number, number];
   // genres: string[];
-  releaseTimeframe: string;
+  // releaseTimeframe: string;
   sortBy: string;
   language: string[];
 };
@@ -85,7 +85,7 @@ export default function MovieFilters({
     if (updatedFilters.scoreRange[0] > 0 || updatedFilters.scoreRange[1] < 100)
       count++;
     // if (updatedFilters.genres.length > 0) count++;
-    if (updatedFilters.releaseTimeframe !== "all") count++;
+    // if (updatedFilters.releaseTimeframe !== "all") count++;
     if (updatedFilters.language.length > 0) count++;
     setActiveFilterCount(count);
   };
@@ -326,7 +326,7 @@ export default function MovieFilters({
         )}
 
         {/* Release Timeframe */}
-        <div
+        {/* <div
           className="space-y-2"
           data-pol-id="5kb8eo"
           data-pol-file-name="movie-filters"
@@ -379,7 +379,7 @@ export default function MovieFilters({
               ))}
             </SelectContent>
           </Select>
-        </div>
+        </div> */}
 
         {activeFilterCount > 0 && (
           <Button
@@ -686,7 +686,7 @@ export default function MovieFilters({
             )}
 
             {/* Release Timeframe */}
-            <div
+            {/* <div
               data-pol-id="be8h5s"
               data-pol-file-name="movie-filters"
               data-pol-file-type="component"
@@ -738,7 +738,7 @@ export default function MovieFilters({
                   ))}
                 </SelectContent>
               </Select>
-            </div>
+            </div> */}
           </PopoverContent>
         </Popover>
       </div>
@@ -819,7 +819,7 @@ export default function MovieFilters({
             </Badge>
           )}
 
-          {filters.releaseTimeframe !== "all" && (
+          {/* {filters.releaseTimeframe !== "all" && (
             <Badge
               variant="secondary"
               className="flex items-center gap-1"
@@ -839,7 +839,7 @@ export default function MovieFilters({
                 data-pol-file-type="component"
               />
             </Badge>
-          )}
+          )} */}
 
           <Button
             variant="ghost"

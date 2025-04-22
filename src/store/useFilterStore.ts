@@ -12,7 +12,7 @@ const defaultFilters: FilterOptions = {
   search: "",
   category: [],
   scoreRange: [0, 100],
-  releaseTimeframe: "all",
+  // releaseTimeframe: "all",
   sortBy: "date-desc",
   language: ["Hindi"],
 };
