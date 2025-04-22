@@ -6,6 +6,7 @@ import MovieScoreBadge from "@/polymet/components/movie-score-badge";
 // import { CalendarIcon } from "lucide-react";
 import { HistoricMovieDetails } from "@/types/HistoricMovieDetails";
 import Default from "@/assets/default.jpg";
+import { useFilterStore } from "@/store/useFilterStore";
 
 interface MovieListViewProps {
   movies: HistoricMovieDetails[];
@@ -22,6 +23,7 @@ export default function MovieListView({
   source,
   lastItemRef,
 }: MovieListViewProps) {
+  const { filters } = useFilterStore();
   if (isLoading) {
     return (
       <div
@@ -102,7 +104,7 @@ export default function MovieListView({
 
         return (
           <Link
-            to={`/movie/${movie.FilmCommonName}?language=${movie.FilmLang}&mode=historic`}
+            to={`/movie/${movie.FilmCommonName}?language=${filters.language[0]}&mode=historic`}
             key={`${movie.FilmId}-${index}`}
             className="block"
             ref={isLast ? lastItemRef : undefined}

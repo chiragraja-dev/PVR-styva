@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { MovieDetails } from "@/types/MovieDetails";
 
 import Default from "@/assets/default.jpg";
+import { useFilterStore } from "@/store/useFilterStore";
 
 interface MovieListProps {
   movies: MovieDetails[];
@@ -16,12 +17,14 @@ export default function MovieList({
   className,
   isLoading = false,
 }: MovieListProps) {
+  const { filters } = useFilterStore();
+
   if (isLoading) {
     return (
       <div
         className={cn(
           "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6",
-          className,
+          className
         )}
         data-pol-id="u1t16g"
         data-pol-file-name="movie-list"
@@ -47,7 +50,7 @@ export default function MovieList({
       <div
         className={cn(
           "flex flex-col items-center justify-center py-12 text-center",
-          className,
+          className
         )}
         data-pol-id="g92wus"
         data-pol-file-name="movie-list"
@@ -77,7 +80,7 @@ export default function MovieList({
     <div
       className={cn(
         "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6",
-        className,
+        className
       )}
       data-pol-id="xzz1lx"
       data-pol-file-name="movie-list"
@@ -86,7 +89,8 @@ export default function MovieList({
       {Object.values(movies).map((movie, index) => (
         <MovieCard
           key={movie.FilmId}
-          language={movie.FilmLang}
+          // language={movie.FilmOriginalLang ?? movie.FilmLang}
+          language={filters.language[0]}
           id={movie.FilmCommonName}
           title={movie.FilmCommonName}
           FilmPosterUrl={movie.FilmPosterUrl || Default}
