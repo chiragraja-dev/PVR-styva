@@ -116,7 +116,7 @@ export default function DashboardPage() {
     >
       <DashboardHeader
         title="Upcoming Movies"
-        subtitle="Manage and analyze upcoming movie releases for dynamic pricing"
+        subtitle="Manage and analyze upcoming movie releases"
         data-pol-id="7euocu"
         data-pol-file-name="dashboard-page"
         data-pol-file-type="page"

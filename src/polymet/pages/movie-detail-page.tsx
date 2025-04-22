@@ -163,7 +163,9 @@ export default function MovieDetailPage({ setIsSidebarOpen }: PageProps) {
           title: "Budget Score",
           score: movie.features.budget_score,
           description:
-            "Based on estimated production and marketing investment.",
+            movie.features.budget_score == 0
+              ? "No Budget available"
+              : "Based on estimated production and marketing investment.",
           tooltipText:
             "Evaluation of production and marketing budget relative to genre expectations",
         },
