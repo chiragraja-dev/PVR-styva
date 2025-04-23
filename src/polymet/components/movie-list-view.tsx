@@ -84,7 +84,7 @@ export default function MovieListView({
   return (
     <div
       className={cn(
-        "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6 space-y-2",
+        "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 space-y-2",
         className
       )}
       data-pol-id="rr0jtd"
@@ -120,7 +120,7 @@ export default function MovieListView({
             >
               {/* Movie thumbnail */}
               <div
-                className="relative h-16 w-12 flex-shrink-0"
+                className="relative h-28 w-20 flex-shrink-0"
                 data-pol-id={`luh44p_${index}`}
                 data-pol-file-name="movie-list-view"
                 data-pol-file-type="component"

@@ -137,75 +137,88 @@ export default function MovieDetailPage({ setIsSidebarOpen }: PageProps) {
 
   // Generate mock score attributes with descriptions
   const scoreAttributes = movie
-    ? [
-        {
-          title: "Actor Rating",
-          score: movie.features.actorRating,
-          description: movie.features.actorReason,
-          tooltipText:
-            "Measures the quality and audience reception of the cast's performance",
-        },
-        {
-          title: "Director Rating",
-          score: movie.features.directorRating,
-          description: movie.features.directorReason,
-          tooltipText:
-            "Evaluates the director's reputation and previous work success",
-        },
-        {
-          title: "Plot Rating",
-          score: movie.features.plotRating,
-          description: movie.features.plotRatingReason,
-          tooltipText:
-            "Assesses the quality, originality and audience appeal of the storyline",
-        },
-        {
-          title: "Budget Score",
-          score: movie.features.budget_score,
-          description:
-            movie.features.budget_score == 0
-              ? "No Budget available"
-              : "Based on estimated production and marketing investment.",
-          tooltipText:
-            "Evaluation of production and marketing budget relative to genre expectations",
-        },
-        {
-          title: "Overall Sentiment",
-          score: movie.features.sentimentScore,
-          description: movie.features.sentimentReason,
-          tooltipText:
-            "Analysis of social media sentiment and audience reactions",
-        },
-        {
-          title: "Audience Popularity",
-          score: movie.features.audiencePopularityScore,
-          description: movie.features.audiencePopularityReason,
-          tooltipText:
-            "Measures pre-release audience interest and popularity score",
-        },
-        {
-          title: "Producer Rating",
-          score: movie.features.producerRating,
-          description: movie.features.producerReason,
-          tooltipText:
-            "Measures pre-release audience interest and popularity score",
-        },
-        {
-          title: "Music Director Rating",
-          score: movie.features.musicDirectorRating,
-          description: movie.features.musicDirectorReason,
-          tooltipText:
-            "Measures pre-release audience interest and popularity score",
-        },
-        {
-          title: "Songs Rating",
-          score: movie.features.songsRating,
-          description: movie.features.songReason,
-          tooltipText:
-            "Measures pre-release audience interest and popularity score",
-        },
-      ]
-    : [];
+  ? [
+      {
+        title: "Actor Rating",
+        score: movie.features.actorRating,
+        description: movie.features.actorReason,
+        tooltipText:
+          "Measures the quality and audience reception of the cast's performance",
+      },
+      {
+        title: "Director Rating",
+        score: movie.features.directorRating,
+        description: movie.features.directorReason,
+        tooltipText:
+          "Evaluates the director's reputation and previous work success",
+      },
+      {
+        title: "Plot Rating",
+        score: movie.features.plotRating,
+        description: movie.features.plotRatingReason,
+        tooltipText:
+          "Assesses the quality, originality and audience appeal of the storyline",
+      },
+      ...(language === "Hindi"
+        ? [
+            {
+              title: "Budget Score",
+              score: movie.features.budget_score,
+              description:
+                movie.features.budget_score === 0
+                  ? "No Budget available"
+                  : "Based on estimated production and marketing investment.",
+              tooltipText:
+                "Evaluation of production and marketing budget relative to genre expectations",
+            },
+          ]
+        : [
+            {
+              title: "Franchise Score",
+              score: movie.features.franchiseRating,
+              description: movie.features.franchiseRatingReason,
+              tooltipText:
+                "Franchise score is based on the success of previous movies in the franchise",
+            },
+          ]),
+      {
+        title: "Overall Sentiment",
+        score: movie.features.sentimentScore,
+        description: movie.features.sentimentReason,
+        tooltipText:
+          "Analysis of social media sentiment and audience reactions",
+      },
+      {
+        title: "Audience Popularity",
+        score: movie.features.audiencePopularityScore,
+        description: movie.features.audiencePopularityReason,
+        tooltipText:
+          "Measures pre-release audience interest and popularity score",
+      },
+      {
+        title: "Producer Rating",
+        score: movie.features.producerRating,
+        description: movie.features.producerReason,
+        tooltipText:
+          "Measures pre-release audience interest and popularity score",
+      },
+      {
+        title: "Music Director Rating",
+        score: movie.features.musicDirectorRating,
+        description: movie.features.musicDirectorReason,
+        tooltipText:
+          "Measures pre-release audience interest and popularity score",
+      },
+      {
+        title: "Songs Rating",
+        score: movie.features.songsRating,
+        description: movie.features.songReason,
+        tooltipText:
+          "Measures pre-release audience interest and popularity score",
+      },
+    ]
+  : [];
+
 
   const handleDownloadCSV = async () => {
     try {

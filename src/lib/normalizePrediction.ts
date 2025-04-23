@@ -41,6 +41,8 @@ export function normalizePrediction(raw: any): Prediction {
       FilmCommonName: features.FilmCommonName,
       plotRatingReason: features.plotRatingReason,
       plotRating: Number(features.plotRating),
+      franchiseRating: Number(features.franchiseRating),
+      franchiseRatingReason: features.franchiseRatingReason,
       filmGenre: features.filmGenre ?? features.FilmGenre,
       movie_name: features.movie_name,
       budget_score: Number(features.budget_score),

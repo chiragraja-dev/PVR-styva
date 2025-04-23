@@ -21,6 +21,7 @@ const ScoreAnalysisSection: React.FC<ScoreAnalysisSectionProps> = ({ scoreAttrib
       "Budget Score",
       "Overall Sentiment",
       "Audience Popularity",
+      "Franchise Score"
     ].includes(attr.title)
   );
 

@@ -10,6 +10,8 @@ export interface Prediction {
     musicDirectorReason: string;
     sentimentScore: number;
     sentimentReason: string;
+    franchiseRating: number;
+    franchiseRatingReason: string;
     isControversial: string;
     controversialReason: string;
     isHistoric: string;

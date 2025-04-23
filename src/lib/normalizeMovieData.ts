@@ -10,6 +10,8 @@ export const normalizeMovieData = (movies: any[]): BaseMovieDetails[] => {
     actorReason: movie.actorReason,
     producerRating: movie.producerRating,
     producerReason: movie.producerReason,
+    franchiseRating: movie.franchiseRating,
+    franchiseRatingReason: movie.franchiseRatingReason,
     musicDirectorRating:
       movie.musicDirectorRating21 || movie.musicDirectorRating,
     musicDirectorReason: movie.musicDirectorReason,
