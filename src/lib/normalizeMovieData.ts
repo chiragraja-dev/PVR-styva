@@ -137,7 +137,7 @@ export const normalizeMovieData = <T extends BaseMovieDetails>(
         ratio_label: movie.ratio_label || "",
       };
       // Type guard to ensure T is HistoricMovieDetails
-      if (isHistoricMovieDetails<T>()) {
+      if (isHistoricMovieDetails()) {
         return historicMovie as unknown as T;
       }
       throw new Error(
@@ -150,6 +150,6 @@ export const normalizeMovieData = <T extends BaseMovieDetails>(
 };
 
 // Type guard for HistoricMovieDetails
-function isHistoricMovieDetails<T extends BaseMovieDetails>(): boolean {
+function isHistoricMovieDetails(): boolean {
   return true;
 }
