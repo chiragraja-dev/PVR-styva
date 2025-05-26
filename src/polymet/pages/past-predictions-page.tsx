@@ -1,9 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-
 import MovieListView from "@/polymet/components/movie-list-view";
 import DashboardHeader from "@/polymet/components/dashboard-header";
-// import { FilterOptions } from "@/polymet/components/movie-filters";
-
 import { HistoricMovieDetails } from "@/types/HistoricMovieDetails";
 import { fetchHistoricMovies } from "@/services/movieService";
 import { useFilterStore } from "@/store/useFilterStore";
@@ -21,16 +18,17 @@ export default function PastPredictionsPage() {
       try {
         const language = filters.language[0] || "Hindi";
         const data = await fetchHistoricMovies(language);
-        const normalizedMovies = normalizeMovieData(
-          Object.values(data)
-        ) as HistoricMovieDetails[];
+        const normalizedMovies = normalizeMovieData<HistoricMovieDetails>(
+          Object.values(data),
+          true
+        );
         const pastMovies = normalizedMovies.filter((movie) => {
           const movieDate = new Date(movie.FilmRelDate);
-          return movieDate <= new Date();
+          return !isNaN(movieDate.getTime()) && movieDate <= new Date();
         });
         setAllMovies(pastMovies);
       } catch (error) {
-        console.error("Failed to load movies", error);
+        setAllMovies([]);
       } finally {
         setIsLoading(false);
       }
@@ -47,26 +45,31 @@ export default function PastPredictionsPage() {
       filtered = filtered.filter(
         (movie) =>
           movie.FilmCommonName.toLowerCase().includes(searchLower) ||
-          movie.Director?.toLowerCase().includes(searchLower)
+          (movie.Director && movie.Director.toLowerCase().includes(searchLower))
       );
     }
 
     if (filters?.category?.length) {
       filtered = filtered.filter((movie) =>
-        filters.category.includes(movie.classification_s6b3)
+        filters.category.some(
+          (cat) => cat.toLowerCase() === movie.classification_s6b3.toLowerCase()
+        )
       );
     }
 
     if (
       filters?.scoreRange?.length === 2 &&
       filters.scoreRange[0] != null &&
-      filters.scoreRange[1] != null
+      filters.scoreRange[1] != null &&
+      Number.isFinite(filters.scoreRange[0]) &&
+      Number.isFinite(filters.scoreRange[1])
     ) {
-      filtered = filtered.filter(
-        (movie) =>
-          movie.Total_Score_s6b3 >= filters.scoreRange[0] &&
-          movie.Total_Score_s6b3 <= filters.scoreRange[1]
-      );
+      const minScore = Number(filters.scoreRange[0]);
+      const maxScore = Number(filters.scoreRange[1]);
+      filtered = filtered.filter((movie) => {
+        const score = Number(movie.Total_Score_s6b3);
+        return Number.isFinite(score) && score >= minScore && score <= maxScore;
+      });
     }
 
     switch (filters?.sortBy) {
@@ -127,11 +130,11 @@ export default function PastPredictionsPage() {
 
       if (node) observer.current.observe(node);
     },
-    [hasMore, isLoading, displayedMovies]
+    [hasMore, isLoading]
   );
 
   useEffect(() => {
-    setCurrentPage(1); // Reset pagination when filters change
+    setCurrentPage(1);
   }, [filters]);
 
   return (
@@ -140,7 +143,6 @@ export default function PastPredictionsPage() {
         title="Past Movies"
         subtitle="Review and analyze previously predicted movie performances"
       />
-
       <MovieListView
         movies={displayedMovies}
         isLoading={isLoading}

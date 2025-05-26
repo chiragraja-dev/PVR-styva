@@ -11,6 +11,8 @@ export interface BaseMovieDetails {
   sentimentScore: number;
   sentimentReason: string;
   isControversial: string;
+  franchiseRating: number;
+  franchiseRatingReason: string;
   controversialReason: string;
   isHistoric: string;
   historicTopic: string;
