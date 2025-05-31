@@ -45,10 +45,12 @@ export function normalizePrediction(raw: any): Prediction {
       franchiseRatingReason: features.franchiseRatingReason,
       filmGenre: features.filmGenre ?? features.FilmGenre,
       movie_name: features.movie_name,
-      budget_score: Number(features.budget_score),
+      budget_score: Number(features.budget_score || features.budgetScore),
       revenue_label: features.revenue_label,
       Total_Score_s6b3: Number(
-        features.Total_Score_s6b3 ?? features.Total_Score
+        features.classificationScore ||
+          features.Total_Score_s6b3 ||
+          features.Total_Score
       ),
       classification_s6b3:
         features.classification_s6b3 ?? features.classification_label,

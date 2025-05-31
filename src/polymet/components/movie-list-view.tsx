@@ -1,12 +1,13 @@
 import { Link } from "react-router-dom";
 // import { format, formatDistanceToNow, parseISO } from "date-fns";
 
-import { cn } from "@/lib/utils";
+import { cn, getCategoryDisplayLabel } from "@/lib/utils";
 import MovieScoreBadge from "@/polymet/components/movie-score-badge";
 // import { CalendarIcon } from "lucide-react";
 import { HistoricMovieDetails } from "@/types/HistoricMovieDetails";
 import Default from "@/assets/default.jpg";
 import { useFilterStore } from "@/store/useFilterStore";
+import { CategoryType } from "./category-badge";
 
 interface MovieListViewProps {
   movies: HistoricMovieDetails[];
@@ -189,7 +190,7 @@ export default function MovieListView({
                         data-pol-file-name="movie-list-view"
                         data-pol-file-type="component"
                       >
-                        {movie.classification_s6b3}
+                        {getCategoryDisplayLabel(movie.classification_s6b3 as CategoryType)}
                       </span>
                     </div>
                   </div>

@@ -219,7 +219,6 @@ export default function MovieDetailPage({ setIsSidebarOpen }: PageProps) {
     ]
   : [];
 
-
   const handleDownloadCSV = async () => {
     try {
       if (!movieName) return;

@@ -1,6 +1,6 @@
 // import { CalendarIcon, Globe2Icon } from "lucide-react";
 // import { format, parseISO } from "date-fns";
-import { cn } from "@/lib/utils";
+import { cn, getCategoryDisplayLabel } from "@/lib/utils";
 import MovieScoreBadge from "@/polymet/components/movie-score-badge";
 import CategoryBadge from "@/polymet/components/category-badge";
 // import { Button } from "@/components/ui/button";
@@ -96,15 +96,7 @@ export default function MovieDetailHeader({
     },
     {
       label: "Actual",
-      value: (
-        <CategoryBadge
-          category={movie.revenue_label}
-          className="text-sm"
-          data-pol-id="733bwu"
-          data-pol-file-name="movie-detail-header"
-          data-pol-file-type="component"
-        />
-      ),
+      value: getCategoryDisplayLabel(movie.revenue_label),
       reason: "The actual classification of the movie",
       icon: ActivitySquare,
       color: "text-amber-500",
@@ -207,6 +199,7 @@ export default function MovieDetailHeader({
                   data-pol-file-name="movie-detail-header"
                   data-pol-file-type="component"
                 />
+                
               </div>
               <CategoryBadge
                 category={movie.classification_s6b3}

@@ -22,8 +22,9 @@ import {
   SearchIcon,
   XIcon,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, getCategoryDisplayLabel } from "@/lib/utils";
 import { useFilterStore } from "@/store/useFilterStore";
+import { CategoryType } from "./category-badge";
 
 export type FilterOptions = {
   search: string;
@@ -232,7 +233,7 @@ export default function MovieFilters({
                 data-pol-file-name="movie-filters"
                 data-pol-file-type="component"
               >
-                {category}
+                {getCategoryDisplayLabel(category as CategoryType)}
               </Button>
             ))}
           </div>
@@ -589,7 +590,7 @@ export default function MovieFilters({
                     data-pol-file-name="movie-filters"
                     data-pol-file-type="component"
                   >
-                    {category}
+                    {getCategoryDisplayLabel(category as CategoryType)}
                   </Button>
                 ))}
               </div>
