@@ -1,6 +1,6 @@
 // import { CalendarIcon, Globe2Icon } from "lucide-react";
 // import { format, parseISO } from "date-fns";
-import { cn } from "@/lib/utils";
+import { cn, getCategoryDisplayLabel } from "@/lib/utils";
 import MovieScoreBadge from "@/polymet/components/movie-score-badge";
 import CategoryBadge from "@/polymet/components/category-badge";
 // import { Button } from "@/components/ui/button";
@@ -96,15 +96,7 @@ export default function MovieDetailHeader({
     },
     {
       label: "Actual",
-      value: (
-        <CategoryBadge
-          category={movie.revenue_label}
-          className="text-sm"
-          data-pol-id="733bwu"
-          data-pol-file-name="movie-detail-header"
-          data-pol-file-type="component"
-        />
-      ),
+      value: getCategoryDisplayLabel(movie.revenue_label),
       reason: "The actual classification of the movie",
       icon: ActivitySquare,
       color: "text-amber-500",
@@ -178,43 +170,46 @@ export default function MovieDetailHeader({
           data-pol-file-name="movie-detail-header"
           data-pol-file-type="component"
         >
-          <div className="flex gap-x-6">
-            <h1
-              className="text-3xl md:text-4xl font-bold"
-              data-pol-id="hmkkk5"
-              data-pol-file-name="movie-detail-header"
-              data-pol-file-type="component"
-            >
-              {movie.FilmCommonName}
-            </h1>
-
-            <div
-              className="flex gap-x-2 items-center"
-              data-pol-id="3oryqx"
-              data-pol-file-name="movie-detail-header"
-              data-pol-file-type="component"
-            >
-              <div
-                className=""
-                data-pol-id="10287q"
+          <div className="flex gap-x-6 justify-between">
+            <div className="flex gap-x-6 justify-between" >
+              <h1
+                className="text-3xl md:text-4xl font-bold"
+                data-pol-id="hmkkk5"
                 data-pol-file-name="movie-detail-header"
                 data-pol-file-type="component"
               >
-                <MovieScoreBadge
-                  score={movie.Total_Score_s6b3}
-                  size="lg"
-                  data-pol-id="5p201n"
+                {movie.FilmCommonName}
+              </h1>
+
+              <div
+                className="flex gap-x-2 items-center"
+                data-pol-id="3oryqx"
+                data-pol-file-name="movie-detail-header"
+                data-pol-file-type="component"
+              >
+                <div
+                  className=""
+                  data-pol-id="10287q"
+                  data-pol-file-name="movie-detail-header"
+                  data-pol-file-type="component"
+                >
+                  <MovieScoreBadge
+                    score={movie.Total_Score_s6b3}
+                    size="lg"
+                    data-pol-id="5p201n"
+                    data-pol-file-name="movie-detail-header"
+                    data-pol-file-type="component"
+                  />
+
+                </div>
+                <CategoryBadge
+                  category={movie.classification_s6b3}
+                  className="text-sm"
+                  data-pol-id="733bwu"
                   data-pol-file-name="movie-detail-header"
                   data-pol-file-type="component"
                 />
               </div>
-              <CategoryBadge
-                category={movie.classification_s6b3}
-                className="text-sm"
-                data-pol-id="733bwu"
-                data-pol-file-name="movie-detail-header"
-                data-pol-file-type="component"
-              />
             </div>
             <div className="flex gap-2">{children}</div>
           </div>

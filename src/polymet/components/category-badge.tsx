@@ -1,5 +1,5 @@
 import { Badge } from "@/components/ui/badge";
-import { cn } from "@/lib/utils";
+import { cn, getCategoryDisplayLabel } from "@/lib/utils";
 export type CategoryType =
   | "regular"
   | "blockbuster"
@@ -46,7 +46,7 @@ export default function CategoryBadge({
       data-pol-file-name="category-badge"
       data-pol-file-type="component"
     >
-      {category}
+      {getCategoryDisplayLabel(category)}
     </Badge>
   );
 }

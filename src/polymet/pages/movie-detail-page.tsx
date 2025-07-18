@@ -19,6 +19,7 @@ import { normalizePrediction } from "@/lib/normalizePrediction";
 
 import { downloadFilmData } from "@/services/movieService";
 import { convertToCSV } from "@/lib/csvUtils";
+import { PopupComponent } from "../components/popup-component";
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
@@ -29,7 +30,15 @@ export default function MovieDetailPage({ setIsSidebarOpen }: PageProps) {
   const query = useQuery();
   const mode = query.get("mode");
   const language = query.get("language") || "Hindi";
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
 
+  const handleViewPricing = () => {
+    setIsPopupOpen(true);
+  };
+
+  const handleClosePopup = () => {
+    setIsPopupOpen(false);
+  };
   const [movie, setMovie] = useState<
     Prediction & Partial<HistoricPrediction>
   >();
@@ -137,7 +146,7 @@ export default function MovieDetailPage({ setIsSidebarOpen }: PageProps) {
 
   // Generate mock score attributes with descriptions
   const scoreAttributes = movie
-  ? [
+    ? [
       {
         title: "Actor Rating",
         score: movie.features.actorRating,
@@ -161,26 +170,26 @@ export default function MovieDetailPage({ setIsSidebarOpen }: PageProps) {
       },
       ...(language === "Hindi"
         ? [
-            {
-              title: "Budget Score",
-              score: movie.features.budget_score,
-              description:
-                movie.features.budget_score === 0
-                  ? "No Budget available"
-                  : "Based on estimated production and marketing investment.",
-              tooltipText:
-                "Evaluation of production and marketing budget relative to genre expectations",
-            },
-          ]
+          {
+            title: "Budget Score",
+            score: movie.features.budget_score,
+            description:
+              movie.features.budget_score === 0
+                ? "No Budget available"
+                : "Based on estimated production and marketing investment.",
+            tooltipText:
+              "Evaluation of production and marketing budget relative to genre expectations",
+          },
+        ]
         : [
-            {
-              title: "Franchise Score",
-              score: movie.features.franchiseRating,
-              description: movie.features.franchiseRatingReason,
-              tooltipText:
-                "Franchise score is based on the success of previous movies in the franchise",
-            },
-          ]),
+          {
+            title: "Franchise Score",
+            score: movie.features.franchiseRating,
+            description: movie.features.franchiseRatingReason,
+            tooltipText:
+              "Franchise score is based on the success of previous movies in the franchise",
+          },
+        ]),
       {
         title: "Overall Sentiment",
         score: movie.features.sentimentScore,
@@ -217,8 +226,7 @@ export default function MovieDetailPage({ setIsSidebarOpen }: PageProps) {
           "Measures pre-release audience interest and popularity score",
       },
     ]
-  : [];
-
+    : [];
 
   const handleDownloadCSV = async () => {
     try {
@@ -287,6 +295,7 @@ export default function MovieDetailPage({ setIsSidebarOpen }: PageProps) {
 
       {/* Movie header */}
       {movie && (
+
         <MovieDetailHeader
           movie={movie.features}
           movieMeta={movie.meta}
@@ -297,14 +306,26 @@ export default function MovieDetailPage({ setIsSidebarOpen }: PageProps) {
           <Button onClick={handleDownloadCSV} variant="outline">
             Download CSV
           </Button>
+
+          <div>
+            <Button onClick={handleViewPricing} variant="default">
+              View Pricing
+            </Button>
+            {isPopupOpen && movieName && <PopupComponent onClose={handleClosePopup} movieName={movieName} language={language} isHistoric={mode == 'historic' ? true : false} />}
+          </div>
+
         </MovieDetailHeader>
+
+
       )}
+
 
       <Separator
         data-pol-id="s236ib"
         data-pol-file-name="movie-detail-page"
         data-pol-file-type="page"
       />
+
 
       <div>
         <h2
