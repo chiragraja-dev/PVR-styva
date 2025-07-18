@@ -4,4 +4,7 @@ export const client = axios.create({
   baseURL: "https://pvrdataapi.azurewebsites.net/api",
 });
 
-// baseURL: "https://pvrapi.azurewebsites.net/api",
+export const clientV2 = axios.create({
+  baseURL: "https://pvr-dal-movieanalytics.azurewebsites.net/api/v1"
+})
+

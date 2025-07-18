@@ -1,4 +1,4 @@
-import { client } from "../api/client";
+import { client, clientV2 } from "../api/client";
 import {
   MOVIES,
   HISTORIC_MOVIES,
@@ -6,6 +6,10 @@ import {
   HISTORIC_PREDICTION,
   DOWNLOAD,
   HISTORIC_DOWNLOAD,
+  GET_CINEMA,
+  GET_SCREENS,
+  GET_TIME_SLOTS,
+  GET_PRICING,
 } from "../api/endpoints";
 
 import { HistoricMovieDetails } from "@/types/HistoricMovieDetails";
@@ -79,6 +83,87 @@ export const downloadFilmData = async ({
   const endpoint = isHistoric ? HISTORIC_DOWNLOAD : DOWNLOAD;
   const response = await client.get(endpoint, {
     params: { movie, language },
+  });
+  return response.data;
+};
+
+
+// 1. GET CINEMAS
+export const fetchCinemas = async (): Promise<{ PropertyId: number; PropertyName: string }[]> => {
+  const response = await clientV2.get(GET_CINEMA, {
+    params: { code: process.env.API_CODE! },
+  });
+  return response.data;
+};
+
+// 2. GET SCREENS
+export const fetchScreens = async (propertyId: number): Promise<{ ScreenId: number; ScreenType: string }[]> => {
+  const response = await clientV2.get(GET_SCREENS, {
+    params: {
+      code: process.env.API_CODE!,
+      property_id: propertyId,
+    },
+  });
+  return response.data;
+};
+
+// 3. GET TIME SLOTS
+export const fetchTimeSlots = async ({
+  propertyId,
+  screenId,
+  timeSlot,
+  language,
+  movieName,
+  isHistoric
+}: {
+  propertyId: number;
+  screenId: number;
+  timeSlot: string;
+  language: string;
+  movieName: string;
+  isHistoric: boolean;
+}): Promise<{ TimeSlot: string; TimeSlotRange: string }[]> => {
+  const response = await clientV2.get(GET_TIME_SLOTS, {
+    params: {
+      code: process.env.API_CODE!,
+      property_id: propertyId,
+      screen_id: screenId,
+      // time_slot: timeSlot,
+      is_historic: isHistoric,
+      language,
+      movie_name: movieName,
+    },
+  });
+
+  return response.data;
+};
+
+// 4. GET PRICING
+export const fetchPricing = async ({
+  propertyId,
+  screenId,
+  timeSlot,
+  language,
+  movieName,
+  isHistoric
+}: {
+  propertyId: number;
+  screenId: number;
+  timeSlot: string;
+  language: string;
+  movieName: string;
+  isHistoric: boolean
+}): Promise<{ SeatType: string; FilmFormat: string; TicketPrice: number }[]> => {
+  const response = await clientV2.get(GET_PRICING, {
+    params: {
+      code: process.env.API_CODE!,
+      property_id: propertyId,
+      screen_id: screenId,
+      time_slot: timeSlot,
+      language,
+      is_historic: isHistoric,
+      movie_name: movieName,
+    },
   });
   return response.data;
 };
