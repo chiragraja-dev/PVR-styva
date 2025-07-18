@@ -97,6 +97,7 @@ export const PopupComponent = ({ onClose, movieName, language, isHistoric }: Pop
     const loadCinemas = async () => {
         setLoadingCinemas(true);
         try {
+            console.log(import.meta.env.VITE_API_CODE)
             const cinemasData = await fetchCinemas();
             setCinemas(cinemasData);
         } catch (error) {

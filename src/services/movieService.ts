@@ -92,7 +92,7 @@ export const downloadFilmData = async ({
 // 1. GET CINEMAS
 export const fetchCinemas = async (): Promise<{ PropertyId: number; PropertyName: string }[]> => {
   const response = await clientV2.get(GET_CINEMA, {
-    params: { code: process.env.API_CODE! },
+    params: { code: import.meta.env.VITE_API_CODE! },
   });
   return response.data;
 };
@@ -101,7 +101,7 @@ export const fetchCinemas = async (): Promise<{ PropertyId: number; PropertyName
 export const fetchScreens = async (propertyId: number): Promise<{ ScreenId: number; ScreenType: string }[]> => {
   const response = await clientV2.get(GET_SCREENS, {
     params: {
-      code: process.env.API_CODE!,
+      code: import.meta.env.VITE_API_CODE!,
       property_id: propertyId,
     },
   });
@@ -124,7 +124,7 @@ export const fetchTimeSlots = async ({
 }): Promise<{ TimeSlot: string; TimeSlotRange: string }[]> => {
   const response = await clientV2.get(GET_TIME_SLOTS, {
     params: {
-      code: process.env.API_CODE!,
+      code: import.meta.env.VITE_API_CODE!,
       property_id: propertyId,
       screen_id: screenId,
       // time_slot: timeSlot,
@@ -154,7 +154,7 @@ export const fetchPricing = async ({
 }): Promise<{ SeatType: string; FilmFormat: string; TicketPrice: number }[]> => {
   const response = await clientV2.get(GET_PRICING, {
     params: {
-      code: process.env.API_CODE!,
+      code: import.meta.env.VITE_API_CODE!,
       property_id: propertyId,
       screen_id: screenId,
       time_slot: timeSlot,
