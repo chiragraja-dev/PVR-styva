@@ -138,7 +138,7 @@ export const PopupComponent = ({ onClose, movieName, language, isHistoric }: Pop
             const timeSlotsData = await fetchTimeSlots({
                 propertyId: selectedCinema.PropertyId,
                 screenId: screen.ScreenId,
-                timeSlot: 'all', // You might want to adjust this
+                // You might want to adjust this
                 language,
                 movieName,
                 isHistoric

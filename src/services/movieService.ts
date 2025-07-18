@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { client, clientV2 } from "../api/client";
 import {
   MOVIES,
@@ -111,14 +112,12 @@ export const fetchScreens = async (propertyId: number): Promise<{ ScreenId: numb
 export const fetchTimeSlots = async ({
   propertyId,
   screenId,
-  timeSlot,
   language,
   movieName,
   isHistoric
 }: {
   propertyId: number;
   screenId: number;
-  timeSlot: string;
   language: string;
   movieName: string;
   isHistoric: boolean;
