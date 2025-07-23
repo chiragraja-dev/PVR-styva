@@ -57,7 +57,7 @@ const CardComponent: React.FC<CardComponentProps> = ({
                     <p className="font-medium">{filmFormat}</p>
                 </div>
                 <div className="space-y-1">
-                    <p className="text-muted-foreground">Ticket Price</p>
+                    <p className="text-muted-foreground">Suggested ticket pricing</p>
                     <p className="font-semibold text-amber-700 bg-amber-100 inline-block px-2 py-0.5 rounded-md">
                         ₹ {ticketPrice}
                     </p>
