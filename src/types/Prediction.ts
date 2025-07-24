@@ -38,17 +38,17 @@ export interface Prediction {
     budget_score: number;
     Total_Score_s6b3: number;
     classification_s6b3:
-      | "regular"
-      | "blockbuster"
-      | "mega_blockbuster"
-      | "popular"
-      | "Below Average";
+    | "regular"
+    | "blockbuster"
+    | "mega_blockbuster"
+    | "popular"
+    | "Below Average";
     revenue_label:
-      | "regular"
-      | "blockbuster"
-      | "mega_blockbuster"
-      | "popular"
-      | "Below Average";
+    | "regular"
+    | "blockbuster"
+    | "mega_blockbuster"
+    | "popular"
+    | "Below Average";
   };
   meta: {
     FilmStars: string;
@@ -56,4 +56,14 @@ export interface Prediction {
     FilmRunTime: number;
     FilmPosterUrl: string | null;
   };
+}
+
+export interface PricingResponse {
+  FilmFormat: string;
+  PropertyName: string;
+  ScreenId: number;
+  ScreenType: string;
+  SeatType: string;
+  TicketPrice: number;
+  TimeSlot: string;
 }

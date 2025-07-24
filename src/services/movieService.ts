@@ -11,11 +11,12 @@ import {
   GET_SCREENS,
   GET_TIME_SLOTS,
   GET_PRICING,
+  GET_PRICING_TICKET,
 } from "../api/endpoints";
 
 import { HistoricMovieDetails } from "@/types/HistoricMovieDetails";
 import { MovieDetails } from "@/types/MovieDetails";
-import { Prediction } from "@/types/Prediction";
+import { Prediction, PricingResponse } from "@/types/Prediction";
 import { HistoricPrediction } from "@/types/HistoricPrediction";
 import { ApiResponse } from "@/types/DownloadMovie";
 
@@ -161,6 +162,27 @@ export const fetchPricing = async ({
       language,
       is_historic: isHistoric,
       movie_name: movieName,
+    },
+  });
+  return response.data;
+};
+
+
+export const downloadPricingModal = async ({
+  movie,
+  language,
+  isHistoric,
+}: {
+  movie: string;
+  language: string;
+  isHistoric: boolean;
+}): Promise<PricingResponse> => {
+  const response = await clientV2(GET_PRICING_TICKET, {
+    params: {
+      movie_name: movie,
+      language,
+      is_historic: isHistoric,
+      code: import.meta.env.VITE_API_CODE!,
     },
   });
   return response.data;

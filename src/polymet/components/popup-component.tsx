@@ -1,15 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import { X } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { OptionPopover } from './popover-select';
-import { fetchCinemas, fetchPricing, fetchScreens, fetchTimeSlots } from '@/services/movieService';
+import React, { useEffect, useState } from "react";
+import { X } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { OptionPopover } from "./popover-select";
+import {
+    downloadPricingModal,
+    fetchCinemas,
+    fetchPricing,
+    fetchScreens,
+    fetchTimeSlots,
+} from "@/services/movieService";
+import { convertPricingToCSV } from "@/lib/csvUtils";
 
 interface PopupComponentProps {
     onClose: () => void;
     movieName: string;
     language: string;
-    isHistoric: boolean
+    isHistoric: boolean;
 }
 
 interface Cinema {
@@ -57,7 +64,7 @@ const CardComponent: React.FC<CardComponentProps> = ({
                     <p className="font-medium">{filmFormat}</p>
                 </div>
                 <div className="space-y-1">
-                    <p className="text-muted-foreground">Suggested ticket pricing</p>
+                    <p className="text-muted-foreground">Ticket price</p>
                     <p className="font-semibold text-amber-700 bg-amber-100 inline-block px-2 py-0.5 rounded-md">
                         ₹ {ticketPrice}
                     </p>
@@ -71,11 +78,18 @@ const CardComponent: React.FC<CardComponentProps> = ({
     );
 };
 
-export const PopupComponent = ({ onClose, movieName, language, isHistoric }: PopupComponentProps) => {
-    console.log("object", movieName)
+export const PopupComponent = ({
+    onClose,
+    movieName,
+    language,
+    isHistoric,
+}: PopupComponentProps) => {
+    console.log("object", movieName);
     const [selectedCinema, setSelectedCinema] = useState<Cinema | null>(null);
     const [selectedScreen, setSelectedScreen] = useState<Screen | null>(null);
-    const [selectedTimeSlot, setSelectedTimeSlot] = useState<TimeSlot | null>(null);
+    const [selectedTimeSlot, setSelectedTimeSlot] = useState<TimeSlot | null>(
+        null
+    );
 
     // State for API data
     const [cinemas, setCinemas] = useState<Cinema[]>([]);
@@ -97,11 +111,11 @@ export const PopupComponent = ({ onClose, movieName, language, isHistoric }: Pop
     const loadCinemas = async () => {
         setLoadingCinemas(true);
         try {
-            console.log(import.meta.env.VITE_API_CODE)
+            console.log(import.meta.env.VITE_API_CODE);
             const cinemasData = await fetchCinemas();
             setCinemas(cinemasData);
         } catch (error) {
-            console.error('Error fetching cinemas:', error);
+            console.error("Error fetching cinemas:", error);
         } finally {
             setLoadingCinemas(false);
         }
@@ -120,7 +134,7 @@ export const PopupComponent = ({ onClose, movieName, language, isHistoric }: Pop
             const screensData = await fetchScreens(cinema.PropertyId);
             setScreens(screensData);
         } catch (error) {
-            console.error('Error fetching screens:', error);
+            console.error("Error fetching screens:", error);
         } finally {
             setLoadingScreens(false);
         }
@@ -142,11 +156,11 @@ export const PopupComponent = ({ onClose, movieName, language, isHistoric }: Pop
                 // You might want to adjust this
                 language,
                 movieName,
-                isHistoric
+                isHistoric,
             });
             setTimeSlots(timeSlotsData);
         } catch (error) {
-            console.error('Error fetching time slots:', error);
+            console.error("Error fetching time slots:", error);
         } finally {
             setLoadingTimeSlots(false);
         }
@@ -166,13 +180,38 @@ export const PopupComponent = ({ onClose, movieName, language, isHistoric }: Pop
                 timeSlot: timeSlot.TimeSlot,
                 language,
                 movieName,
-                isHistoric
+                isHistoric,
             });
             setPricingData(pricingDataResponse);
         } catch (error) {
-            console.error('Error fetching pricing:', error);
+            console.error("Error fetching pricing:", error);
         } finally {
             setLoadingPricing(false);
+        }
+    };
+
+    const handleDownloadPricingModal = async () => {
+        try {
+            const moviePrice = await downloadPricingModal({
+                movie: movieName,
+                language,
+                isHistoric,
+            });
+
+            const csv = convertPricingToCSV(Object.values(moviePrice));
+
+            // Create download
+            const blob = new Blob([csv], { type: "text/csv" });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = `pricing_data.csv`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error(error);
         }
     };
 
@@ -181,15 +220,27 @@ export const PopupComponent = ({ onClose, movieName, language, isHistoric }: Pop
             <Card className="max-w-4xl w-full mx-4 lg:max-h-[100vh] xl:max-h-auto overflow-hidden rounded-md">
                 {/* Header */}
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
-                    <CardTitle className="text-xl font-semibold">Ticket Pricing for {movieName}</CardTitle>
-                    <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={onClose}
-                        className="h-8 w-8"
-                    >
-                        <X className="h-4 w-4" />
-                    </Button>
+                    <CardTitle className="text-xl font-semibold">
+                        Suggested Ticket Pricing for {movieName}
+                    </CardTitle>
+                    <div className="flex items-center gap-4 justify-end flex-1">
+                        <Button
+                            variant="default"
+                            size="icon"
+                            onClick={handleDownloadPricingModal}
+                            className="h-8 border w-1/4"
+                        >
+                            Download Pricing
+                        </Button>
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={onClose}
+                            className="h-8 w-8"
+                        >
+                            <X className="h-4 w-4" />
+                        </Button>
+                    </div>
                 </CardHeader>
 
                 <CardContent className="p-0">
@@ -199,10 +250,10 @@ export const PopupComponent = ({ onClose, movieName, language, isHistoric }: Pop
                             label="Select Cinema"
                             selected={selectedCinema?.PropertyName || ""}
                             setSelected={(value) => {
-                                const cinema = cinemas.find(c => c.PropertyName === value);
+                                const cinema = cinemas.find((c) => c.PropertyName === value);
                                 if (cinema) handleCinemaSelect(cinema);
                             }}
-                            options={cinemas.map(c => c.PropertyName)}
+                            options={cinemas.map((c) => c.PropertyName)}
                             id="cinema-select"
                             placeholder="Select Cinema"
                             loading={loadingCinemas}
@@ -223,20 +274,25 @@ export const PopupComponent = ({ onClose, movieName, language, isHistoric }: Pop
                             loading={loadingScreens}
                         /> */}
 
-
                         <OptionPopover
                             label="Select Screen"
-                            selected={selectedScreen ? `Screen ${selectedScreen.ScreenId} - ${selectedScreen.ScreenType}` : ""}
+                            selected={
+                                selectedScreen
+                                    ? `Screen ${selectedScreen.ScreenId} - ${selectedScreen.ScreenType}`
+                                    : ""
+                            }
                             setSelected={(value) => {
                                 // Extract ScreenId from the selected value
                                 const screenIdMatch = value.match(/Screen (\d+) -/);
                                 if (screenIdMatch) {
                                     const screenId = parseInt(screenIdMatch[1]);
-                                    const screen = screens.find(s => s.ScreenId === screenId);
+                                    const screen = screens.find((s) => s.ScreenId === screenId);
                                     if (screen) handleScreenSelect(screen);
                                 }
                             }}
-                            options={screens.map(s => `Screen ${s.ScreenId} - ${s.ScreenType}`)}
+                            options={screens.map(
+                                (s) => `Screen ${s.ScreenId} - ${s.ScreenType}`
+                            )}
                             id="screen-select"
                             placeholder="Select Screen"
                             disabled={!selectedCinema}
@@ -247,10 +303,12 @@ export const PopupComponent = ({ onClose, movieName, language, isHistoric }: Pop
                             label="Select Time"
                             selected={selectedTimeSlot?.TimeSlotRange || ""}
                             setSelected={(value) => {
-                                const timeSlot = timeSlots.find(t => t.TimeSlotRange === value);
+                                const timeSlot = timeSlots.find(
+                                    (t) => t.TimeSlotRange === value
+                                );
                                 if (timeSlot) handleTimeSlotSelect(timeSlot);
                             }}
-                            options={timeSlots.map(t => t.TimeSlotRange)}
+                            options={timeSlots.map((t) => t.TimeSlotRange)}
                             id="time-select"
                             placeholder="Select Time"
                             disabled={!selectedScreen}
@@ -278,11 +336,15 @@ export const PopupComponent = ({ onClose, movieName, language, isHistoric }: Pop
                             ))
                         ) : selectedTimeSlot ? (
                             <div className="col-span-3 text-center py-8">
-                                <p className="text-gray-500">No pricing data available for the selected options.</p>
+                                <p className="text-gray-500">
+                                    No pricing data available for the selected options.
+                                </p>
                             </div>
                         ) : (
                             <div className="col-span-3 text-center py-8">
-                                <p className="text-gray-500">Please select cinema, screen, and time slot to view pricing.</p>
+                                <p className="text-gray-500">
+                                    Please select cinema, screen, and time slot to view pricing.
+                                </p>
                             </div>
                         )}
                     </div>
