@@ -228,7 +228,7 @@ export const PopupComponent = ({
                             variant="default"
                             size="icon"
                             onClick={handleDownloadPricingModal}
-                            className="h-8 border w-1/4"
+                            className="h-8 border w-1/3"
                         >
                             Download Pricing
                         </Button>
