@@ -223,22 +223,24 @@ export const PopupComponent = ({
           <CardTitle className="text-xl font-semibold">
             Suggested Ticket Pricing for {movieName}
           </CardTitle>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={handleDownloadPricingModal}
-            className="h-8 w-8 border"
-          >
-            Download Pricing
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={onClose}
-            className="h-8 w-8"
-          >
-            <X className="h-4 w-4" />
-          </Button>
+          <div className="flex items-center gap-4 justify-end flex-1">
+            <Button
+              variant="default"
+              size="icon"
+              onClick={handleDownloadPricingModal}
+              className="h-8 border w-1/4"
+            >
+              Download Pricing
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={onClose}
+              className="h-8 w-8"
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          </div>
         </CardHeader>
 
         <CardContent className="p-0">
