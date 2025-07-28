@@ -6,6 +6,7 @@ import { OptionPopover } from "./popover-select";
 import {
     downloadPricingModal,
     fetchCinemas,
+    fetchMovieLanguages,
     fetchPricing,
     fetchScreens,
     fetchTimeSlots,
@@ -92,12 +93,15 @@ export const PopupComponent = ({
     );
 
     // State for API data
+    const [movieLanguages, setMovieLanguages] = useState<string[]>([]);
+    const [selectedLanguage, setSelectedLanguage] = useState<string>("");
     const [cinemas, setCinemas] = useState<Cinema[]>([]);
     const [screens, setScreens] = useState<Screen[]>([]);
     const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([]);
     const [pricingData, setPricingData] = useState<PricingData[]>([]);
 
     // Loading states
+    const [loadingMovieLanguages, setLoadingMovieLanguages] = useState(false);
     const [loadingCinemas, setLoadingCinemas] = useState(false);
     const [loadingScreens, setLoadingScreens] = useState(false);
     const [loadingTimeSlots, setLoadingTimeSlots] = useState(false);
@@ -107,6 +111,25 @@ export const PopupComponent = ({
     useEffect(() => {
         loadCinemas();
     }, []);
+
+    useEffect(() => {
+        if (movieName) {
+            loadMovieLanguages();
+        }
+    }, [movieName]);
+
+    const loadMovieLanguages = async () => {
+        setLoadingMovieLanguages(true);
+        try {
+            const languages = await fetchMovieLanguages(movieName);
+            setMovieLanguages(languages);
+            console.log("Available languages:", languages);
+        } catch (error) {
+            console.error("Error fetching movie languages:", error);
+        } finally {
+            setLoadingMovieLanguages(false);
+        }
+    };
 
     const loadCinemas = async () => {
         setLoadingCinemas(true);
@@ -119,6 +142,12 @@ export const PopupComponent = ({
         } finally {
             setLoadingCinemas(false);
         }
+    };
+
+    const handleLanguageSelect = (language: string) => {
+        setSelectedLanguage(language);
+        setSelectedTimeSlot(null);
+        setPricingData([]);
     };
 
     const handleCinemaSelect = async (cinema: Cinema) => {
@@ -155,6 +184,7 @@ export const PopupComponent = ({
                 screenId: screen.ScreenId,
                 // You might want to adjust this
                 language,
+                film_lang: selectedLanguage,
                 movieName,
                 isHistoric,
             });
@@ -178,6 +208,7 @@ export const PopupComponent = ({
                 propertyId: selectedCinema.PropertyId,
                 screenId: selectedScreen.ScreenId,
                 timeSlot: timeSlot.TimeSlot,
+                film_lang: selectedLanguage,
                 language,
                 movieName,
                 isHistoric,
@@ -245,7 +276,18 @@ export const PopupComponent = ({
 
                 <CardContent className="p-0">
                     {/* Filters */}
-                    <div className="grid grid-cols-3 gap-4 mb-6 p-6">
+                    <div className="grid grid-cols-4 gap-4 mb-6 p-6">
+                        <OptionPopover
+                            label="Select Film Language"
+                            selected={selectedLanguage || ""}
+                            setSelected={handleLanguageSelect}
+                            options={movieLanguages}
+                            id="language-select"
+                            placeholder="Select Language"
+                            loading={loadingMovieLanguages}
+                            disabled={false}
+                        />
+
                         <OptionPopover
                             label="Select Cinema"
                             selected={selectedCinema?.PropertyName || ""}
