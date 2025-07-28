@@ -12,6 +12,7 @@ import {
   GET_TIME_SLOTS,
   GET_PRICING,
   GET_PRICING_TICKET,
+  MOVIE_LANGUAGES,
 } from "../api/endpoints";
 
 import { HistoricMovieDetails } from "@/types/HistoricMovieDetails";
@@ -89,6 +90,13 @@ export const downloadFilmData = async ({
   return response.data;
 };
 
+// 0. GET MOVIE LANGUAGES
+export const fetchMovieLanguages = async (movieName: string): Promise<string[]> => {
+  const response = await clientV2.get(MOVIE_LANGUAGES, {
+    params: { code: import.meta.env.VITE_API_CODE!, movie_name: movieName },
+  });
+  return response.data;
+};
 
 // 1. GET CINEMAS
 export const fetchCinemas = async (): Promise<{ PropertyId: number; PropertyName: string }[]> => {
@@ -114,12 +122,14 @@ export const fetchTimeSlots = async ({
   propertyId,
   screenId,
   language,
+  film_lang,
   movieName,
   isHistoric
 }: {
   propertyId: number;
   screenId: number;
   language: string;
+  film_lang: string;
   movieName: string;
   isHistoric: boolean;
 }): Promise<{ TimeSlot: string; TimeSlotRange: string }[]> => {
@@ -131,6 +141,7 @@ export const fetchTimeSlots = async ({
       // time_slot: timeSlot,
       is_historic: isHistoric,
       language,
+      film_lang,
       movie_name: movieName,
     },
   });
@@ -143,6 +154,7 @@ export const fetchPricing = async ({
   screenId,
   timeSlot,
   language,
+  film_lang,
   movieName,
   isHistoric
 }: {
@@ -150,6 +162,7 @@ export const fetchPricing = async ({
   screenId: number;
   timeSlot: string;
   language: string;
+  film_lang: string;
   movieName: string;
   isHistoric: boolean
 }): Promise<{ SeatType: string; FilmFormat: string; TicketPrice: number }[]> => {
@@ -160,6 +173,7 @@ export const fetchPricing = async ({
       screen_id: screenId,
       time_slot: timeSlot,
       language,
+      film_lang,
       is_historic: isHistoric,
       movie_name: movieName,
     },
