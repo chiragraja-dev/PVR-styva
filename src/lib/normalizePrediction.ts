@@ -47,6 +47,7 @@ export function normalizePrediction(raw: any): Prediction {
       movie_name: features.movie_name,
       budget_score: Number(features.budget_score || features.budgetScore),
       revenue_label: features.revenue_label,
+      classificationLabel: (features.classificationLabel).toLowerCase(),
       Total_Score_s6b3: Number(
         features.classificationScore ||
           features.Total_Score_s6b3 ||

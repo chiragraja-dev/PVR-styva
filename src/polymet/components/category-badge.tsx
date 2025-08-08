@@ -50,3 +50,18 @@ export default function CategoryBadge({
     </Badge>
   );
 }
+
+export const postValueToBadgeValue: Record<string, CategoryType> = {
+  Regular: "regular",
+  Popular: "popular",
+  Blockbuster: "blockbuster",
+  MegaBlockbuster: "mega_blockbuster",
+};
+
+export const badgeValueToPostValue: Record<CategoryType, string> = {
+  regular: "Regular",
+  popular: "Popular",
+  blockbuster: "Blockbuster",
+  mega_blockbuster: "MegaBlockbuster",
+  "Below Average": "Below Average", // not used in dropdown, but kept for completeness
+};

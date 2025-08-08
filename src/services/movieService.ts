@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { client, clientV2 } from "../api/client";
+import { clientV2 } from "@/api/client";
 import {
   MOVIES,
   HISTORIC_MOVIES,
@@ -24,8 +24,8 @@ import { ApiResponse } from "@/types/DownloadMovie";
 export const fetchMovies = async (
   language: string
 ): Promise<MovieDetails[]> => {
-  const response = await client.get(MOVIES, {
-    params: { language },
+  const response = await clientV2.get(MOVIES, {
+    params: { code: import.meta.env.VITE_API_CODE!, language },
   });
   return response.data;
 };
@@ -36,8 +36,8 @@ export const fetchMovies = async (
 export const fetchHistoricMovies = async (
   language: string
 ): Promise<HistoricMovieDetails> => {
-  const response = await client.get(HISTORIC_MOVIES, {
-    params: { language },
+  const response = await clientV2.get(HISTORIC_MOVIES, {
+    params: { code: import.meta.env.VITE_API_CODE!, language },
   });
   return response.data;
 };
@@ -52,8 +52,8 @@ export const fetchPrediction = async ({
   movie: string;
   language: string;
 }): Promise<Prediction> => {
-  const response = await client.get(PREDICTION, {
-    params: { movie, language },
+  const response = await clientV2.get(PREDICTION, {
+    params: { code: import.meta.env.VITE_API_CODE!, movie, language },
   });
   return response.data;
 };
@@ -68,8 +68,8 @@ export const fetchHistoricPrediction = async ({
   movie: string;
   language: string;
 }): Promise<HistoricPrediction> => {
-  const response = await client.get(HISTORIC_PREDICTION, {
-    params: { movie, language },
+  const response = await clientV2.get(HISTORIC_PREDICTION, {
+    params: { code: import.meta.env.VITE_API_CODE!, movie, language },
   });
   return response.data;
 };
@@ -84,14 +84,16 @@ export const downloadFilmData = async ({
   isHistoric: boolean;
 }): Promise<ApiResponse> => {
   const endpoint = isHistoric ? HISTORIC_DOWNLOAD : DOWNLOAD;
-  const response = await client.get(endpoint, {
-    params: { movie, language },
+  const response = await clientV2.get(endpoint, {
+    params: { code: import.meta.env.VITE_API_CODE!, movie, language },
   });
   return response.data;
 };
 
 // 0. GET MOVIE LANGUAGES
-export const fetchMovieLanguages = async (movieName: string): Promise<string[]> => {
+export const fetchMovieLanguages = async (
+  movieName: string
+): Promise<string[]> => {
   const response = await clientV2.get(MOVIE_LANGUAGES, {
     params: { code: import.meta.env.VITE_API_CODE!, movie_name: movieName },
   });
@@ -99,7 +101,9 @@ export const fetchMovieLanguages = async (movieName: string): Promise<string[]> 
 };
 
 // 1. GET CINEMAS
-export const fetchCinemas = async (): Promise<{ PropertyId: number; PropertyName: string }[]> => {
+export const fetchCinemas = async (): Promise<
+  { PropertyId: number; PropertyName: string }[]
+> => {
   const response = await clientV2.get(GET_CINEMA, {
     params: { code: import.meta.env.VITE_API_CODE! },
   });
@@ -107,7 +111,9 @@ export const fetchCinemas = async (): Promise<{ PropertyId: number; PropertyName
 };
 
 // 2. GET SCREENS
-export const fetchScreens = async (propertyId: number): Promise<{ ScreenId: number; ScreenType: string }[]> => {
+export const fetchScreens = async (
+  propertyId: number
+): Promise<{ ScreenId: number; ScreenType: string }[]> => {
   const response = await clientV2.get(GET_SCREENS, {
     params: {
       code: import.meta.env.VITE_API_CODE!,
@@ -124,7 +130,7 @@ export const fetchTimeSlots = async ({
   language,
   film_lang,
   movieName,
-  isHistoric
+  isHistoric,
 }: {
   propertyId: number;
   screenId: number;
@@ -156,7 +162,7 @@ export const fetchPricing = async ({
   language,
   film_lang,
   movieName,
-  isHistoric
+  isHistoric,
 }: {
   propertyId: number;
   screenId: number;
@@ -164,8 +170,10 @@ export const fetchPricing = async ({
   language: string;
   film_lang: string;
   movieName: string;
-  isHistoric: boolean
-}): Promise<{ SeatType: string; FilmFormat: string; TicketPrice: number }[]> => {
+  isHistoric: boolean;
+}): Promise<
+  { SeatType: string; FilmFormat: string; TicketPrice: number }[]
+> => {
   const response = await clientV2.get(GET_PRICING, {
     params: {
       code: import.meta.env.VITE_API_CODE!,
@@ -181,7 +189,6 @@ export const fetchPricing = async ({
   return response.data;
 };
 
-
 export const downloadPricingModal = async ({
   movie,
   language,
@@ -193,11 +200,37 @@ export const downloadPricingModal = async ({
 }): Promise<PricingResponse> => {
   const response = await clientV2(GET_PRICING_TICKET, {
     params: {
+      code: import.meta.env.VITE_API_CODE!,
       movie_name: movie,
       language,
       is_historic: isHistoric,
-      code: import.meta.env.VITE_API_CODE!,
     },
   });
   return response.data;
+};
+
+export const postPredictionCategory = async (
+  FilmCommonName: string,
+  PVRPrediction: string
+) => {
+  try {
+    const body = {
+      FilmCommonName,
+      PVRPrediction,
+    };
+
+    const { data } = await clientV2.post(
+      "/pvr-prediction",
+      JSON.stringify(body),
+      {
+        params: {
+          code: import.meta.env.VITE_API_CODE!,
+        },
+      }
+    );
+    return data;
+  } catch (error) {
+    console.error("Error posting prediction category:", error);
+    throw error;
+  }
 };

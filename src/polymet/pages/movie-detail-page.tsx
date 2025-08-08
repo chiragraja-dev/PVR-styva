@@ -299,6 +299,7 @@ export default function MovieDetailPage({ setIsSidebarOpen }: PageProps) {
         <MovieDetailHeader
           movie={movie.features}
           movieMeta={movie.meta}
+          mode={mode}
           data-pol-id="udj1ct"
           data-pol-file-name="movie-detail-page"
           data-pol-file-type="page"
