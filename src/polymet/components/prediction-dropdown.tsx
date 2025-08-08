@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/select";
 import { postPredictionCategory } from "@/services/movieService";
 import CategoryBadge, {
-  CategoryType,
   postValueToBadgeValue,
 } from "./category-badge";
 
