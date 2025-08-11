@@ -8,16 +8,24 @@ import {
 } from "@/components/ui/select";
 import { postPredictionCategory } from "@/services/movieService";
 import CategoryBadge, {
-  postValueToBadgeValue,
+  postValueToBadgeValue,badgeValueToPostValue,
+  CategoryType
 } from "./category-badge";
 
 interface PredictionDropdownProps {
   FilmCommonName: string;
+  PVRPrediction?: CategoryType;
 }
 
 const PredictionDropdown: React.FC<PredictionDropdownProps> = ({
   FilmCommonName,
+  PVRPrediction
 }) => {
+
+const defaultValue = PVRPrediction
+    ? badgeValueToPostValue[PVRPrediction] // converts "regular" → "Regular"
+    : undefined;
+
   const PVR_PREDICT_OPTIONS = [
     { value: "Regular", label: "Regular" },
     { value: "Popular", label: "Popular" },
@@ -34,8 +42,8 @@ const PredictionDropdown: React.FC<PredictionDropdownProps> = ({
   };
 
   return (
-    <Select onValueChange={handleChange}>
-      <SelectTrigger className="">
+    <Select onValueChange={handleChange} defaultValue={defaultValue}>
+      <SelectTrigger>
         <SelectValue placeholder="Select Prediction" />
       </SelectTrigger>
       <SelectContent>

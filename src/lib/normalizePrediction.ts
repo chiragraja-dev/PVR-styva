@@ -48,6 +48,7 @@ export function normalizePrediction(raw: any): Prediction {
       budget_score: Number(features.budget_score || features.budgetScore),
       revenue_label: features.revenue_label,
       classificationLabel: (features.classificationLabel).toLowerCase(),
+      PVRPrediction: (features.PVRPrediction).toLowerCase(),
       Total_Score_s6b3: Number(
         features.classificationScore ||
           features.Total_Score_s6b3 ||

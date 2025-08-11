@@ -50,6 +50,7 @@ interface MovieDetailHeaderProps {
     patrioticTopic: string;
     revenue_label: CategoryType;
     classificationLabel: CategoryType;
+    PVRPrediction: CategoryType;
   };
   movieMeta: {
     FilmStars: string;
@@ -237,7 +238,7 @@ export default function MovieDetailHeader({
               <p className="text-gray-400 font-semibold w-full">
                 PVR Prediction:
               </p>
-              <PredictionDropdown FilmCommonName={movie.FilmCommonName} />
+              <PredictionDropdown FilmCommonName={movie.FilmCommonName} PVRPrediction={movie.PVRPrediction} />
             </div>
           )}
         </div>

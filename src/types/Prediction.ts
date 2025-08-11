@@ -43,6 +43,7 @@ export interface Prediction {
       | "mega_blockbuster"
       | "popular"
       | "Below Average";
+    PVRPrediction: "regular" | "blockbuster" | "mega_blockbuster" | "popular";
     classification_s6b3:
       | "regular"
       | "blockbuster"
