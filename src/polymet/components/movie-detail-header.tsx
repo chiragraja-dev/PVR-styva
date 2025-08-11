@@ -227,20 +227,20 @@ export default function MovieDetailHeader({
           </div>
         </div>
 
-        {mode !== "historic" && (
-          <div className="flex gap-x-8 items-center py-2 w-full">
-            <div className="flex gap-x-2 items-center">
-              <p className="text-gray-400 font-semibold">AI Prediction:</p>
-              <CategoryBadge category={movie.classificationLabel} />
-            </div>
+        <div className="flex gap-x-8 items-center py-2 w-full">
+          <div className="flex gap-x-2 items-center">
+            <p className="text-gray-400 font-semibold">AI Prediction:</p>
+            <CategoryBadge category={movie.classificationLabel} />
+          </div>
+          {mode !== "historic" && (
             <div className="flex gap-x-2 items-center">
               <p className="text-gray-400 font-semibold w-full">
                 PVR Prediction:
               </p>
               <PredictionDropdown FilmCommonName={movie.FilmCommonName} />
             </div>
-          </div>
-        )}
+          )}
+        </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
           {flags.map((flag, index) => {
