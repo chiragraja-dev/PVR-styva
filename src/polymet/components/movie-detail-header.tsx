@@ -26,6 +26,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import PredictionDropdown from "./prediction-dropdown";
 
 interface MovieDetailHeaderProps {
   movie: {
@@ -48,6 +49,8 @@ interface MovieDetailHeaderProps {
     isPatriotic: string;
     patrioticTopic: string;
     revenue_label: CategoryType;
+    classificationLabel: CategoryType;
+    PVRPrediction: CategoryType;
   };
   movieMeta: {
     FilmStars: string;
@@ -55,6 +58,7 @@ interface MovieDetailHeaderProps {
     FilmRunTime: number;
     FilmPosterUrl: string | null;
   };
+  mode: string | null;
   className?: string;
   children?: React.ReactNode;
 }
@@ -64,6 +68,7 @@ export default function MovieDetailHeader({
   movieMeta,
   className,
   children,
+  mode,
 }: MovieDetailHeaderProps) {
   const flags = [
     {
@@ -171,7 +176,7 @@ export default function MovieDetailHeader({
           data-pol-file-type="component"
         >
           <div className="flex gap-x-6 justify-between">
-            <div className="flex gap-x-6 justify-between" >
+            <div className="flex gap-x-6 justify-between">
               <h1
                 className="text-3xl md:text-4xl font-bold"
                 data-pol-id="hmkkk5"
@@ -200,7 +205,6 @@ export default function MovieDetailHeader({
                     data-pol-file-name="movie-detail-header"
                     data-pol-file-type="component"
                   />
-
                 </div>
                 <CategoryBadge
                   category={movie.classification_s6b3}
@@ -222,6 +226,21 @@ export default function MovieDetailHeader({
           >
             Genre : {movie.filmGenre}
           </div>
+        </div>
+
+        <div className="flex gap-x-8 items-center py-2 w-full">
+          <div className="flex gap-x-2 items-center">
+            <p className="text-gray-400 font-semibold">AI Prediction:</p>
+            <CategoryBadge category={movie.classificationLabel} />
+          </div>
+          {mode !== "historic" && (
+            <div className="flex gap-x-2 items-center">
+              <p className="text-gray-400 font-semibold w-full">
+                PVR Prediction:
+              </p>
+              <PredictionDropdown FilmCommonName={movie.FilmCommonName} PVRPrediction={movie.PVRPrediction} />
+            </div>
+          )}
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">

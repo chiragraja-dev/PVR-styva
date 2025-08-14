@@ -37,18 +37,25 @@ export interface Prediction {
     movie_name: string;
     budget_score: number;
     Total_Score_s6b3: number;
+    classificationLabel:
+      | "regular"
+      | "blockbuster"
+      | "mega_blockbuster"
+      | "popular"
+      | "Below Average";
+    PVRPrediction: "regular" | "blockbuster" | "mega_blockbuster" | "popular";
     classification_s6b3:
-    | "regular"
-    | "blockbuster"
-    | "mega_blockbuster"
-    | "popular"
-    | "Below Average";
+      | "regular"
+      | "blockbuster"
+      | "mega_blockbuster"
+      | "popular"
+      | "Below Average";
     revenue_label:
-    | "regular"
-    | "blockbuster"
-    | "mega_blockbuster"
-    | "popular"
-    | "Below Average";
+      | "regular"
+      | "blockbuster"
+      | "mega_blockbuster"
+      | "popular"
+      | "Below Average";
   };
   meta: {
     FilmStars: string;
