@@ -11,7 +11,9 @@ export default function PastPredictionsPage() {
   const { filters } = useFilterStore();
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
+
   const ITEMS_PER_PAGE = 12;
+  const PRE_RENDER_COUNT = 4;
 
   useEffect(() => {
     const loadPastMovies = async () => {
