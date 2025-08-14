@@ -11,7 +11,9 @@ export default function PastPredictionsPage() {
   const { filters } = useFilterStore();
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
+
   const ITEMS_PER_PAGE = 12;
+  const PRE_RENDER_COUNT = 4;
 
   useEffect(() => {
     const loadPastMovies = async () => {
@@ -108,13 +110,23 @@ export default function PastPredictionsPage() {
     return filtered;
   };
 
-  const filteredMovies = getFilteredMovies();
-  const displayedMovies = filteredMovies.slice(0, currentPage * ITEMS_PER_PAGE);
-  const hasMore = displayedMovies.length < filteredMovies.length;
+
 
   const loadMoreMovies = () => {
-    if (hasMore) setCurrentPage((prev) => prev + 1);
+    if (hasMore) setCurrentPage((prev) => prev + PRE_RENDER_COUNT);
   };
+
+
+  const filteredMovies = getFilteredMovies();
+  // const displayedMovies = filteredMovies.slice(0, currentPage * ITEMS_PER_PAGE);
+
+  const displayedMovies = filteredMovies.slice(0, Math.min(
+    currentPage * ITEMS_PER_PAGE,
+    filteredMovies.length
+  ));
+  const hasMore = displayedMovies.length < filteredMovies.length;
+
+
 
   const observer = useRef<IntersectionObserver | null>(null);
   const lastMovieElementRef = useCallback(
