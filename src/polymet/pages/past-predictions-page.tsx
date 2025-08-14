@@ -13,7 +13,7 @@ export default function PastPredictionsPage() {
   const [isLoading, setIsLoading] = useState(true);
 
   const ITEMS_PER_PAGE = 12;
-  const PRE_RENDER_COUNT = 4;
+  // const PRE_RENDER_COUNT = 4;
 
   useEffect(() => {
     const loadPastMovies = async () => {
