@@ -139,7 +139,7 @@ const MovieCard = ({
       <div style={style} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-1">
         {rowItems.map((movie, idx) => (
           <MovieCard
-            key={movie.FilmId}
+            key={idx}
             movie={movie}
             isLast={startIndex + idx === movies.length - 1}
           />
