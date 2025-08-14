@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import MovieListView from "@/polymet/components/movie-list-view";
 import DashboardHeader from "@/polymet/components/dashboard-header";
 import { HistoricMovieDetails } from "@/types/HistoricMovieDetails";
@@ -27,17 +27,16 @@ export default function PastPredictionsPage() {
           return !isNaN(movieDate.getTime()) && movieDate <= new Date();
         });
         setAllMovies(pastMovies);
-      } catch (error) {
+      } catch {
         setAllMovies([]);
       } finally {
         setIsLoading(false);
       }
     };
-
     loadPastMovies();
   }, [filters.language]);
 
-  const getFilteredMovies = (): HistoricMovieDetails[] => {
+  const filteredMovies = useMemo(() => {
     let filtered = [...allMovies];
 
     if (filters?.search) {
@@ -60,15 +59,12 @@ export default function PastPredictionsPage() {
     if (
       filters?.scoreRange?.length === 2 &&
       filters.scoreRange[0] != null &&
-      filters.scoreRange[1] != null &&
-      Number.isFinite(filters.scoreRange[0]) &&
-      Number.isFinite(filters.scoreRange[1])
+      filters.scoreRange[1] != null
     ) {
-      const minScore = Number(filters.scoreRange[0]);
-      const maxScore = Number(filters.scoreRange[1]);
+      const [minScore, maxScore] = filters.scoreRange.map(Number);
       filtered = filtered.filter((movie) => {
         const score = Number(movie.Total_Score_s6b3);
-        return Number.isFinite(score) && score >= minScore && score <= maxScore;
+        return score >= minScore && score <= maxScore;
       });
     }
 
@@ -82,15 +78,13 @@ export default function PastPredictionsPage() {
       case "date-asc":
         filtered.sort(
           (a, b) =>
-            new Date(a.FilmRelDate).getTime() -
-            new Date(b.FilmRelDate).getTime()
+            new Date(a.FilmRelDate).getTime() - new Date(b.FilmRelDate).getTime()
         );
         break;
       case "date-desc":
         filtered.sort(
           (a, b) =>
-            new Date(b.FilmRelDate).getTime() -
-            new Date(a.FilmRelDate).getTime()
+            new Date(b.FilmRelDate).getTime() - new Date(a.FilmRelDate).getTime()
         );
         break;
       case "title-asc":
@@ -106,15 +100,14 @@ export default function PastPredictionsPage() {
     }
 
     return filtered;
-  };
+  }, [allMovies, filters]);
 
-  const filteredMovies = getFilteredMovies();
   const displayedMovies = filteredMovies.slice(0, currentPage * ITEMS_PER_PAGE);
   const hasMore = displayedMovies.length < filteredMovies.length;
 
-  const loadMoreMovies = () => {
+  const loadMoreMovies = useCallback(() => {
     if (hasMore) setCurrentPage((prev) => prev + 1);
-  };
+  }, [hasMore]);
 
   const observer = useRef<IntersectionObserver | null>(null);
   const lastMovieElementRef = useCallback(
@@ -130,7 +123,7 @@ export default function PastPredictionsPage() {
 
       if (node) observer.current.observe(node);
     },
-    [hasMore, isLoading]
+    [hasMore, isLoading, loadMoreMovies]
   );
 
   useEffect(() => {
@@ -147,7 +140,7 @@ export default function PastPredictionsPage() {
         movies={displayedMovies}
         isLoading={isLoading}
         lastItemRef={lastMovieElementRef}
-        source={"past"}
+        source="past"
       />
     </div>
   );
