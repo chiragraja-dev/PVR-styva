@@ -233,14 +233,18 @@ export default function MovieDetailHeader({
             <p className="text-gray-400 font-semibold">AI Prediction:</p>
             <CategoryBadge category={movie.classificationLabel} />
           </div>
-          {mode !== "historic" && (
             <div className="flex gap-x-2 items-center">
               <p className="text-gray-400 font-semibold w-full">
                 PVR Prediction:
               </p>
+
+          {mode !== "historic" && (
               <PredictionDropdown FilmCommonName={movie.FilmCommonName} PVRPrediction={movie.PVRPrediction} />
+            )}
+          {mode === "historic" && (
+              <CategoryBadge category={movie.PVRPrediction} />
+            )}
             </div>
-          )}
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
