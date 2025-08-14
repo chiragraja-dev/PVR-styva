@@ -12,7 +12,6 @@ interface MovieListViewProps {
   movies: HistoricMovieDetails[];
   className?: string;
   isLoading?: boolean;
-  isFetchingMore?: boolean;
   source: string;
   lastItemRef?: (node: HTMLAnchorElement | null) => void;
 }
@@ -20,8 +19,7 @@ interface MovieListViewProps {
 export default function MovieListView({
   movies,
   className,
-  isLoading = false,
-  isFetchingMore = false,
+  isLoading,
   source,
   lastItemRef,
 }: MovieListViewProps) {
@@ -158,7 +156,7 @@ const MovieCard = ({
       >
         {Row}
       </List>
-      {isFetchingMore && (
+      {isLoading && (  
         <div className="flex justify-center py-6">
           <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
         </div>

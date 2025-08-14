@@ -5,12 +5,13 @@ import { HistoricMovieDetails } from "@/types/HistoricMovieDetails";
 import { fetchHistoricMovies } from "@/services/movieService";
 import { useFilterStore } from "@/store/useFilterStore";
 import { normalizeMovieData } from "@/lib/normalizeMovieData";
+import { Loader2 } from "lucide-react";
 
 export default function PastPredictionsPage() {
   const [allMovies, setAllMovies] = useState<HistoricMovieDetails[]>([]);
   const { filters } = useFilterStore();
   const [currentPage, setCurrentPage] = useState(1);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const ITEMS_PER_PAGE = 12;
   // const PRE_RENDER_COUNT = 4;
@@ -18,6 +19,7 @@ export default function PastPredictionsPage() {
   useEffect(() => {
     const loadPastMovies = async () => {
       try {
+        setIsLoading(true);
         const language = filters.language[0] || "Hindi";
         const data = await fetchHistoricMovies(language);
         const normalizedMovies = normalizeMovieData<HistoricMovieDetails>(
@@ -37,6 +39,12 @@ export default function PastPredictionsPage() {
     };
     loadPastMovies();
   }, [filters.language]);
+
+  useEffect(() => {
+    setIsLoading(!isLoading);
+    
+  }, [filters.language]);
+  
 
   const filteredMovies = useMemo(() => {
     let filtered = [...allMovies];
@@ -138,6 +146,12 @@ export default function PastPredictionsPage() {
         title="Past Movies"
         subtitle="Review and analyze previously predicted movie performances"
       />
+
+            {isLoading && (  
+        <div className="flex justify-center py-6">
+          <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+        </div>
+      )}
       <MovieListView
         movies={displayedMovies}
         isLoading={isLoading}
