@@ -122,12 +122,12 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             </div>
             {isSidebarOpen && (
               <span
-                className="font-bold text-lg"
+                className="font-bold text-"
                 data-pol-id="djveeu"
                 data-pol-file-name="dashboard-layout"
                 data-pol-file-type="layout"
               >
-                PVR INOX movie analytics
+                Pvr inox movie analytics
               </span>
             )}
           </div>
